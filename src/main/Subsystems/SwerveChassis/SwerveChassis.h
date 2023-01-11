@@ -5,6 +5,20 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
+#include <Subsystems/SwerveModule/SwerveModule.h>
+#include <frc/Joystick.h>
+#include <frc2/command/SubsystemBase.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+//#include <frc/filter/SlewRateLimiter.h>
+#include <frc/kinematics/ChassisSpeeds.h>
+#include <frc/kinematics/SwerveDriveKinematics.h>
+#include <frc/kinematics/SwerveDriveOdometry.h>
+#include <frc/estimator/SwerveDrivePoseEstimator.h>
+#include <frc/smartdashboard/Field2d.h>
+#include <frc/geometry/Translation2d.h>
+
+#include <numbers>
+#include <AHRS.h>
 
 class SwerveChassis : public frc2::SubsystemBase {
  public:
@@ -16,6 +30,29 @@ class SwerveChassis : public frc2::SubsystemBase {
   void Periodic() override;
 
  private:
-  // Components (e.g. motor controllers and sensors) should generally be
-  // declared private and exposed only through public methods.
+ SwerveModule backRightModule{ 1, 2, 9, -143.70507812500001 };
+  SwerveModule backLeftModule{ 3, 4, 10, -70 };
+  SwerveModule frontLeftModule{ 5, 6, 11, -147.5 };
+  SwerveModule frontRightModule{ 7, 8, 12, -160 };
+
+  double wheelVoltage;
+  double targetAngle;
+
+  double linearX;
+  double linearY;
+  double angular;
+
+  std::array<frc::Translation2d, 4> modulePos{
+      frc::Translation2d(10.36_in, 10.36_in),   // front left
+      frc::Translation2d(10.36_in, -10.36_in),  // front right
+      frc::Translation2d(-10.36_in, -10.36_in), // back right
+      frc::Translation2d(-10.36_in, 10.36_in)   // back left
+  };
+  AHRS navx{ frc::SPI::Port::kMXP };
+  frc::SwerveDriveKinematics<4> kinematics{ modulePos };
+
+  frc::SwerveDrivePoseEstimator<4> odometry{ frc::Rotation2d(0_deg), {0_m,0_m,{0_deg}}, kinematics, {0.6,0.6,0.6}, {0.5},{0.5,0.5,0.5} };
+
+  frc::Field2d field2d;
+
 };
