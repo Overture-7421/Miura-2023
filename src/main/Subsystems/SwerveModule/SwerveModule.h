@@ -19,6 +19,6 @@ class SwerveModule : public frc2::SubsystemBase {
   void Periodic() override;
 
  private:
-WPI_TalonFX rotationMotor;
-WPI_TalonFX wheelMotor;
+  WPI_TalonFX rotationMotor;
+  WPI_TalonFX wheelMotor;
 };
