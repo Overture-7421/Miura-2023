@@ -52,7 +52,7 @@ class SwerveChassis : public frc2::SubsystemBase {
   AHRS navx{ frc::SPI::Port::kMXP };
   frc::SwerveDriveKinematics<4> kinematics{ modulePos };
 
-  frc::SwerveDrivePoseEstimator<4> odometry{ kinematics, frc::Rotation2d{}, modulePos, frc::Pose2d{}};
+  // frc::SwerveDrivePoseEstimator<4> odometry{ kinematics, frc::Rotation2d{}, modulePos, frc::Pose2d{}};
 
   frc::Field2d field2d;
 };
