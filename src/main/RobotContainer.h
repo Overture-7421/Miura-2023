@@ -5,13 +5,21 @@
 #pragma once
 
 #include <frc2/command/CommandPtr.h>
+#include <frc/Joystick.h>
+
+#include <Subsystems/SwerveChassis/SwerveChassis.h>
+#include <Commands/Teleop/Drive/Drive.h>
 
 class RobotContainer {
- public:
+public:
   RobotContainer();
 
   frc2::CommandPtr GetAutonomousCommand();
 
- private:
+private:
   void ConfigureBindings();
+
+  frc::Joystick controller{ 0 };
+
+  SwerveChassis swerveChassis;
 };

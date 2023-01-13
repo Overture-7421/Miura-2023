@@ -4,41 +4,57 @@
 
 #include "SwerveModule.h"
 
-SwerveModule::SwerveModule(int rotatorID, int wheelID, int canCoderID, double offSet) : rotator(rotatorID), wheel(wheelID), canCoder(canCoderID){
-  canCoder.ConfigAbsoluteSensorRange(AbsoluteSensorRange::Signed_PlusMinus180);
+SwerveModule::SwerveModule(int rotatorID, int wheelID, int canCoderID, double offSet): rotator(rotatorID), wheel(wheelID), canCoder(canCoderID) {
+    canCoder.ConfigAbsoluteSensorRange(AbsoluteSensorRange::Signed_PlusMinus180);
 
-  rotator.ConfigFactoryDefault();
-  wheel.ConfigFactoryDefault();
-  rotatorPID.EnableContinuousInput(-180, 180);
-  canCoder.ConfigSensorDirection(false);
-  rotator.SetInverted(true);
+    rotator.ConfigFactoryDefault();
+    wheel.ConfigFactoryDefault();
+    rotatorPID.EnableContinuousInput(-180, 180);
+    canCoder.ConfigSensorDirection(false);
+    rotator.SetInverted(true);
 
-  wheel.SetNeutralMode(NeutralMode::Brake);
-  rotator.SetNeutralMode(NeutralMode::Brake);
-  this->offSet = offSet;
+    wheel.SetNeutralMode(NeutralMode::Brake);
+    rotator.SetNeutralMode(NeutralMode::Brake);
+    this->offSet = offSet;
 }
+
 double SwerveModule::getSpeed() {
     return getMeters(wheel.GetSelectedSensorVelocity() * 10);
 }
+
 double SwerveModule::getMeters(double codes) {
     double meters = codes / 2048 / 6.75 * 0.319024;
     return meters;
 }
+
 void SwerveModule::SetRotatorVoltage(double rotatorVoltage) {
     rotator.SetVoltage(units::volt_t(rotatorVoltage));
 }
+
 void SwerveModule::SetWheelVoltage(double wheelVoltage) {
     wheel.SetVoltage(units::volt_t(wheelVoltage));
 }
+
 double SwerveModule::getAngle() {
     return frc::Rotation2d(units::degree_t(canCoder.GetAbsolutePosition())).RotateBy(units::degree_t(offSet)).Degrees().value();
 }
-double SwerveModule::getPID(double setPoint) {
+
+double SwerveModule::getRotatorPID(double setPoint) {
     return rotatorPID.Calculate(getAngle(), setPoint);
 }
+
+double SwerveModule::getWheelPID(double setPoint) {
+    return rotatorPID.Calculate(wheel.GetSelectedSensorVelocity(), setPoint);
+}
+
 void SwerveModule::setAngle(double angle) {
     this->angle = angle;
 }
+
+void SwerveModule::setSpeed(double speed) {
+    this->speed = speed;
+}
+
 frc::SwerveModuleState SwerveModule::getState() {
     frc::SwerveModuleState state;
 
@@ -47,10 +63,22 @@ frc::SwerveModuleState SwerveModule::getState() {
 
     return state;
 }
-void SwerveModule::Periodic() {
-    SetRotatorVoltage(getPID(angle));
+
+frc::SwerveModulePosition SwerveModule::getPosition() {
+    return { units::meter_t{getSpeed()}, units::degree_t{getAngle()} };
 }
-void SwerveModule::setPIDvalues(double kP, double kI, double kD, double f) {
+
+void SwerveModule::Periodic() {
+    SetRotatorVoltage(getRotatorPID(angle));
+    SetWheelVoltage(getWheelPID(speed));
+}
+
+void SwerveModule::setRotatorPIDValues(double kP, double kI, double kD, double f) {
     rotatorPID.SetPID(kP, kI, kD);
-    this->f = f;
+    this->rotatorF = f;
+}
+
+void SwerveModule::setWheelPIDValues(double kP, double kI, double kD, double f) {
+    wheelPID.SetPID(kP, kI, kD);
+    this->wheelF = f;
 }

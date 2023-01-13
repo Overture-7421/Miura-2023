@@ -7,6 +7,9 @@
 #include <frc2/command/Commands.h>
 
 RobotContainer::RobotContainer() {
+
+  swerveChassis.SetDefaultCommand(Drive(&swerveChassis, &controller));
+
   ConfigureBindings();
 }
 
