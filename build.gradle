@@ -48,10 +48,30 @@ wpi.sim.addDriverstation()
 
 model {
     components {
+        sysid(NativeLibrarySpec){
+            targetPlatform wpi.platforms.roborio
+
+            sources.cpp {
+                source {
+                    srcDir "libs/sysid/src/main/cpp"
+                    include "**/*.cpp"
+                }
+                exportedHeaders {
+                    srcDir "libs/sysid/src/main/include"
+                }
+            }
+            wpi.cpp.vendor.cpp(it)
+            wpi.cpp.deps.wpilib(it)
+        }
+
         frcUserProgram(NativeExecutableSpec) {
             targetPlatform wpi.platforms.roborio
             if (includeDesktopSupport) {
                 targetPlatform wpi.platforms.desktop
+            }
+            
+            binaries.all {
+                lib library: 'sysid', linkage: 'shared'
             }
 
             sources.cpp {

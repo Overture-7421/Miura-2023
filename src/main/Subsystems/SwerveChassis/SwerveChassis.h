@@ -28,20 +28,25 @@ public:
   SwerveChassis();
   void setTargetAngle(double targetAngle);
   void setSpeed(double linearX, double linearY, double angular);
+  void setWheelVoltage(double voltage);
   frc::Pose2d getOdometry();
+  double getHeadingRate();
   const frc::SwerveDriveKinematics<4>& getKinematics();
   void addVisionMeasurement(frc::Pose2d pose, units::second_t latency);
   void setModuleStates(wpi::array<frc::SwerveModuleState, 4> desiredStates);
+  wpi::array<frc::SwerveModuleState, 4> getModuleStates();
+  wpi::array<frc::SwerveModulePosition, 4> getModulePosition();
+
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
   void Periodic() override;
 
 private:
-  SwerveModule backRightModule{ 1, 2, 9, -143.70507812500001 };
-  SwerveModule backLeftModule{ 3, 4, 10, -70 };
-  SwerveModule frontLeftModule{ 5, 6, 11, -147.5 };
-  SwerveModule frontRightModule{ 7, 8, 12, -160 };
+  SwerveModule backRightModule{ 1, 2, 9, -138.7, "BackRightModule" };
+  SwerveModule backLeftModule{ 3, 4, 10, -65.3, "BackLeftModule" };
+  SwerveModule frontLeftModule{ 5, 6, 11, -150, "FrontLeftModule" };
+  SwerveModule frontRightModule{ 7, 8, 12, -161.89, "FrontRightModule" };
 
   double wheelVoltage;
   double targetAngle;

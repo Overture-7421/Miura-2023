@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "Robot.h"
-
+#include "Characterization/SwerveCharacterization.h"
 #include <frc2/command/CommandScheduler.h>
 
 void Robot::RobotInit() {}
@@ -50,6 +50,6 @@ void Robot::TestExit() {}
 
 #ifndef RUNNING_FRC_TESTS
 int main() {
-  return frc::StartRobot<Robot>();
+  return frc::StartRobot<SwerveCharacterizationRobot>();
 }
 #endif

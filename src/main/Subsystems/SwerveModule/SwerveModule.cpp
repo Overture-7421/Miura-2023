@@ -3,8 +3,9 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "SwerveModule.h"
+#include <frc/smartdashboard/SmartDashboard.h>
 
-SwerveModule::SwerveModule(int rotatorID, int wheelID, int canCoderID, double offSet): rotator(rotatorID), wheel(wheelID), canCoder(canCoderID) {
+SwerveModule::SwerveModule(int rotatorID, int wheelID, int canCoderID, double offSet, std::string name): rotator(rotatorID), wheel(wheelID), canCoder(canCoderID), name(name) {
     canCoder.ConfigAbsoluteSensorRange(AbsoluteSensorRange::Signed_PlusMinus180);
 
     rotator.ConfigFactoryDefault();
@@ -14,12 +15,17 @@ SwerveModule::SwerveModule(int rotatorID, int wheelID, int canCoderID, double of
     rotator.SetInverted(true);
 
     wheel.SetNeutralMode(NeutralMode::Brake);
-    rotator.SetNeutralMode(NeutralMode::Brake);
+    rotator.SetNeutralMode(NeutralMode::Coast);
+    wheel.SetSelectedSensorPosition(0);
     this->offSet = offSet;
 }
 
 double SwerveModule::getSpeed() {
     return getMeters(wheel.GetSelectedSensorVelocity() * 10);
+}
+
+double SwerveModule::getDistance() {
+    return getMeters(wheel.GetSelectedSensorPosition());
 }
 
 double SwerveModule::getMeters(double codes) {
@@ -32,7 +38,7 @@ void SwerveModule::SetRotatorVoltage(double rotatorVoltage) {
 }
 
 void SwerveModule::SetWheelVoltage(double wheelVoltage) {
-    wheel.SetVoltage(units::volt_t(wheelVoltage));
+    this->wheelVoltage = wheelVoltage;
 }
 
 double SwerveModule::getAngle() {
@@ -47,14 +53,6 @@ double SwerveModule::getWheelPID(double setPoint) {
     return rotatorPID.Calculate(wheel.GetSelectedSensorVelocity(), setPoint);
 }
 
-void SwerveModule::setAngle(double angle) {
-    this->angle = angle;
-}
-
-void SwerveModule::setSpeed(double speed) {
-    this->speed = speed;
-}
-
 frc::SwerveModuleState SwerveModule::getState() {
     frc::SwerveModuleState state;
 
@@ -64,13 +62,24 @@ frc::SwerveModuleState SwerveModule::getState() {
     return state;
 }
 
+void SwerveModule::setState(frc::SwerveModuleState state) {
+    moduleState = frc::SwerveModuleState::Optimize(state, moduleState.angle);
+}
+
 frc::SwerveModulePosition SwerveModule::getPosition() {
-    return { units::meter_t{getSpeed()}, units::degree_t{getAngle()} };
+    return { units::meter_t{getDistance()}, units::degree_t{getAngle()} };
 }
 
 void SwerveModule::Periodic() {
-    SetRotatorVoltage(getRotatorPID(angle));
-    SetWheelVoltage(getWheelPID(speed));
+    SetRotatorVoltage(getRotatorPID(moduleState.angle.Degrees().value()));
+
+    if (useRawVoltageSpeed) {
+        wheel.SetVoltage(units::volt_t(wheelVoltage));
+    }
+
+    frc::SmartDashboard::PutNumber(name + "/Distance", getDistance());
+    frc::SmartDashboard::PutNumber(name + "/Angle", getAngle());
+    frc::SmartDashboard::PutNumber(name + "/RawAngle", canCoder.GetAbsolutePosition());
 }
 
 void SwerveModule::setRotatorPIDValues(double kP, double kI, double kD, double f) {
@@ -81,4 +90,8 @@ void SwerveModule::setRotatorPIDValues(double kP, double kI, double kD, double f
 void SwerveModule::setWheelPIDValues(double kP, double kI, double kD, double f) {
     wheelPID.SetPID(kP, kI, kD);
     this->wheelF = f;
+}
+
+void SwerveModule::setUseRawVoltageSpeed(bool set) {
+    useRawVoltageSpeed = set;
 }

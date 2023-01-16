@@ -13,21 +13,21 @@
 
 class SwerveModule: public frc2::SubsystemBase {
 public:
-  SwerveModule(int rotatorID, int wheelID, int canCoderID, double offSet);
+  SwerveModule(int rotatorID, int wheelID, int canCoderID, double offSet, std::string name = "");
   double getSpeed();
+  double getDistance();
   double getMeters(double codes);
   void SetRotatorVoltage(double rotatorVoltage);
   void SetWheelVoltage(double wheelVoltage);
   double getAngle();
   double getRotatorPID(double setPoint);
   double getWheelPID(double setPoint);
-  void setAngle(double angle);
-  void setSpeed(double speed);
   frc::SwerveModuleState getState();
+  void setState(frc::SwerveModuleState state);
   frc::SwerveModulePosition getPosition();
   void setRotatorPIDValues(double kP, double kI, double kD, double f);
   void setWheelPIDValues(double kP, double kI, double kD, double f);
-
+  void setUseRawVoltageSpeed(bool set);
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -38,6 +38,7 @@ private:
   //Declaration of motors
   WPI_TalonFX rotator;
   WPI_TalonFX wheel;
+  double wheelVoltage = 0;
 
   //Declaration of CanCoder
   CANCoder canCoder;
@@ -49,10 +50,11 @@ private:
   double wheelF = 0;
 
   //State
-  double angle = 0;
-  double speed = 0;
+  frc::SwerveModuleState moduleState;
 
   double offSet;
+  std::string name;
+  bool useRawVoltageSpeed = false;
 };
 
 
