@@ -49,10 +49,6 @@ double SwerveModule::getRotatorPID(double setPoint) {
     return rotatorPID.Calculate(getAngle(), setPoint);
 }
 
-double SwerveModule::getWheelPID(double setPoint) {
-    return rotatorPID.Calculate(wheel.GetSelectedSensorVelocity(), setPoint);
-}
-
 frc::SwerveModuleState SwerveModule::getState() {
     frc::SwerveModuleState state;
 
@@ -75,6 +71,8 @@ void SwerveModule::Periodic() {
 
     if (useRawVoltageSpeed) {
         wheel.SetVoltage(units::volt_t(wheelVoltage));
+    } else {
+        wheel.SetVoltage(driveFeedForward.Calculate(moduleState.speed));
     }
 
     frc::SmartDashboard::PutNumber(name + "/Distance", getDistance());
@@ -85,11 +83,6 @@ void SwerveModule::Periodic() {
 void SwerveModule::setRotatorPIDValues(double kP, double kI, double kD, double f) {
     rotatorPID.SetPID(kP, kI, kD);
     this->rotatorF = f;
-}
-
-void SwerveModule::setWheelPIDValues(double kP, double kI, double kD, double f) {
-    wheelPID.SetPID(kP, kI, kD);
-    this->wheelF = f;
 }
 
 void SwerveModule::setUseRawVoltageSpeed(bool set) {

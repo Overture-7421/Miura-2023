@@ -9,6 +9,11 @@
 #include <frc/controller/PIDController.h>
 #include <frc/kinematics/SwerveModuleState.h>
 #include <frc/kinematics/SwerveModulePosition.h>
+#include <frc/controller/SimpleMotorFeedforward.h>
+#include <units/length.h>
+#include <units/voltage.h>
+#include <units/velocity.h>
+#include <units/acceleration.h>
 
 
 class SwerveModule: public frc2::SubsystemBase {
@@ -21,12 +26,10 @@ public:
   void SetWheelVoltage(double wheelVoltage);
   double getAngle();
   double getRotatorPID(double setPoint);
-  double getWheelPID(double setPoint);
   frc::SwerveModuleState getState();
   void setState(frc::SwerveModuleState state);
   frc::SwerveModulePosition getPosition();
   void setRotatorPIDValues(double kP, double kI, double kD, double f);
-  void setWheelPIDValues(double kP, double kI, double kD, double f);
   void setUseRawVoltageSpeed(bool set);
 
   /**
@@ -45,9 +48,15 @@ private:
 
   //PID
   frc2::PIDController rotatorPID{ 0.125, 0.5, 0 };
-  frc2::PIDController wheelPID{ 0.1, 0, 0 };
   double rotatorF = 0;
   double wheelF = 0;
+
+  //FeedForward
+  units::volt_t ks{ 0.53793 };
+  units::volt_t kv{ 2.284 };
+  units::volt_t ka{ 0.25576 };
+
+  frc::SimpleMotorFeedforward<units::meters> driveFeedForward{ ks, kv / 1_mps, ka / 1_mps_sq };
 
   //State
   frc::SwerveModuleState moduleState;

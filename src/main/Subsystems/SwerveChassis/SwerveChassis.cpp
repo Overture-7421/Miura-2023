@@ -10,11 +10,6 @@ SwerveChassis::SwerveChassis() {
     frontRightModule.setRotatorPIDValues(0.09, 0.5, 0, 0);
     frontLeftModule.setRotatorPIDValues(0.09, 0.5, 0, 0);
 
-    // backRightModule.setWheelPIDValues(0.004, 0, 0, 0);
-    // backLeftModule.setWheelPIDValues(0.004, 0, 0, 0);
-    // frontRightModule.setWheelPIDValues(0.004, 0, 0, 0);
-    // frontLeftModule.setWheelPIDValues(0.004, 0, 0, 0);
-
     navx.Calibrate();
     std::this_thread::sleep_for(std::chrono::seconds(1));
     double startTime = frc::Timer::GetFPGATimestamp().value();
@@ -36,6 +31,7 @@ void SwerveChassis::setTargetAngle(double targetAngle) {
     this->targetAngle = targetAngle;
 }
 
+// Uso para teleoperado
 void SwerveChassis::setSpeed(double linearX, double linearY, double angular) {
     frontLeftModule.setUseRawVoltageSpeed(false);
     frontRightModule.setUseRawVoltageSpeed(false);
@@ -57,6 +53,7 @@ void SwerveChassis::setSpeed(double linearX, double linearY, double angular) {
     setModuleStates(desiredStates);
 }
 
+// Uso para caracterización
 void SwerveChassis::setWheelVoltage(double voltage) {
     frontLeftModule.setUseRawVoltageSpeed(true);
     frontRightModule.setUseRawVoltageSpeed(true);
