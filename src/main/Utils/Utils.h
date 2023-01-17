@@ -18,7 +18,7 @@ struct Utils {
      * To learn more: https://www.desmos.com/calculator/kvubon8yfw?lang=es
      *
      * */
-    static double ApplyAxisFilter(double axisValue, double deadzone = 0.15,
+    static double ApplyAxisFilter(double axisValue, double deadzone = 0.10,
         double exponentialGain = 0.9) {
         double axisMag = std::abs(axisValue);
         if (axisMag < deadzone) return 0.0;
