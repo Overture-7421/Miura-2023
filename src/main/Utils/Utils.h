@@ -5,7 +5,6 @@ struct Utils {
     static int sgn(T val) {
         return (T(0) < val) - (val < T(0));
     }
-
     /**
      * Apply a filter to an Axis, so that when the driver is not using it, the
      * robot doesn't move randomly. It applies an Exponential curve for finer
