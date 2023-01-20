@@ -8,7 +8,7 @@
 #include <frc2/command/CommandHelper.h>
 #include <frc/Joystick.h>
 #include <frc/kinematics/ChassisSpeeds.h>
-// #include <frc/filter/SlewRateLimiter.h>
+#include <frc/filter/SlewRateLimiter.h>
 #include <units/angular_acceleration.h>
 #include <units/angular_velocity.h>
 
@@ -36,6 +36,10 @@ public:
 
 private:
   SwerveChassis* m_swerveChassis;
+
+  units::meters_per_second_squared_t acceleration{ 30 };
+  frc::SlewRateLimiter<units::meters_per_second> xLimiter{ acceleration };
+  frc::SlewRateLimiter<units::meters_per_second> yLimiter{ acceleration };
 
   frc::Joystick* joystick;
 };

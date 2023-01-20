@@ -15,9 +15,13 @@ void Drive::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void Drive::Execute() {
+
+  units::meters_per_second_t xInput{ Utils::ApplyAxisFilter(-joystick->GetRawAxis(1)) * 5 };
+  units::meters_per_second_t yInput{ Utils::ApplyAxisFilter(-joystick->GetRawAxis(0)) * 5 };
+
   frc::ChassisSpeeds chassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(
-    units::meters_per_second_t{ Utils::ApplyAxisFilter(-joystick->GetRawAxis(1)) * 5 },
-    units::meters_per_second_t{ Utils::ApplyAxisFilter(-joystick->GetRawAxis(0)) * 5 },
+    xLimiter.Calculate(xInput),
+    yLimiter.Calculate(yInput),
     units::radians_per_second_t{ Utils::ApplyAxisFilter(-joystick->GetRawAxis(4)) * 9 },
     m_swerveChassis->getOdometry().Rotation());
 
