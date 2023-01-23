@@ -37,7 +37,7 @@ public:
 private:
   SwerveChassis* m_swerveChassis;
 
-  units::meters_per_second_squared_t acceleration{ 30 };
+  units::meters_per_second_squared_t acceleration{ 15 };
   frc::SlewRateLimiter<units::meters_per_second> xLimiter{ acceleration };
   frc::SlewRateLimiter<units::meters_per_second> yLimiter{ acceleration };
 

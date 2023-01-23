@@ -80,7 +80,7 @@ const frc::SwerveDriveKinematics<4>& SwerveChassis::getKinematics() {
 }
 
 void SwerveChassis::addVisionMeasurement(frc::Pose2d pose, units::second_t latency) {
-    // odometry.AddVisionMeasurement(pose, frc::Timer::GetFPGATimestamp() - latency);
+    odometry.AddVisionMeasurement(pose, frc::Timer::GetFPGATimestamp() - latency);
 }
 
 void SwerveChassis::setModuleStates(wpi::array<frc::SwerveModuleState, 4> desiredStates) {

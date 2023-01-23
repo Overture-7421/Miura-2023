@@ -8,6 +8,7 @@
 #include <frc/Joystick.h>
 
 #include <Subsystems/SwerveChassis/SwerveChassis.h>
+#include <Subsystems/VisionManager/VisionManager.h>
 #include <Commands/Teleop/Drive/Drive.h>
 
 class RobotContainer {
@@ -22,4 +23,5 @@ private:
   frc::Joystick controller{ 0 };
 
   SwerveChassis swerveChassis;
+  // VisionManager visionManager{ &swerveChassis };
 };
