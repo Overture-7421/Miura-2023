@@ -19,7 +19,7 @@ PracticeAuto::PracticeAuto(SwerveChassis* swerveChassis, std::vector<frc::Pose2d
   );
 
   frc::ProfiledPIDController<units::radian> thetaController(
-    5, 0, 0, { std::numbers::pi * 4_rad_per_s, std::numbers::pi * 8_rad_per_s / 1_s }
+    3, 0, 0, { std::numbers::pi * 6_rad_per_s, std::numbers::pi * 6_rad_per_s / 1_s }
   );
 
   thetaController.EnableContinuousInput(-180_deg, 180_deg);
@@ -28,8 +28,8 @@ PracticeAuto::PracticeAuto(SwerveChassis* swerveChassis, std::vector<frc::Pose2d
     trajectory,
     [this]() {return this->swerveChassis->getOdometry();},
     swerveChassis->getKinematics(),
-    frc::PIDController(5, 0, 0),
-    frc::PIDController(5, 0, 0),
+    frc::PIDController(0.9, 0, 0),
+    frc::PIDController(0.9, 0, 0),
     thetaController,
     [this](auto desiredStates) {this->swerveChassis->setModuleStates(desiredStates);},
     { swerveChassis }

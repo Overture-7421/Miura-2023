@@ -32,8 +32,14 @@ private:
 
 	//Auto
 	frc::SendableChooser<frc2::Command*> autoChooser;
-	Paths* paths;
+	// Paths* paths;
 
-	PracticeAuto practiceAuto{ &swerveChassis, paths->practicePaths, { 4_mps, 4_mps_sq } };
+	PracticeAuto practiceAuto{ &swerveChassis, {
+	{0_m,0_m,{0_deg}},
+	{7_m,0_m,{0_deg}},
+	{7_m,0_m,{180_deg}},
+	{0_m,0_m,{180_deg}}
+	// {0_m,0_m,{0_deg}}
+	}, { 2_mps, 2_mps_sq } };
 
 };
