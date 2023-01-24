@@ -10,11 +10,13 @@ RobotContainer::RobotContainer() {
 
   swerveChassis.SetDefaultCommand(Drive(&swerveChassis, &controller));
 
+  autoChooser.AddOption("Practice", PracticeAuto(&swerveChassis, paths->practicePaths, { 4_mps, 4_mps_sq }).ToPtr());
+
   ConfigureBindings();
 }
 
 void RobotContainer::ConfigureBindings() {}
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
-  return frc2::cmd::Print("No autonomous command configured");
+  return autoChooser.GetSelected();
 }
