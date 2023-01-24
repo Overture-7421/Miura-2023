@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <frc2/command/CommandPtr.h>
+#include <frc2/command/Command.h>
 #include <frc/Joystick.h>
 #include <frc/smartdashboard/SendableChooser.h>
 
@@ -16,22 +16,24 @@
 
 class RobotContainer {
 public:
-  RobotContainer();
+	RobotContainer();
 
-  frc2::CommandPtr GetAutonomousCommand();
+	frc2::Command* GetAutonomousCommand();
 
 private:
-  void ConfigureBindings();
+	void ConfigureBindings();
 
-  //Controllers
-  frc::Joystick controller{ 0 };
+	//Controllers
+	frc::Joystick controller{ 0 };
 
-  // Subsystems
-  SwerveChassis swerveChassis;
-  // VisionManager visionManager{ &swerveChassis };
+	// Subsystems
+	SwerveChassis swerveChassis;
+	// VisionManager visionManager{ &swerveChassis };
 
-  //Auto
-  frc::SendableChooser<frc2::CommandPtr> autoChooser;
-  Paths* paths;
+	//Auto
+	frc::SendableChooser<frc2::Command*> autoChooser;
+	Paths* paths;
+
+	PracticeAuto practiceAuto{ &swerveChassis, paths->practicePaths, { 4_mps, 4_mps_sq } };
 
 };
