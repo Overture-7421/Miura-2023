@@ -83,6 +83,10 @@ void SwerveChassis::addVisionMeasurement(frc::Pose2d pose, units::second_t laten
     odometry.AddVisionMeasurement(pose, frc::Timer::GetFPGATimestamp() - latency);
 }
 
+void SwerveChassis::resetNavx() {
+    navx.ZeroYaw();
+}
+
 void SwerveChassis::setModuleStates(wpi::array<frc::SwerveModuleState, 4> desiredStates) {
     frontLeftModule.setState(desiredStates[0]);
     frontRightModule.setState(desiredStates[1]);
@@ -109,6 +113,8 @@ wpi::array<frc::SwerveModulePosition, 4> SwerveChassis::getModulePosition() {
     };
     return modulePositions;
 }
+
+
 
 // This method will be called once per scheduler run
 void SwerveChassis::Periodic() {

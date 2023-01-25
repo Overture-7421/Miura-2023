@@ -6,7 +6,7 @@
 
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
-#include <frc/Joystick.h>
+#include <frc/XboxController.h>
 #include <frc/kinematics/ChassisSpeeds.h>
 #include <frc/filter/SlewRateLimiter.h>
 #include <units/angular_acceleration.h>
@@ -24,7 +24,7 @@
 class Drive
   : public frc2::CommandHelper<frc2::CommandBase, Drive> {
 public:
-  Drive(SwerveChassis* swerveChassis, frc::Joystick* controller);
+  Drive(SwerveChassis* swerveChassis, frc::XboxController* controller);
 
   void Initialize() override;
 
@@ -41,5 +41,5 @@ private:
   frc::SlewRateLimiter<units::meters_per_second> xLimiter{ acceleration };
   frc::SlewRateLimiter<units::meters_per_second> yLimiter{ acceleration };
 
-  frc::Joystick* joystick;
+  frc::XboxController* joystick;
 };

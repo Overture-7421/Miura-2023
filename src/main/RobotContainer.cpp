@@ -16,7 +16,9 @@ RobotContainer::RobotContainer() {
 	ConfigureBindings();
 }
 
-void RobotContainer::ConfigureBindings() {}
+void RobotContainer::ConfigureBindings() {
+	resetNavx.WhenPressed(frc2::InstantCommand([this] {swerveChassis.resetNavx();}));
+}
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
 	return autoChooser.GetSelected();

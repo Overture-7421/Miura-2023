@@ -5,7 +5,7 @@
 #include "Drive.h"
 #include "Utils/Utils.h"
 
-Drive::Drive(SwerveChassis* swerveChassis, frc::Joystick* controller): m_swerveChassis(swerveChassis), joystick(controller) {
+Drive::Drive(SwerveChassis* swerveChassis, frc::XboxController* controller): m_swerveChassis(swerveChassis), joystick(controller) {
   // Use addRequirements() here to declare subsystem dependencies.
   AddRequirements(m_swerveChassis);
 }
@@ -16,13 +16,13 @@ void Drive::Initialize() {}
 // Called repeatedly when this Command is scheduled to run
 void Drive::Execute() {
 
-  units::meters_per_second_t xInput{ Utils::ApplyAxisFilter(-joystick->GetRawAxis(1)) * 5 };
-  units::meters_per_second_t yInput{ Utils::ApplyAxisFilter(-joystick->GetRawAxis(0)) * 5 };
+  units::meters_per_second_t xInput{ Utils::ApplyAxisFilter(-joystick->GetLeftX()) * 5 };
+  units::meters_per_second_t yInput{ Utils::ApplyAxisFilter(-joystick->GetLeftY()) * 5 };
 
   frc::ChassisSpeeds chassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(
     xLimiter.Calculate(xInput),
     yLimiter.Calculate(yInput),
-    units::radians_per_second_t{ Utils::ApplyAxisFilter(-joystick->GetRawAxis(4)) * 9 },
+    units::radians_per_second_t{ Utils::ApplyAxisFilter(-joystick->GetRightY()) * 9 },
     m_swerveChassis->getOdometry().Rotation());
 
 
