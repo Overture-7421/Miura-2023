@@ -13,9 +13,7 @@ class Intake : public frc2::SubsystemBase {
   Intake();
  
  
-virtual void frc::Solenoid::Set	(	bool 	off	)	
-/*void frc::Solenoid::Toggle	(		)	
-esto con un "if"? */
+ void setPiston	(	bool 	off	);
   
   void Periodic() override;
 
