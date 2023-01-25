@@ -35,7 +35,7 @@ PracticeAuto::PracticeAuto(SwerveChassis* swerveChassis, std::vector<frc::Pose2d
     { swerveChassis }
   );
 
-  frc2::InstantCommand stopCommand([this]() {this->swerveChassis->setSpeed(0, 0, 0);});
+  frc2::InstantCommand stopCommand([this]() {this->swerveChassis->setSpeed({ 0_mps, 0_mps, 0_rad_per_s });});
 
   AddCommands(controllerCommand, stopCommand);
 }

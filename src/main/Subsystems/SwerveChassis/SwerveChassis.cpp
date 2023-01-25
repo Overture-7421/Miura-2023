@@ -32,23 +32,17 @@ void SwerveChassis::setTargetAngle(double targetAngle) {
 }
 
 // Uso para teleoperado
-void SwerveChassis::setSpeed(double linearX, double linearY, double angular) {
+void SwerveChassis::setSpeed(frc::ChassisSpeeds speeds) {
     frontLeftModule.setUseRawVoltageSpeed(false);
     frontRightModule.setUseRawVoltageSpeed(false);
     backLeftModule.setUseRawVoltageSpeed(false);
     backRightModule.setUseRawVoltageSpeed(false);
 
-    this->linearX = linearX;
-    this->linearY = linearY;
-    this->angular = angular;
+    this->linearX = speeds.vx.value();
+    this->linearY = speeds.vy.value();
+    this->angular = speeds.omega.value();
 
-    frc::ChassisSpeeds chassisSpeed;
-
-    chassisSpeed.vx = units::meters_per_second_t(linearX);
-    chassisSpeed.vy = units::meters_per_second_t(linearY);
-    chassisSpeed.omega = units::radians_per_second_t(angular);
-
-    wpi::array<frc::SwerveModuleState, 4> desiredStates = kinematics.ToSwerveModuleStates(chassisSpeed);
+    wpi::array<frc::SwerveModuleState, 4> desiredStates = kinematics.ToSwerveModuleStates(speeds);
 
     setModuleStates(desiredStates);
 }
@@ -69,6 +63,10 @@ void SwerveChassis::setWheelVoltage(double voltage) {
 
 frc::Pose2d SwerveChassis::getOdometry() {
     return odometry.GetEstimatedPosition();
+}
+
+void SwerveChassis::resetOdometry(frc::Pose2d initPose) {
+    odometry.ResetPosition(frc::Rotation2d{ units::degree_t{navx.GetAngle()} }, getModulePosition(), initPose);
 }
 
 double SwerveChassis::getHeadingRate() {

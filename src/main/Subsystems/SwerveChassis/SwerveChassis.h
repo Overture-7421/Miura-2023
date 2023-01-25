@@ -4,6 +4,9 @@
 
 #pragma once
 
+#include <units/time.h>
+#include <units/angular_velocity.h>
+#include <units/angular_acceleration.h>
 #include <frc/Joystick.h>
 #include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Translation2d.h>
@@ -15,9 +18,6 @@
 #include <frc/smartdashboard/Field2d.h>
 #include <frc/estimator/SwerveDrivePoseEstimator.h>
 #include <frc2/command/SubsystemBase.h>
-#include <units/angular_velocity.h>
-#include <units/angular_acceleration.h>
-#include <units/time.h>
 #include <numbers>
 #include <AHRS.h>
 
@@ -27,9 +27,10 @@ class SwerveChassis: public frc2::SubsystemBase {
 public:
   SwerveChassis();
   void setTargetAngle(double targetAngle);
-  void setSpeed(double linearX, double linearY, double angular);
+  void setSpeed(frc::ChassisSpeeds speeds);
   void setWheelVoltage(double voltage);
   frc::Pose2d getOdometry();
+  void resetOdometry(frc::Pose2d initPose);
   double getHeadingRate();
   const frc::SwerveDriveKinematics<4>& getKinematics();
   void addVisionMeasurement(frc::Pose2d pose, units::second_t latency);

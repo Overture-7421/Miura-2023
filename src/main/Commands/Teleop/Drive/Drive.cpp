@@ -26,7 +26,7 @@ void Drive::Execute() {
     m_swerveChassis->getOdometry().Rotation());
 
 
-  m_swerveChassis->setSpeed(chassisSpeeds.vx.value(), chassisSpeeds.vy.value(), chassisSpeeds.omega.value());
+  m_swerveChassis->setSpeed(chassisSpeeds);
 }
 
 // Called once the command ends or is interrupted.
