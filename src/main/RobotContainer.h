@@ -8,6 +8,7 @@
 #include <frc/XboxController.h>
 #include <frc/smartdashboard/SendableChooser.h>
 #include <frc2/command/button/Trigger.h>
+#include <frc2/command/InstantCommand.h>
 
 #include "Subsystems/SwerveChassis/SwerveChassis.h"
 #include "Subsystems/VisionManager/VisionManager.h"
@@ -26,7 +27,7 @@ private:
 
 	//Controllers
 	frc::XboxController controller{ 0 };
-	frc2::Trigger resetNavx = controller.;
+	frc2::Trigger resetNavx{ [this] {return controller.GetYButton();} };
 
 	// Subsystems
 	SwerveChassis swerveChassis;

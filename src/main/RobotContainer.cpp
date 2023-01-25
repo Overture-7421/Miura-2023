@@ -17,7 +17,7 @@ RobotContainer::RobotContainer() {
 }
 
 void RobotContainer::ConfigureBindings() {
-	resetNavx.WhenPressed(frc2::InstantCommand([this] {swerveChassis.resetNavx();}));
+	resetNavx.OnTrue(frc2::InstantCommand{ [this]() {this->swerveChassis.resetNavx();} }.ToPtr());
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
