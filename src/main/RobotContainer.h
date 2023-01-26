@@ -9,6 +9,8 @@
 #include <frc/smartdashboard/SendableChooser.h>
 #include <frc2/command/button/Trigger.h>
 #include <frc2/command/InstantCommand.h>
+#include <pathplanner/lib/auto/SwerveAutoBuilder.h>
+#include <pathplanner/lib/PathPlanner.h>
 
 #include "Subsystems/SwerveChassis/SwerveChassis.h"
 #include "Subsystems/VisionManager/VisionManager.h"
@@ -19,6 +21,9 @@ public:
 	RobotContainer();
 
 	frc2::CommandPtr GetAutonomousCommand();
+
+	// Generates auto with pathplanner
+	frc2::CommandPtr CreateAuto(std::string pathName);
 
 private:
 	void ConfigureBindings();
@@ -32,5 +37,7 @@ private:
 	// VisionManager visionManager{ &swerveChassis };
 
 	//Auto
+	frc::SendableChooser<std::string> pathChooser;
+	std::unordered_map<std::string, std::shared_ptr<frc2::Command>> eventMap;
 
 };
