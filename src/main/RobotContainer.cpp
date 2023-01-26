@@ -10,9 +10,6 @@ RobotContainer::RobotContainer() {
 
 	swerveChassis.SetDefaultCommand(Drive(&swerveChassis, &controller));
 
-	autoChooser.SetDefaultOption("Practice", &practiceAuto);
-	frc::SmartDashboard::PutData("Auto Chooser", &autoChooser);
-
 	ConfigureBindings();
 }
 
@@ -20,6 +17,6 @@ void RobotContainer::ConfigureBindings() {
 	resetNavx.OnTrue(frc2::InstantCommand{ [this]() {this->swerveChassis.resetNavx();} }.ToPtr());
 }
 
-frc2::Command* RobotContainer::GetAutonomousCommand() {
-	return autoChooser.GetSelected();
+frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
+	return frc2::cmd::Print("No autonomous command configured");
 }
