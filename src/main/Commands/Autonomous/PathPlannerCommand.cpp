@@ -27,8 +27,6 @@ PathPlannerCommand::PathPlannerCommand(SwerveChassis* swerveChassis): swerveChas
 		true // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
 	);
 
-	frc2::InstantCommand stopCommand([this]() {this->swerveChassis->setSpeed({ 0_mps, 0_mps, 0_rad_per_s });});
-
 	frc2::CommandPtr command = autoBuilder.fullAuto(examplePath);
 	// AddCommands(command, stopCommand);
 
