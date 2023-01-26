@@ -16,8 +16,15 @@ class Intake : public frc2::SubsystemBase {
   Intake();
  
  void setVoltage ();
- 
+ /*  
+    Codigo pasado
+    hacerlo para 2 motores e invertir uno
 
+    Intake() { intakeMotor.SetInverted(true); };
+    void setMotor(double voltage) {
+    leftIntakeMotor.SetVoltage(units::volt_t(voltage));
+  }
+*/
  void setPiston	(bool state) {
     if (state) {
         intakeSolenoid.Set(frc::DoubleSolenoid::Value::kForward);
