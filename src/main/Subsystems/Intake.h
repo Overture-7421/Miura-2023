@@ -32,8 +32,15 @@ class Intake : public frc2::SubsystemBase {
         intakeSolenoid.Set(frc::DoubleSolenoid::Value::kReverse);
     }
  } 
+    //Aqui va a ir una función "invertTalonFX" para invertir el movimiento
+    void SetInverted(TalonFXInvertType invertType);
 
- 
+
+    void Set(TalonFXControlMode FollowerType, double 1.0, DemandType NeutralMode, double demand1);
+   
+
+   //Aqui va ir una función "setTalofnFX" para definir porcentaje 
+    void Set(TalonFXControlMode PercentOutput, double 1.0);
   
   void Periodic() override;
 
