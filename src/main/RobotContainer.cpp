@@ -8,9 +8,19 @@
 
 RobotContainer::RobotContainer() {
 
+	//Set default commands
 	swerveChassis.SetDefaultCommand(Drive(&swerveChassis, &controller));
 
+	//Set choosers for auto
 	pathChooser.SetDefaultOption("PracticePath", "PracticePath");
+	pathChooser.AddOption("JulianAndRigoTest", "JulianAndRigoTest");
+	pathChooser.AddOption("Test2", "Test2");
+	pathChooser.AddOption("Test3", "Test3");
+	pathChooser.AddOption("Test4", "Test4");
+
+
+
+	frc::SmartDashboard::PutData("Auto Chooser", &pathChooser);
 
 	ConfigureBindings();
 }
@@ -24,17 +34,17 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
 }
 
 frc2::CommandPtr RobotContainer::CreateAuto(std::string pathName) {
-	pathplanner::PathPlannerTrajectory examplePath = pathplanner::PathPlanner::loadPath(pathName, pathplanner::PathConstraints(4_mps, 4_mps_sq));
+	std::vector<pathplanner::PathPlannerTrajectory> examplePath = pathplanner::PathPlanner::loadPathGroup(pathName, { pathplanner::PathConstraints(1_mps, 4_mps_sq),pathplanner::PathConstraints(4_mps, 4_mps_sq),pathplanner::PathConstraints(.2_mps, 2_mps_sq),pathplanner::PathConstraints(1_mps, 2_mps_sq), });
 
 	pathplanner::SwerveAutoBuilder autoBuilder(
-		[this]() { return this->swerveChassis->getOdometry(); }, // Function to supply current robot pose
-		[this](auto initPose) { this->swerveChassis->resetOdometry(initPose); }, // Function used to reset odometry at the beginning of auto
-		swerveChassis->getKinematics(),
+		[this]() { return swerveChassis.getOdometry(); }, // Function to supply current robot pose
+		[this](auto initPose) { swerveChassis.resetOdometry(initPose); }, // Function used to reset odometry at the beginning of auto
+		swerveChassis.getKinematics(),
 		pathplanner::PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
 		pathplanner::PIDConstants(0.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
-		[this](auto speeds) { this->swerveChassis->setModuleStates(speeds); }, // Output function that accepts field relative ChassisSpeeds
+		[this](auto speeds) { swerveChassis.setModuleStates(speeds); }, // Output function that accepts field relative ChassisSpeeds
 		eventMap, // Our event map
-		{ swerveChassis }, // Drive requirements, usually just a single drive subsystem
+		{ &swerveChassis }, // Drive requirements, usually just a single drive subsystem
 		true // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
 	);
 
