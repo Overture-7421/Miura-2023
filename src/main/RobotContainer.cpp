@@ -17,6 +17,7 @@ RobotContainer::RobotContainer() {
 	pathChooser.AddOption("Test2", "Test2");
 	pathChooser.AddOption("Test3", "Test3");
 	pathChooser.AddOption("Test4", "Test4");
+	pathChooser.AddOption("Test5.1", "Test5.1");
 
 
 
@@ -34,7 +35,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
 }
 
 frc2::CommandPtr RobotContainer::CreateAuto(std::string pathName) {
-	std::vector<pathplanner::PathPlannerTrajectory> examplePath = pathplanner::PathPlanner::loadPathGroup(pathName, { pathplanner::PathConstraints(1_mps, 4_mps_sq),pathplanner::PathConstraints(4_mps, 4_mps_sq),pathplanner::PathConstraints(.2_mps, 2_mps_sq),pathplanner::PathConstraints(1_mps, 2_mps_sq), });
+	std::vector<pathplanner::PathPlannerTrajectory> examplePath = pathplanner::PathPlanner::loadPathGroup(pathName, { pathplanner::PathConstraints(2_mps, 4_mps_sq),pathplanner::PathConstraints(1_mps, 4_mps_sq),pathplanner::PathConstraints(2_mps, 2_mps_sq),pathplanner::PathConstraints(.2_mps, 2_mps_sq), });
 
 	pathplanner::SwerveAutoBuilder autoBuilder(
 		[this]() { return swerveChassis.getOdometry(); }, // Function to supply current robot pose
