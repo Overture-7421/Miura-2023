@@ -24,11 +24,12 @@ public:
   void Periodic() override;
 
 private:
+  photonlib::PhotonCamera cameraEstimator{ "IMX219" };
   photonlib::PhotonCamera camera{ "IMX219" };
   photonlib::PhotonPipelineResult cameraResult;
   frc::Transform3d cameraToRobot{ {0_m, 0_m, 0.50_m}, frc::Rotation3d{} };
   frc::AprilTagFieldLayout tagLayout{ frc::LoadAprilTagLayoutField(frc::AprilTagField::k2023ChargedUp) };
-  photonlib::PhotonPoseEstimator poseEstimator{ tagLayout, photonlib::PoseStrategy::CLOSEST_TO_REFERENCE_POSE, std::move(camera), cameraToRobot };
+  photonlib::PhotonPoseEstimator poseEstimator{ tagLayout, photonlib::PoseStrategy::CLOSEST_TO_REFERENCE_POSE, std::move(cameraEstimator), cameraToRobot };
 
   SwerveChassis* chassis;
 

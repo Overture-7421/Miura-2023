@@ -45,11 +45,6 @@ void SwerveChassis::setSpeed(frc::ChassisSpeeds speeds) {
     wpi::array<frc::SwerveModuleState, 4> desiredStates = kinematics.ToSwerveModuleStates(speeds);
 
     setModuleStates(desiredStates);
-
-    backRightModule.setVoltages();
-    backLeftModule.setVoltages();
-    frontLeftModule.setVoltages();
-    frontRightModule.setVoltages();
 }
 
 // Uso para caracterización
@@ -95,6 +90,11 @@ void SwerveChassis::setModuleStates(wpi::array<frc::SwerveModuleState, 4> desire
     frontRightModule.setState(desiredStates[1]);
     backRightModule.setState(desiredStates[2]);
     backLeftModule.setState(desiredStates[3]);
+
+    backRightModule.setVoltages();
+    backLeftModule.setVoltages();
+    frontLeftModule.setVoltages();
+    frontRightModule.setVoltages();
 }
 
 wpi::array<frc::SwerveModuleState, 4> SwerveChassis::getModuleStates() {
