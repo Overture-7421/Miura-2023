@@ -4,9 +4,8 @@
 
 #pragma once
 
-#include <frc2/command/SubsystemBase.h>
 #include <ctre/Phoenix.h>
-#include <frc/Solenoid.h>
+#include <frc/Solenoid.h> // <- Borrar?
 #include <frc/DoubleSolenoid.h>
 #include <frc2/command/SubsystemBase.h>
 
@@ -14,17 +13,16 @@
 class Intake : public frc2::SubsystemBase {
  public:
   Intake();
- 
- void setVoltage ();
- /*  
-    Codigo pasado
-    hacerlo para 2 motores e invertir uno
+//Preparado para cuando migremos el código a Intake.cpp
+//void setVoltage(double voltage);
+//void setPistons(bool set);
 
-    Intake() { intakeMotor.SetInverted(true); };
-    void setMotor(double voltage) {
-    leftIntakeMotor.SetVoltage(units::volt_t(voltage));
-  }
-*/
+ void setVoltage (double voltage) {
+  leftIntakeMotor.SetVoltage(units::volt_t(voltage));
+  rightIntakeMotor.SetVoltage(units::volt_t(voltage));
+//Corregir ^ (hacer 1 a slave e invertir desde Intake.cpp)
+ }
+
  void setPiston	(bool state) {
     if (state) {
         intakeSolenoid.Set(frc::DoubleSolenoid::Value::kForward);
@@ -32,22 +30,13 @@ class Intake : public frc2::SubsystemBase {
         intakeSolenoid.Set(frc::DoubleSolenoid::Value::kReverse);
     }
  } 
-    //Aqui va a ir una función "invertTalonFX" para invertir el movimiento
-    void SetInverted(TalonFXInvertType invertType);
 
-
-    void Set(TalonFXControlMode FollowerType, double 1.0, DemandType NeutralMode, double demand1);
-   
-
-   //Aqui va ir una función "setTalofnFX" para definir porcentaje 
-    void Set(TalonFXControlMode PercentOutput, double 1.0);
-  
   void Periodic() override;
 
  private:
  
  WPI_TalonFX leftIntakeMotor {13};
- WPI_TalonFX rightIntakeMotor  {14};  
+ WPI_TalonFX rightIntakeMotor {14};  
  frc::DoubleSolenoid intakeSolenoid {frc::PneumaticsModuleType::CTREPCM, 1, 2};
  
 };
