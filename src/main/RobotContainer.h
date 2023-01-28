@@ -35,7 +35,7 @@ private:
 
 	// Subsystems
 	SwerveChassis swerveChassis;
-	// VisionManager visionManager{ &swerveChassis };
+	VisionManager visionManager{ &swerveChassis };
 
 	//Auto
 	frc::SendableChooser<std::string> pathChooser;

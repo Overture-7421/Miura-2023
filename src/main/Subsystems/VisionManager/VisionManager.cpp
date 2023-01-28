@@ -9,7 +9,7 @@ VisionManager::VisionManager(SwerveChassis* chassis): chassis(chassis) {
 };
 
 void VisionManager::Periodic() {
-    // cameraResult = camera.GetLatestResult();
+    cameraResult = camera.GetLatestResult();
 
     // if (cameraResult.HasTargets()) {
     //     photonlib::PhotonTrackedTarget target = cameraResult.GetBestTarget();

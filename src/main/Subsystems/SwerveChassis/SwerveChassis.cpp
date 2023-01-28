@@ -45,6 +45,11 @@ void SwerveChassis::setSpeed(frc::ChassisSpeeds speeds) {
     wpi::array<frc::SwerveModuleState, 4> desiredStates = kinematics.ToSwerveModuleStates(speeds);
 
     setModuleStates(desiredStates);
+
+    backRightModule.setVoltages();
+    backLeftModule.setVoltages();
+    frontLeftModule.setVoltages();
+    frontRightModule.setVoltages();
 }
 
 // Uso para caracterización
@@ -116,21 +121,15 @@ wpi::array<frc::SwerveModulePosition, 4> SwerveChassis::getModulePosition() {
 
 // This method will be called once per scheduler run
 void SwerveChassis::Periodic() {
-    frc::SmartDashboard::PutNumber("LinearX", linearX);
-    frc::SmartDashboard::PutNumber("LinearY", linearY);
-    frc::SmartDashboard::PutNumber("Angular", angular);
-
-    backRightModule.Periodic();
-    backLeftModule.Periodic();
-    frontLeftModule.Periodic();
-    frontRightModule.Periodic();
-
+    // frc::SmartDashboard::PutNumber("LinearX", linearX);
+    // frc::SmartDashboard::PutNumber("LinearY", linearY);
+    // frc::SmartDashboard::PutNumber("Angular", angular);
 
     odometry.Update(frc::Rotation2d(units::degree_t(-navx.GetAngle())), getModulePosition());
     auto estimatedPos = getOdometry();
-    frc::SmartDashboard::PutNumber("OdometryX", estimatedPos.X().value());
-    frc::SmartDashboard::PutNumber("OdometryY", estimatedPos.Y().value());
-    frc::SmartDashboard::PutNumber("AnglenaveX", estimatedPos.Rotation().Degrees().value());
+    // frc::SmartDashboard::PutNumber("OdometryX", estimatedPos.X().value());
+    // frc::SmartDashboard::PutNumber("OdometryY", estimatedPos.Y().value());
+    // frc::SmartDashboard::PutNumber("AnglenaveX", estimatedPos.Rotation().Degrees().value());
 
 
     field2d.SetRobotPose(getOdometry());

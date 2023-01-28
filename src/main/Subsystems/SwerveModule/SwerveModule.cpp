@@ -67,17 +67,10 @@ frc::SwerveModulePosition SwerveModule::getPosition() {
 }
 
 void SwerveModule::Periodic() {
-    SetRotatorVoltage(getRotatorPID(moduleState.angle.Degrees().value()));
 
-    if (useRawVoltageSpeed) {
-        wheel.SetVoltage(units::volt_t(wheelVoltage));
-    } else {
-        wheel.SetVoltage(driveFeedForward.Calculate(moduleState.speed));
-    }
-
-    frc::SmartDashboard::PutNumber(name + "/Distance", getDistance());
-    frc::SmartDashboard::PutNumber(name + "/Angle", getAngle());
-    frc::SmartDashboard::PutNumber(name + "/RawAngle", canCoder.GetAbsolutePosition());
+    // frc::SmartDashboard::PutNumber(name + "/Distance", getDistance());
+    // frc::SmartDashboard::PutNumber(name + "/Angle", getAngle());
+    // frc::SmartDashboard::PutNumber(name + "/RawAngle", canCoder.GetAbsolutePosition());
 }
 
 void SwerveModule::setRotatorPIDValues(double kP, double kI, double kD, double f) {
@@ -87,4 +80,14 @@ void SwerveModule::setRotatorPIDValues(double kP, double kI, double kD, double f
 
 void SwerveModule::setUseRawVoltageSpeed(bool set) {
     useRawVoltageSpeed = set;
+}
+
+void SwerveModule::setVoltages() {
+    SetRotatorVoltage(getRotatorPID(moduleState.angle.Degrees().value()));
+
+    if (useRawVoltageSpeed) {
+        wheel.SetVoltage(units::volt_t(wheelVoltage));
+    } else {
+        wheel.SetVoltage(driveFeedForward.Calculate(moduleState.speed));
+    }
 }
