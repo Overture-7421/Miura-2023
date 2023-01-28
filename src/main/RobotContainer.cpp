@@ -8,18 +8,18 @@
 
 RobotContainer::RobotContainer() {
 
+
 	//Set default commands
 	swerveChassis.SetDefaultCommand(Drive(&swerveChassis, &controller));
 
 	//Set choosers for auto
-	pathChooser.SetDefaultOption("PracticePath", "PracticePath");
-	pathChooser.AddOption("JulianAndRigoTest", "JulianAndRigoTest");
+	pathChooser.SetDefaultOption("OutOfCommunity&Balance", "OutOfCommunity&Balance");
+	pathChooser.AddOption("Test1", "Test1");
 	pathChooser.AddOption("Test2", "Test2");
 	pathChooser.AddOption("Test3", "Test3");
 	pathChooser.AddOption("Test4", "Test4");
-	pathChooser.AddOption("Test5.1", "Test5.1");
-
-
+	pathChooser.AddOption("Test5", "Test5");
+	pathChooser.AddOption("Test6", "Test6");
 
 	frc::SmartDashboard::PutData("Auto Chooser", &pathChooser);
 
@@ -35,7 +35,12 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
 }
 
 frc2::CommandPtr RobotContainer::CreateAuto(std::string pathName) {
-	std::vector<pathplanner::PathPlannerTrajectory> examplePath = pathplanner::PathPlanner::loadPathGroup(pathName, { pathplanner::PathConstraints(2_mps, 4_mps_sq),pathplanner::PathConstraints(1_mps, 4_mps_sq),pathplanner::PathConstraints(2_mps, 2_mps_sq),pathplanner::PathConstraints(.2_mps, 2_mps_sq), });
+	std::vector<pathplanner::PathPlannerTrajectory> examplePath = pathplanner::PathPlanner::loadPathGroup(pathName, { pathplanner::PathConstraints(4_mps, 4_mps_sq),
+	pathplanner::PathConstraints(4_mps, 4_mps_sq),
+	pathplanner::PathConstraints(.5_mps, 2_mps_sq), });
+
+	eventMap.emplace("Stage1", std::make_shared<frc2::PrintCommand>("Salió en la terminal??"));
+
 
 	pathplanner::SwerveAutoBuilder autoBuilder(
 		[this]() { return swerveChassis.getOdometry(); }, // Function to supply current robot pose
