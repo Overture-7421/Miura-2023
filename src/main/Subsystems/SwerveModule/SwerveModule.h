@@ -31,6 +31,7 @@ public:
   frc::SwerveModulePosition getPosition();
   void setRotatorPIDValues(double kP, double kI, double kD, double f);
   void setUseRawVoltageSpeed(bool set);
+  void setVoltages();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
