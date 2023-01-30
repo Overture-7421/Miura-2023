@@ -77,8 +77,8 @@ const frc::SwerveDriveKinematics<4>& SwerveChassis::getKinematics() {
     return kinematics;
 }
 
-void SwerveChassis::addVisionMeasurement(frc::Pose2d pose, units::second_t latency) {
-    odometry.AddVisionMeasurement(pose, frc::Timer::GetFPGATimestamp() - latency);
+void SwerveChassis::addVisionMeasurement(frc::Pose2d pose, units::second_t timestamp) {
+    odometry.AddVisionMeasurement(pose, timestamp);
 }
 
 void SwerveChassis::resetNavx() {
