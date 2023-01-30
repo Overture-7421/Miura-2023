@@ -5,7 +5,6 @@
 #pragma once
 
 #include <ctre/Phoenix.h>
-#include <frc/Solenoid.h> // <- Borrar?
 #include <frc/DoubleSolenoid.h>
 #include <frc2/command/SubsystemBase.h>
 
@@ -15,12 +14,14 @@ class Intake : public frc2::SubsystemBase {
   Intake();
 //Preparado para cuando migremos el código a Intake.cpp
 //void setVoltage(double voltage);
-//void setPistons(bool set);
+//void setPistons(bool state);
 
  void setVoltage (double voltage) {
-  leftIntakeMotor.SetVoltage(units::volt_t(voltage));
-  rightIntakeMotor.SetVoltage(units::volt_t(voltage));
-//Corregir ^ (hacer 1 a slave e invertir desde Intake.cpp)
+  intakeVoltage = units::volt_t(voltage);
+  rightIntakeSlave.SetInverted(true);
+
+  leftIntakeMaster.SetVoltage(intakeVoltage);
+  rightIntakeSlave.Follow(leftIntakeMaster);
  }
 
  void setPiston	(bool state) {
@@ -34,10 +35,10 @@ class Intake : public frc2::SubsystemBase {
   void Periodic() override;
 
  private:
- 
- WPI_TalonFX leftIntakeMotor {13};
- WPI_TalonFX rightIntakeMotor {14};  
- frc::DoubleSolenoid intakeSolenoid {frc::PneumaticsModuleType::CTREPCM, 1, 2};
+ frc::DoubleSolenoid intakeSolenoid {frc::PneumaticsModuleType::CTREPCM, 0, 1};
+ WPI_TalonFX leftIntakeMaster {13};
+ WPI_TalonFX rightIntakeSlave {14};  
+ units::volt_t intakeVoltage;
  
 };
 
