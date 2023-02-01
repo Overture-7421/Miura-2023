@@ -5,12 +5,20 @@
 #include "VisionManager.h"
 
 VisionManager::VisionManager(SwerveChassis* chassis): chassis(chassis) {
+    frc::DriverStation::Alliance allianceColor = frc::DriverStation::GetAlliance();
+    if (allianceColor == frc::DriverStation::Alliance::kBlue) {
+        tagLayout.SetOrigin(frc::AprilTagFieldLayout::OriginPosition::kBlueAllianceWallRightSide);
+    } else {
+        tagLayout.SetOrigin(frc::AprilTagFieldLayout::OriginPosition::kRedAllianceWallRightSide);
+    }
 
-};
+    poseEstimator = new photonlib::PhotonPoseEstimator{ tagLayout, photonlib::PoseStrategy::CLOSEST_TO_REFERENCE_POSE, std::move(cameraEstimator), cameraToRobot };
+
+}
 
 void VisionManager::Periodic() {
     /*Calculate pose using AprilTags*/
-    std::optional<photonlib::EstimatedRobotPose>poseResult = poseEstimator.Update();
+    std::optional<photonlib::EstimatedRobotPose>poseResult = poseEstimator->Update();
     if (poseResult) {
         chassis->addVisionMeasurement(poseResult.value().estimatedPose.ToPose2d(), poseResult.value().timestamp);
     }

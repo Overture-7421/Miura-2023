@@ -14,6 +14,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/apriltag/AprilTagFieldLayout.h>
 #include <frc/apriltag/AprilTagFields.h>
+#include <frc/DriverStation.h>
 
 #include "Subsystems/SwerveChassis/SwerveChassis.h"
 
@@ -29,7 +30,7 @@ private:
   photonlib::PhotonPipelineResult cameraResult;
   frc::Transform3d cameraToRobot{ {0_m, 0_m, 0.50_m}, frc::Rotation3d{} };
   frc::AprilTagFieldLayout tagLayout{ frc::LoadAprilTagLayoutField(frc::AprilTagField::k2023ChargedUp) };
-  photonlib::PhotonPoseEstimator poseEstimator{ tagLayout, photonlib::PoseStrategy::CLOSEST_TO_REFERENCE_POSE, std::move(cameraEstimator), cameraToRobot };
+  photonlib::PhotonPoseEstimator* poseEstimator;
 
   SwerveChassis* chassis;
 
