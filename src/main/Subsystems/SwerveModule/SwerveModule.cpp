@@ -49,6 +49,10 @@ double SwerveModule::getRotatorPID(double setPoint) {
     return rotatorPID.Calculate(getAngle(), setPoint);
 }
 
+double SwerveModule::getWheelPID(double setPoint) {
+    return wheelPID.Calculate(getSpeed(), setPoint);
+}
+
 frc::SwerveModuleState SwerveModule::getState() {
     frc::SwerveModuleState state;
 
@@ -88,6 +92,6 @@ void SwerveModule::setVoltages() {
     if (useRawVoltageSpeed) {
         wheel.SetVoltage(units::volt_t(wheelVoltage));
     } else {
-        wheel.SetVoltage(driveFeedForward.Calculate(moduleState.speed));
+        wheel.SetVoltage(units::volt_t{ getWheelPID(moduleState.speed.value()) } + driveFeedForward.Calculate(moduleState.speed));
     }
 }
