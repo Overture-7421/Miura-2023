@@ -12,34 +12,15 @@
 class Intake : public frc2::SubsystemBase {
  public:
   Intake();
-//Preparado para cuando migremos el código a Intake.cpp
-//void setVoltage(double voltage);
-//void setPistons(bool state);
-
- void setVoltage (double voltage) {
-  intakeVoltage = units::volt_t(voltage);
-  rightIntakeSlave.SetInverted(true);
-
-  leftIntakeMaster.SetVoltage(intakeVoltage);
-  rightIntakeSlave.Follow(leftIntakeMaster);
- }
-
- void setPiston	(bool state) {
-    if (state) {
-        intakeSolenoid.Set(frc::DoubleSolenoid::Value::kForward);
-    } else {
-        intakeSolenoid.Set(frc::DoubleSolenoid::Value::kReverse);
-    }
- } 
+  void setVoltage(double voltage);
+  void setPistons(bool state);
 
   void Periodic() override;
 
  private:
  frc::DoubleSolenoid intakeSolenoid {frc::PneumaticsModuleType::CTREPCM, 0, 1};
  WPI_TalonFX leftIntakeMaster {13};
- WPI_TalonFX rightIntakeSlave {14};  
  units::volt_t intakeVoltage;
- 
 };
 
 

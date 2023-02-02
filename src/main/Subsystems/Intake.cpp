@@ -6,5 +6,19 @@
 
 Intake::Intake() = default;
 
+
+void Intake::setVoltage (double voltage) {
+  leftIntakeMaster.SetVoltage(intakeVoltage);
+} 
+
+ void Intake::setPistons (bool state) {
+    if (state) {
+        intakeSolenoid.Set(frc::DoubleSolenoid::Value::kForward);
+    } else {
+        intakeSolenoid.Set(frc::DoubleSolenoid::Value::kReverse);
+    }
+ } 
+
+
 // This method will be called once per scheduler run
 void Intake::Periodic() {}
