@@ -18,20 +18,20 @@
 
 class SwerveModule: public frc2::SubsystemBase {
 public:
-    SwerveModule(int rotatorID, int wheelID, int canCoderID, double offSet, std::string name = "");
+    SwerveModule( int rotatorID, int wheelID, int canCoderID, double offSet, std::string name = "" );
     double getSpeed();
     double getDistance();
-    double getMeters(double codes);
-    void SetRotatorVoltage(double rotatorVoltage);
-    void SetWheelVoltage(double wheelVoltage);
+    double getMeters( double codes );
+    void SetRotatorVoltage( double rotatorVoltage );
+    void SetWheelVoltage( double wheelVoltage );
     double getAngle();
-    double getRotatorPID(double setPoint);
-    double getWheelPID(double setPoint);
+    double getRotatorPID( double setPoint );
+    // double getWheelPID(double setPoint);
     frc::SwerveModuleState getState();
-    void setState(frc::SwerveModuleState state);
+    void setState( frc::SwerveModuleState state );
     frc::SwerveModulePosition getPosition();
-    void setRotatorPIDValues(double kP, double kI, double kD, double f);
-    void setUseRawVoltageSpeed(bool set);
+    void setRotatorPIDValues( double kP, double kI, double kD, double f );
+    void setUseRawVoltageSpeed( bool set );
     void setVoltages();
 
     /**
@@ -50,7 +50,7 @@ private:
 
     //PID
     frc2::PIDController rotatorPID{ 0.125, 0.5, 0 };
-    frc2::PIDController wheelPID{ 0.065, 0, 0 };
+    // frc2::PIDController wheelPID{ 0.065, 0, 0 };
 
     double rotatorF = 0;
     double wheelF = 0;
