@@ -7,10 +7,7 @@
 #include <photonlib/PhotonCamera.h>
 #include <photonlib/PhotonPoseEstimator.h>
 #include <frc2/command/SubsystemBase.h>
-#include <frc/geometry/Transform3d.h>
 #include <frc/geometry/Pose3d.h>
-#include <frc/geometry/Transform2d.h>
-#include <frc/geometry/Rotation3d.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/apriltag/AprilTagFieldLayout.h>
 #include <frc/apriltag/AprilTagFields.h>
@@ -20,18 +17,22 @@
 
 class VisionManager: public frc2::SubsystemBase {
 public:
-  VisionManager(SwerveChassis* chassis);
+    VisionManager(SwerveChassis* chassis);
+    void setAllianceColor();
+    void updateOdometry();
+    void Periodic() override;
 
-  void Periodic() override;
+    /* PhotonVision */
+    photonlib::PhotonCamera camera{ "IMX219" };
+    frc::AprilTagFieldLayout tagLayout{ frc::LoadAprilTagLayoutField(frc::AprilTagField::k2023ChargedUp) };
 
 private:
-  photonlib::PhotonCamera cameraEstimator{ "IMX219" };
-  photonlib::PhotonCamera camera{ "IMX219" };
-  photonlib::PhotonPipelineResult cameraResult;
-  frc::Transform3d cameraToRobot{ {0_m, 0_m, 0.50_m}, frc::Rotation3d{} };
-  frc::AprilTagFieldLayout tagLayout{ frc::LoadAprilTagLayoutField(frc::AprilTagField::k2023ChargedUp) };
-  photonlib::PhotonPoseEstimator* poseEstimator;
+    /* PhotonVision */
+    photonlib::PhotonCamera cameraEstimator{ "IMX219" };
+    photonlib::PhotonPipelineResult cameraResult;
+    frc::Transform3d cameraToRobot{ {0_m, 0_m, 0.50_m}, frc::Rotation3d{} };
+    photonlib::PhotonPoseEstimator* poseEstimator;
 
-  SwerveChassis* chassis;
-
+    /* Subsystems */
+    SwerveChassis* swerveChassis;
 };

@@ -4,7 +4,10 @@
 
 #include "VisionManager.h"
 
-VisionManager::VisionManager(SwerveChassis* chassis): chassis(chassis) {
+VisionManager::VisionManager(SwerveChassis* swerveChassis): swerveChassis(swerveChassis) {}
+
+void VisionManager::setAllianceColor() {
+    // Set alliance color for the poseEstimator
     frc::DriverStation::Alliance allianceColor = frc::DriverStation::GetAlliance();
     if (allianceColor == frc::DriverStation::Alliance::kBlue) {
         tagLayout.SetOrigin(frc::AprilTagFieldLayout::OriginPosition::kBlueAllianceWallRightSide);
@@ -12,15 +15,22 @@ VisionManager::VisionManager(SwerveChassis* chassis): chassis(chassis) {
         tagLayout.SetOrigin(frc::AprilTagFieldLayout::OriginPosition::kRedAllianceWallRightSide);
     }
 
-    poseEstimator = new photonlib::PhotonPoseEstimator{ tagLayout, photonlib::PoseStrategy::CLOSEST_TO_REFERENCE_POSE, std::move(cameraEstimator), cameraToRobot };
-
+    // Set pose estimator
+    poseEstimator = new photonlib::PhotonPoseEstimator{
+        tagLayout,
+        photonlib::PoseStrategy::LOWEST_AMBIGUITY,
+        std::move(cameraEstimator),
+        cameraToRobot
+    };
 }
 
-void VisionManager::Periodic() {
-    /*Calculate pose using AprilTags*/
-    std::optional<photonlib::EstimatedRobotPose>poseResult = poseEstimator->Update();
+void VisionManager::updateOdometry() {
+    /* Calculate pose using AprilTags */
+    std::optional<photonlib::EstimatedRobotPose>poseResult = poseEstimator->Update();;
+
     if (poseResult) {
-        chassis->addVisionMeasurement(poseResult.value().estimatedPose.ToPose2d(), poseResult.value().timestamp);
+        swerveChassis->addVisionMeasurement(poseResult.value().estimatedPose.ToPose2d(), poseResult.value().timestamp);
     }
-
 }
+
+void VisionManager::Periodic() {}
