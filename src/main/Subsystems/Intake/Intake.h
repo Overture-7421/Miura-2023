@@ -13,15 +13,22 @@ class Intake : public frc2::SubsystemBase {
  public:
   Intake();
   void setVoltage(double voltage);
-  void setPistons(bool state);
+  void setConeControl();
+  void setConeAuto(bool state);
+  void setWristControl();
+  void setWristAuto(bool state);
 
   void Periodic() override;
 
  private:
- frc::DoubleSolenoid intakeSolenoid {frc::PneumaticsModuleType::CTREPCM, 0, 1};
- WPI_TalonFX leftIntakeMaster {13};
- units::volt_t intakeVoltage;
+ frc::DoubleSolenoid coneSolenoid{frc::PneumaticsModuleType::CTREPCM, 0, 1};
+ frc::DoubleSolenoid wristSolenoid{frc::PneumaticsModuleType::CTREPCM, 2, 3};
+ WPI_TalonFX intakeMotor{13};
 };
+
+
+//otro piston
+
 
 
 
