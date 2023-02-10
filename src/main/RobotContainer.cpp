@@ -17,12 +17,7 @@ RobotContainer::RobotContainer() {
 
     //Set choosers for auto
     pathChooser.SetDefaultOption("OutOfCommunity&Balance", "OutOfCommunity&Balance");
-    pathChooser.AddOption("Test1", "Test1");
-    pathChooser.AddOption("Test2", "Test2");
-    pathChooser.AddOption("Test3", "Test3");
-    pathChooser.AddOption("Test4", "Test4");
-    pathChooser.AddOption("Test5", "Test5");
-    pathChooser.AddOption("Test6", "Test6");
+
 
     frc::SmartDashboard::PutData("Auto Chooser", &pathChooser);
 
