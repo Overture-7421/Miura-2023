@@ -5,40 +5,40 @@
 #include "Intake.h"
 
 Intake::Intake() {
-  intakeMotor.SetNeutralMode(NeutralMode::Brake);
-  intakeMotor.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_1_General, 20);
-  intakeMotor.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_2_Feedback0, 255);
-  intakeMotor.ConfigOpenloopRamp(0,1);
-  intakeMotor.ConfigSupplyCurrentLimit(SupplyCurrentLimitConfiguration(true, 25, 0, 1));
+    intakeMotor.SetNeutralMode(NeutralMode::Brake);
+    intakeMotor.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_1_General, 20);
+    intakeMotor.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_2_Feedback0, 255);
+    intakeMotor.ConfigOpenloopRamp(0, 1);
+    intakeMotor.ConfigSupplyCurrentLimit(SupplyCurrentLimitConfiguration(true, 25, 0, 1));
 }
 
-void Intake::setVoltage (double voltage) {
-  intakeMotor.SetVoltage(units::volt_t(voltage));
-} 
+void Intake::setVoltage(double voltage) {
+    intakeMotor.SetVoltage(units::volt_t(voltage));
+}
 
- void Intake::setConeControl() {
-  coneSolenoid.Toggle();
- }
+void Intake::setConeControl() {
+    conePiston.Toggle();
+}
 
- void Intake::setConeAuto(bool state) {
+void Intake::setConeAuto(bool state) {
     if (state) {
-        coneSolenoid.Set(frc::DoubleSolenoid::Value::kForward);
+        conePiston.Set(frc::DoubleSolenoid::Value::kForward);
     } else {
-        coneSolenoid.Set(frc::DoubleSolenoid::Value::kReverse);
+        conePiston.Set(frc::DoubleSolenoid::Value::kReverse);
     }
- } 
+}
 
- void Intake::setWristControl() {
-  wristSolenoid.Toggle();
- }
- 
- void Intake::setWristAuto(bool state) {
+void Intake::setWristControl() {
+    wristPiston.Toggle();
+}
+
+void Intake::setWristAuto(bool state) {
     if (state) {
-        wristSolenoid.Set(frc::DoubleSolenoid::Value::kForward);
+        wristPiston.Set(frc::DoubleSolenoid::Value::kForward);
     } else {
-        wristSolenoid.Set(frc::DoubleSolenoid::Value::kReverse);
+        wristPiston.Set(frc::DoubleSolenoid::Value::kReverse);
     }
- } 
+}
 
 // This method will be called once per scheduler run
 void Intake::Periodic() {}

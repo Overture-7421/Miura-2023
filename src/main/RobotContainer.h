@@ -15,9 +15,12 @@
 
 #include "Subsystems/SwerveChassis/SwerveChassis.h"
 #include "Subsystems/VisionManager/VisionManager.h"
+#include "Subsystems/Intake/Intake.h"
+
 #include "Commands/Teleop/Drive/Drive.h"
 #include "Commands/Common/AlignRobotToTarget/AlignRobotToTarget.h"
 #include "Commands/Common/UpdateVisionOdometry/UpdateVisionOdometry.h"
+#include "Commands/Common/IntakeControl/IntakeControl.h"
 
 class RobotContainer {
 public:
@@ -38,9 +41,15 @@ private:
     frc2::Trigger alignRight{ [this] {return controller.GetRightBumper();} }; //Change Button for final robot
     frc2::Trigger alignLeft{ [this] {return controller.GetLeftBumper();} }; //Change Button for final robot
 
+    // Mechanism Controller
+    frc::XboxController mechanisms{ 1 };
+    frc2::Trigger conePiston{ [this] {return mechanisms.GetRightBumper();} };
+    frc2::Trigger wristPiston{ [this] {return mechanisms.GetLeftBumper();} };
+
     // Subsystems
     SwerveChassis swerveChassis;
     VisionManager visionManager{ &swerveChassis };
+    Intake intake;
 
     //Auto
     frc::SendableChooser<std::string> pathChooser;

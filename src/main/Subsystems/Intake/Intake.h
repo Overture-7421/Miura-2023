@@ -21,8 +21,8 @@ class Intake : public frc2::SubsystemBase {
   void Periodic() override;
 
  private:
- frc::DoubleSolenoid coneSolenoid{frc::PneumaticsModuleType::CTREPCM, 0, 1};
- frc::DoubleSolenoid wristSolenoid{frc::PneumaticsModuleType::CTREPCM, 2, 3};
+ frc::DoubleSolenoid conePiston{frc::PneumaticsModuleType::CTREPCM, 0, 1};
+ frc::DoubleSolenoid wristPiston{frc::PneumaticsModuleType::CTREPCM, 2, 3};
  WPI_TalonFX intakeMotor{13};
 };
 
