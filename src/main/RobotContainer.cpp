@@ -34,8 +34,8 @@ void RobotContainer::ConfigureBindings() {
     alignLeft.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "Left").ToPtr());
 
     // Mechanisms Controller Buttons
-    conePiston.OnTrue(frc2::InstantCommand{ [this]() { this->intake.SetConeControl();} }.ToPTR());
-    conePiston.OnTrue(frc2::InstantCommand{ [this]() { this->intake.SetWristControl();} }.ToPTR());
+    conePiston.OnTrue(frc2::InstantCommand{ [this]() { this->intake.setConeControl();} }.ToPtr());
+    conePiston.OnTrue(frc2::InstantCommand{ [this]() { this->intake.setWristControl();} }.ToPtr());
 
 }
 
