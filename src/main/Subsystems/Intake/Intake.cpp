@@ -40,5 +40,12 @@ void Intake::setWristAuto(bool state) {
     }
 }
 
+double Intake::getUltrasonic() {
+    double rawValue = ultrasonic.GetValue();
+    double scaleFactor = 5 / frc::RobotController::GetVoltage5V();
+    double distanceCentimeters = rawValue * scaleFactor * 0.125;
+    return distanceCentimeters;
+}
+
 // This method will be called once per scheduler run
 void Intake::Periodic() {}

@@ -5,38 +5,27 @@
 #pragma once
 
 #include <ctre/Phoenix.h>
+#include <frc/AnalogInput.h>
 #include <frc/DoubleSolenoid.h>
+#include <frc/RobotController.h>
 #include <frc2/command/SubsystemBase.h>
 
 
-class Intake : public frc2::SubsystemBase {
- public:
-  Intake();
-  void setVoltage(double voltage);
-  void setConeControl();
-  void setConeAuto(bool state);
-  void setWristControl();
-  void setWristAuto(bool state);
+class Intake: public frc2::SubsystemBase {
+public:
+    Intake();
+    void setVoltage(double voltage);
+    void setConeControl();
+    void setConeAuto(bool state);
+    void setWristControl();
+    void setWristAuto(bool state);
+    double getUltrasonic();
 
-  void Periodic() override;
+    void Periodic() override;
 
- private:
- frc::DoubleSolenoid conePiston{frc::PneumaticsModuleType::CTREPCM, 0, 1};
- frc::DoubleSolenoid wristPiston{frc::PneumaticsModuleType::CTREPCM, 2, 3};
- WPI_TalonFX intakeMotor{13};
+private:
+    frc::DoubleSolenoid conePiston{ frc::PneumaticsModuleType::CTREPCM, 0, 1 }; //input no seguto
+    frc::DoubleSolenoid wristPiston{ frc::PneumaticsModuleType::CTREPCM, 2, 3 }; //input no seguro
+    WPI_TalonFX intakeMotor{ 13 }; //input no seguro
+    frc::AnalogInput ultrasonic{ 0 };
 };
-
-
-//otro piston
-
-
-
-
-//USEFUL DOCUMENTATION (Forgive us, no brain, just ctrl + c, ctrl + v   :D )
-
-
-/* alabada sea la documentacion
-CTRE https://robotpy.readthedocs.io/projects/ctre/en/stable/ctre/WPI_TalonFX.html#ctre.WPI_TalonFX
-WPILib https://github.wpilib.org/allwpilib/docs/release/cpp/classfrc_1_1_p_w_m_talon_f_x.html
-Solenoids https://docs.wpilib.org/es/stable/docs/software/hardware-apis/pneumatics/pneumatics.html
-*/
