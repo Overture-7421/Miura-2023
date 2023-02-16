@@ -19,6 +19,7 @@ void Robot::DisabledPeriodic() {}
 void Robot::DisabledExit() {}
 
 void Robot::AutonomousInit() {
+    m_container.setAllianceColor();
     m_autonomousCommand = m_container.GetAutonomousCommand();
 
     if (m_autonomousCommand) {
@@ -31,11 +32,10 @@ void Robot::AutonomousPeriodic() {}
 void Robot::AutonomousExit() {}
 
 void Robot::TeleopInit() {
-    m_autonomousCommand = m_container.GetAutonomousCommand();
-
     if (m_autonomousCommand) {
         m_autonomousCommand->Cancel();
     }
+    m_container.setAllianceColor();
 }
 
 void Robot::TeleopPeriodic() {}
