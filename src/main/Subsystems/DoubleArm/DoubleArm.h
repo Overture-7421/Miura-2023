@@ -5,17 +5,18 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
+#include <math.h>
+#include <cmath>
 
-class DoubleArm : public frc2::SubsystemBase {
- public:
-  DoubleArm();
+class DoubleArm: public frc2::SubsystemBase {
+public:
+    DoubleArm();
 
-  /**
-   * Will be called periodically whenever the CommandScheduler runs.
-   */
-  void Periodic() override;
+    /**
+     * Will be called periodically whenever the CommandScheduler runs.
+     */
+    void Periodic() override;
+    void SetArmPosition(double Angle1, double Angle2, double TargetX, double TargetY);
 
- private:
-  // Components (e.g. motor controllers and sensors) should generally be
-  // declared private and exposed only through public methods.
+private:
 };
