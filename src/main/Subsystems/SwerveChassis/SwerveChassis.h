@@ -46,10 +46,10 @@ public:
     void resetNavx();
 
 private:
-    SwerveModule backRightModule{ 1, 2, 16, -138.7, "BackRightModule" };
-    SwerveModule backLeftModule{ 3, 4, 17, -65.3, "BackLeftModule" };
-    SwerveModule frontLeftModule{ 5, 6, 18, -150, "FrontLeftModule" };
-    SwerveModule frontRightModule{ 7, 8, 19, -161.89, "FrontRightModule" };
+    SwerveModule backRightModule{ 1, 2, 16, 26.91, "BackRightModule" };
+    SwerveModule backLeftModule{ 3, 4, 17, -61.4, "BackLeftModule" };
+    SwerveModule frontLeftModule{ 5, 6, 18, -72.3, "FrontLeftModule" };
+    SwerveModule frontRightModule{ 7, 8, 19, -47.95, "FrontRightModule" };
 
     double wheelVoltage;
     double targetAngle;
