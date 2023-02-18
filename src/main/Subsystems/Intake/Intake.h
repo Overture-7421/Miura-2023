@@ -9,21 +9,21 @@
 #include <frc2/command/SubsystemBase.h>
 
 
-class Intake : public frc2::SubsystemBase {
- public:
-  Intake();
-  void setVoltage(double voltage);
-  void setConeControl();
-  void setConeAuto(bool state);
-  void setWristControl();
-  void setWristAuto(bool state);
+class Intake: public frc2::SubsystemBase {
+public:
+    Intake();
+    void setVoltage(double voltage);
+    void setConeControl();
+    void setConeAuto(bool state);
+    void setWristControl();
+    void setWristAuto(bool state);
 
-  void Periodic() override;
+    void Periodic() override;
 
- private:
- frc::DoubleSolenoid coneSolenoid{frc::PneumaticsModuleType::CTREPCM, 0, 1};
- frc::DoubleSolenoid wristSolenoid{frc::PneumaticsModuleType::CTREPCM, 2, 3};
- WPI_TalonFX intakeMotor{13};
+private:
+    frc::DoubleSolenoid coneSolenoid{ frc::PneumaticsModuleType::CTREPCM, 0, 1 };
+    frc::DoubleSolenoid wristSolenoid{ frc::PneumaticsModuleType::CTREPCM, 2, 3 };
+    WPI_TalonFX intakeMotor{ 15 };
 };
 
 
