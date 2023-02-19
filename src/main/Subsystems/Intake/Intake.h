@@ -24,8 +24,9 @@ public:
     void Periodic() override;
 
 private:
-    frc::DoubleSolenoid conePiston{ frc::PneumaticsModuleType::CTREPCM, 0, 1 }; //input no seguro
-    frc::DoubleSolenoid wristPiston{ frc::PneumaticsModuleType::CTREPCM, 2, 3 }; //input no seguro
-    WPI_TalonFX intakeMotor{ 13 }; //input no seguro
     frc::AnalogInput ultrasonic{ 0 };
+    frc::DoubleSolenoid coneSolenoid{ frc::PneumaticsModuleType::CTREPCM, 0, 1 };
+    frc::DoubleSolenoid wristSolenoid{ frc::PneumaticsModuleType::CTREPCM, 2, 3 };
+    WPI_TalonFX intakeMotor{ 15 };
 };
+

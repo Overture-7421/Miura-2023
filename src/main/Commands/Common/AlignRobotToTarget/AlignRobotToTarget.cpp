@@ -4,36 +4,38 @@
 
 #include "AlignRobotToTarget.h"
 
-AlignRobotToTarget::AlignRobotToTarget( SwerveChassis* swerveChassis, VisionManager* visionManager, std::string position )
-    : swerveChassis( swerveChassis ), visionManager( visionManager ), position( position ) {
-    AddRequirements( { swerveChassis, visionManager } );
+AlignRobotToTarget::AlignRobotToTarget(SwerveChassis* swerveChassis, VisionManager* visionManager, std::string position)
+    : swerveChassis(swerveChassis), visionManager(visionManager), position(position) {
+    AddRequirements({ swerveChassis, visionManager });
 }
 
 /* Method for calculating the desiredPosition for path generation */
 void AlignRobotToTarget::calculateAlignPose() {
-    photonlib::PhotonPipelineResult result = visionManager->camera.GetLatestResult();
-    if (result.HasTargets()) {
-        int tagID = result.GetBestTarget().GetFiducialId();
-        frc::Pose2d targetpose = visionManager->tagLayout.GetTagPose( tagID ).value().ToPose2d();
+    std::optional<photonlib::PhotonPipelineResult> cameraResult = visionManager->getCameraResult();
+    if (cameraResult.has_value()) {
+        photonlib::PhotonPipelineResult result = cameraResult.value();
+        if (result.HasTargets()) {
+            int tagID = result.GetBestTarget().GetFiducialId();
+            frc::Pose2d targetpose = visionManager->getField().GetTagPose(tagID).value().ToPose2d();
 
-        frc::Pose2d visionPose = targetpose.TransformBy( { positionMap[position].Translation(), positionMap[position].Rotation() } );
-        frc::Pose2d chassisPose = swerveChassis->getOdometry();
+            frc::Pose2d visionPose = targetpose.TransformBy({ positionMap[position].Translation(), positionMap[position].Rotation() });
+            frc::Pose2d chassisPose = swerveChassis->getOdometry();
 
-        // Delete when functional ************************
-        frc::SmartDashboard::PutNumber( "Objective/objX", visionPose.X().value() );
-        frc::SmartDashboard::PutNumber( "Objective/objY", visionPose.Y().value() );
+            // Create PathPoints
+            std::vector<pathplanner::PathPoint> pathPoints = {
+                { chassisPose.Translation(), chassisPose.Rotation(), chassisPose.Rotation() },
+                { visionPose.Translation(), visionPose.Rotation(), visionPose.Rotation() }
+            };
 
-        // Create PathPoints
-        std::vector<pathplanner::PathPoint> pathPoints = {
-            { chassisPose.Translation(), chassisPose.Rotation(), chassisPose.Rotation() },
-            { visionPose.Translation(), visionPose.Rotation(), visionPose.Rotation() }
-        };
-
-        // Create trajector with constraints
-        trajectory = pathplanner::PathPlanner::generatePath( constraints, pathPoints );
-    } else if (!result.HasTargets()) {
-        End( true );
+            // Create trajector with constraints
+            trajectory = pathplanner::PathPlanner::generatePath(constraints, pathPoints);
+        } else if (!result.HasTargets()) {
+            End(true);
+        }
+    } else if (!cameraResult.has_value()) {
+        End(true);
     }
+
 }
 
 // Called when the command is initially scheduled.
@@ -47,7 +49,7 @@ void AlignRobotToTarget::Initialize() {
         { 0,0,0 },
         { 0,0,0 },
         { 0,0,0 },
-        [this]( auto speeds ) { swerveChassis->setModuleStates( speeds ); },
+        [this](auto speeds) { swerveChassis->setModuleStates(speeds); },
         { swerveChassis },
         false
     );
@@ -61,8 +63,8 @@ void AlignRobotToTarget::Execute() {
 }
 
 // Called once the command ends or is interrupted.
-void AlignRobotToTarget::End( bool interrupted ) {
-    alignCommand->End( interrupted );
+void AlignRobotToTarget::End(bool interrupted) {
+    alignCommand->End(interrupted);
 }
 
 // Returns true when the command should end.

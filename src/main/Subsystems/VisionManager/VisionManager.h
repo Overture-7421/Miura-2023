@@ -20,16 +20,16 @@ public:
     VisionManager(SwerveChassis* chassis);
     void setAllianceColor();
     void updateOdometry();
+    std::optional<photonlib::EstimatedRobotPose> update(frc::Pose2d estimatedPose);
+    std::optional<photonlib::PhotonPipelineResult> getCameraResult();
+    frc::AprilTagFieldLayout getField();
     void Periodic() override;
-
-    /* PhotonVision */
-    photonlib::PhotonCamera camera{ "IMX219" };
-    frc::AprilTagFieldLayout tagLayout{ frc::LoadAprilTagLayoutField(frc::AprilTagField::k2023ChargedUp) };
 
 private:
     /* PhotonVision */
     photonlib::PhotonCamera cameraEstimator{ "IMX219" };
-    photonlib::PhotonPipelineResult cameraResult;
+    photonlib::PhotonCamera camera{ "IMX219" };
+    frc::AprilTagFieldLayout tagLayout{ frc::LoadAprilTagLayoutField(frc::AprilTagField::k2023ChargedUp) };
     frc::Transform3d cameraToRobot{ {0_m, 0_m, 0.50_m}, frc::Rotation3d{} };
     photonlib::PhotonPoseEstimator* poseEstimator;
 

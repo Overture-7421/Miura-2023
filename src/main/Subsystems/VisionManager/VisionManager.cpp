@@ -18,19 +18,38 @@ void VisionManager::setAllianceColor() {
     // Set pose estimator
     poseEstimator = new photonlib::PhotonPoseEstimator{
         tagLayout,
-        photonlib::PoseStrategy::LOWEST_AMBIGUITY,
+        photonlib::PoseStrategy::MULTI_TAG_PNP,
         std::move(cameraEstimator),
         cameraToRobot
     };
+
+    poseEstimator->SetMultiTagFallbackStrategy(photonlib::PoseStrategy::LOWEST_AMBIGUITY);
 }
 
+//Update odometry with vision
 void VisionManager::updateOdometry() {
-    /* Calculate pose using AprilTags */
-    std::optional<photonlib::EstimatedRobotPose>poseResult = poseEstimator->Update();;
+    std::optional<photonlib::EstimatedRobotPose> poseResult = update(swerveChassis->getOdometry());
 
-    if (poseResult) {
-        swerveChassis->addVisionMeasurement(poseResult.value().estimatedPose.ToPose2d(), poseResult.value().timestamp);
+    if (poseResult.has_value()) {
+        photonlib::EstimatedRobotPose pose = poseResult.value();
+        swerveChassis->addVisionMeasurement(pose.estimatedPose.ToPose2d(), pose.timestamp);
     }
+}
+
+//Get EstimatedRobotPose from PhotonVision
+std::optional<photonlib::EstimatedRobotPose> VisionManager::update(frc::Pose2d estimatedPose) {
+    poseEstimator->SetReferencePose(frc::Pose3d(estimatedPose));
+    return poseEstimator->Update();
+}
+
+//GetPhotonPipeLineResult from PhotonVision
+std::optional<photonlib::PhotonPipelineResult> VisionManager::getCameraResult() {
+    return camera.GetLatestResult();
+}
+
+//Get AprilTagFieldLayout from driver station
+frc::AprilTagFieldLayout VisionManager::getField() {
+    return tagLayout;
 }
 
 void VisionManager::Periodic() {}
