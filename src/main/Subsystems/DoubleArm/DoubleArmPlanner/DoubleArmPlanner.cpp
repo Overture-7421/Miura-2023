@@ -5,7 +5,7 @@
 #include "DoubleArmPlanner.h"
 #include <frc/Timer.h>
 
-DoubleArmPlanner::DoubleArmPlanner(PlannerProfile::Constraints constraints): targetPointProfile(constraints, PlannerProfile::State{ PlannerProfile::Distance_t{0}, PlannerProfile::Velocity_t{0} }) {
+DoubleArmPlanner::DoubleArmPlanner(PlannerProfile::Constraints constraints, DoubleArmKinematics kinematics): targetPointProfile(constraints, PlannerProfile::State{ PlannerProfile::Distance_t{0}, PlannerProfile::Velocity_t{0} }), kinematics(kinematics) {
     trajectoryStartTime = frc::Timer::GetFPGATimestamp();
 }
 

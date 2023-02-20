@@ -12,7 +12,7 @@
 typedef frc::TrapezoidProfile<units::meter> PlannerProfile;
 class DoubleArmPlanner {
 public:
-    DoubleArmPlanner(PlannerProfile::Constraints constraints);
+    DoubleArmPlanner(PlannerProfile::Constraints constraints, DoubleArmKinematics kinematics);
     void SetTargetCoord(frc::Translation2d targetCoord, frc::Translation2d currentCoord);
     DoubleArmState CalculateCurrentTargetState();
     bool IsFinished();
