@@ -30,7 +30,7 @@ private:
     photonlib::PhotonCamera cameraEstimator{ "IMX219" };
     photonlib::PhotonCamera camera{ "IMX219" };
     frc::AprilTagFieldLayout tagLayout{ frc::LoadAprilTagLayoutField(frc::AprilTagField::k2023ChargedUp) };
-    frc::Transform3d cameraToRobot{ {0_m, 0_m, 0.50_m}, frc::Rotation3d{} };
+    frc::Transform3d cameraToRobot{ {0.02672_m, 0.21183_m, 0.8775_m}, frc::Rotation3d{} };
     photonlib::PhotonPoseEstimator* poseEstimator;
 
     /* Subsystems */
