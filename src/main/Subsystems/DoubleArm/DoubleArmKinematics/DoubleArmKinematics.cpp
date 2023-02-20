@@ -39,8 +39,8 @@ DoubleArmState DoubleArmKinematics::GetStateForTargetCoord(frc::Translation2d ta
 
 
     DoubleArmState targetState;
-    targetState.lowerAngle = targetLowerAngle;
-    targetState.upperAngle = targetLowerAngle + targetUpperAngle;
+    targetState.lowerAngle = rad2deg(targetLowerAngle);
+    targetState.upperAngle = rad2deg(targetLowerAngle + targetUpperAngle);
 
     return targetState;
 }
