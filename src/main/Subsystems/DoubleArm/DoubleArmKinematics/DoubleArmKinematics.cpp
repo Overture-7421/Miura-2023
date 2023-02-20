@@ -4,6 +4,7 @@
 
 #include "DoubleArmKinematics.h"
 #include <units/length.h>
+#include <algorithm>
 
 DoubleArmKinematics::DoubleArmKinematics(double lowerLength, double upperLength) {
     this->lowerLength = lowerLength;
@@ -29,11 +30,14 @@ DoubleArmState DoubleArmKinematics::GetStateForTargetCoord(frc::Translation2d ta
     double targetUpperAngle;
     double targetLowerAngle;
 
+    double cosParam = (pow(targetX, 2) + pow(targetY, 2) - pow(lowerLength, 2) - pow(upperLength, 2)) / (2 * lowerLength * upperLength);
+    cosParam = std::clamp(cosParam, -1.0, 1.0);
+
     if (targetX >= 0) { //Going forward, need joint to bend downwards
-        targetUpperAngle = acos((pow(targetX, 2) + pow(targetY, 2) - pow(lowerLength, 2) - pow(upperLength, 2)) / (2 * lowerLength * upperLength));
+        targetUpperAngle = acos(cosParam);
         targetLowerAngle = atan2(targetY, targetX) - atan2((upperLength * sin(targetUpperAngle)), (lowerLength + upperLength * cos(targetUpperAngle)));
     } else if (targetX < 0) { //Goind backward, need joint to also bend downwards
-        targetUpperAngle = -acos((pow(targetX, 2) + pow(targetY, 2) - pow(lowerLength, 2) - pow(upperLength, 2)) / (2 * lowerLength * upperLength));
+        targetUpperAngle = -acos(cosParam);
         targetLowerAngle = atan2(targetY, targetX) + atan2((upperLength * sin(targetUpperAngle)), (lowerLength + upperLength * cos(targetUpperAngle)));
     }
 
