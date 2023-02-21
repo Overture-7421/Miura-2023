@@ -15,6 +15,7 @@
 
 #include "Subsystems/SwerveChassis/SwerveChassis.h"
 #include "Subsystems/VisionManager/VisionManager.h"
+#include "Subsystems/DoubleArm/DoubleArm.h"
 #include "Commands/Teleop/Drive/Drive.h"
 #include "Commands/Common/AlignRobotToTarget/AlignRobotToTarget.h"
 #include "Commands/Common/UpdateVisionOdometry/UpdateVisionOdometry.h"
@@ -41,7 +42,7 @@ private:
     // Subsystems
     SwerveChassis swerveChassis;
     VisionManager visionManager{ &swerveChassis };
-
+    DoubleArm doubleArm;
     //Auto
     frc::SendableChooser<std::string> pathChooser;
     std::unordered_map<std::string, std::shared_ptr<frc2::Command>> eventMap;

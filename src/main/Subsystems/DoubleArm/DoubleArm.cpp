@@ -12,11 +12,14 @@ DoubleArm::DoubleArm() {
     planner.SetTargetCoord(GetEndpointCoord(), GetEndpointCoord());
 
     frc::SmartDashboard::PutData(&plotter);
-};
+}
 /**
  * Will be called periodically whenever the CommandScheduler runs.
  */
 void DoubleArm::Periodic() {
+    frc::SmartDashboard::PutNumber("Lower Angle", getLowerAngle());
+    frc::SmartDashboard::PutNumber("Upper Angle", getUpperAngle());
+
     std::optional<DoubleArmState> desiredState = planner.CalculateCurrentTargetState();
     if (desiredState.has_value()) {
         DoubleArmState targetState = desiredState.value();
@@ -49,4 +52,41 @@ frc::Translation2d DoubleArm::GetEndpointCoord() {
 
 void DoubleArm::SetTargetCoord(frc::Translation2d targetCoord) {
     planner.SetTargetCoord(targetCoord, GetEndpointCoord());
+}
+
+void DoubleArm::motorConfiguration() {
+    /* Lower Motors */
+    lowerRight.ConfigFactoryDefault();
+    lowerRightInverted.ConfigFactoryDefault();
+    lowerLeft.ConfigFactoryDefault();
+    lowerLeftInverted.ConfigFactoryDefault();
+
+    lowerRightInverted.SetInverted(true);
+    lowerLeftInverted.SetInverted(true);
+
+    lowerRightInverted.Follow(lowerRight);
+    lowerLeftInverted.Follow(lowerLeft);
+
+    /* Upper Motors */
+    upperRight.ConfigFactoryDefault();
+    upperLeft.ConfigFactoryDefault();
+
+    upperLeft.SetInverted(true);
+    upperLeft.Follow(upperRight);
+}
+
+double DoubleArm::getLowerAngle() {
+    return dutyCycleToDegrees(lowerEncoder.GetAbsolutePosition());
+}
+
+double DoubleArm::getUpperAngle() {
+    return dutyCycleToDegrees(upperEncoder.GetAbsolutePosition());
+}
+
+double DoubleArm::dutyCycleToDegrees(double dutyCycleUnits) {
+    return dutyCycleUnits * 360;
+}
+
+double DoubleArm::dutyCycleToCTREUnits(double dutyCyclePos) {
+    return dutyCyclePos * 4096;
 }
