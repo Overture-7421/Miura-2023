@@ -9,40 +9,48 @@
 #include <iostream>
 
 DoubleArm::DoubleArm() {
-    planner.SetTargetCoord(GetEndpointCoord(), GetEndpointCoord());
+    ConfigureMotors();
+    ConfigureSensors();
 
     frc::SmartDashboard::PutData(&plotter);
+    planner.SetTargetCoord(GetEndpointCoord(), GetEndpointCoord());
 }
 /**
  * Will be called periodically whenever the CommandScheduler runs.
  */
 void DoubleArm::Periodic() {
-    frc::SmartDashboard::PutNumber("Lower Angle", getLowerAngle());
-    frc::SmartDashboard::PutNumber("Upper Angle", getUpperAngle());
+    auto currentState = GetCurrentState();
+    frc::SmartDashboard::PutNumber("DoubleArm/CurrentLowerAngle", currentState.lowerAngle.Degrees().value());
+    frc::SmartDashboard::PutNumber("DoubleArm/CurrentUpperAngle", currentState.upperAngle.Degrees().value());
+
+    frc::SmartDashboard::PutNumber("DoubleArm/EncoderLowerRaw", lowerEncoder.GetAbsolutePosition());
+    frc::SmartDashboard::PutNumber("DoubleArm/EncoderUpperRaw", upperEncoder.GetAbsolutePosition());
 
     std::optional<DoubleArmState> desiredState = planner.CalculateCurrentTargetState();
     if (desiredState.has_value()) {
         DoubleArmState targetState = desiredState.value();
-        frc::SmartDashboard::PutNumber("DoubleArm/1.LowerAngleTarget", targetState.lowerAngle.Degrees().value());
-        frc::SmartDashboard::PutNumber("DoubleArm/2.UpperAngleTarget", targetState.upperAngle.Degrees().value());
+        frc::SmartDashboard::PutNumber("DoubleArm/TargetLowerAngle", targetState.lowerAngle.Degrees().value());
+        frc::SmartDashboard::PutNumber("DoubleArm/TargetUpperAngle", targetState.upperAngle.Degrees().value());
 
         auto targetCoord = kinematics.GetEndpointCoord(targetState);
         plotter.SetRobotPose({ targetCoord + frc::Translation2d{4_m, 4_m}, 0_deg });
         frc::SmartDashboard::PutNumber("DoubleArm/DesiredX", targetCoord.X().value());
         frc::SmartDashboard::PutNumber("DoubleArm/DesiredY", targetCoord.Y().value());
+
+        //   SetFalconTargetPos(targetState);
     }
 
-    frc::Translation2d currentCoord = GetEndpointCoord();
+    frc::Translation2d currentCoord = kinematics.GetEndpointCoord(currentState);
     frc::SmartDashboard::PutNumber("DoubleArm/X", currentCoord.X().value());
     frc::SmartDashboard::PutNumber("DoubleArm/Y", currentCoord.Y().value());
-    frc::SmartDashboard::PutNumber("DoubleArm/3.PlannerFinished", planner.IsFinished());
+    frc::SmartDashboard::PutNumber("DoubleArm/PlannerFinished", planner.IsFinished());
 
 }
 
 DoubleArmState DoubleArm::GetCurrentState() {
     DoubleArmState state;
-    state.lowerAngle = 0_deg;
-    state.upperAngle = 0_deg;
+    state.lowerAngle = GetLowerAngle();
+    state.upperAngle = GetUpperAngle();
     return state;
 }
 
@@ -54,39 +62,69 @@ void DoubleArm::SetTargetCoord(frc::Translation2d targetCoord) {
     planner.SetTargetCoord(targetCoord, GetEndpointCoord());
 }
 
-void DoubleArm::motorConfiguration() {
+void DoubleArm::SetFalconTargetPos(DoubleArmState desiredState) {
+    lowerRight.Set(ControlMode::Position, ConvertAngleToLowerFalconPos(desiredState.lowerAngle), DemandType_ArbitraryFeedForward, 0.0 * desiredState.lowerAngle.Cos());
+    upperRight.Set(ControlMode::Position, ConvertAngleToUpperFalconPos(desiredState.upperAngle), DemandType_ArbitraryFeedForward, 0.0 * desiredState.upperAngle.Cos());
+}
+
+void DoubleArm::ConfigureMotors() {
     /* Lower Motors */
     lowerRight.ConfigFactoryDefault();
-    lowerRightInverted.ConfigFactoryDefault();
+    lowerRight2.ConfigFactoryDefault();
     lowerLeft.ConfigFactoryDefault();
-    lowerLeftInverted.ConfigFactoryDefault();
+    lowerLeft2.ConfigFactoryDefault();
 
-    lowerRightInverted.SetInverted(true);
-    lowerLeftInverted.SetInverted(true);
+    lowerRight2.Follow(lowerRight);
+    lowerLeft2.Follow(lowerRight);
+    lowerLeft.Follow(lowerRight);
 
-    lowerRightInverted.Follow(lowerRight);
-    lowerLeftInverted.Follow(lowerLeft);
+    lowerRight2.SetInverted(TalonFXInvertType::FollowMaster);
+    lowerLeft.SetInverted(TalonFXInvertType::OpposeMaster);
+    lowerLeft2.SetInverted(TalonFXInvertType::OpposeMaster);
+
+    lowerRight.SelectProfileSlot(0, 0);
+    lowerRight.Config_kP(0, 0);
+    lowerRight.Config_kI(0, 0);
+    lowerRight.Config_kD(0, 0);
 
     /* Upper Motors */
     upperRight.ConfigFactoryDefault();
     upperLeft.ConfigFactoryDefault();
 
-    upperLeft.SetInverted(true);
     upperLeft.Follow(upperRight);
+    upperLeft.SetInverted(TalonFXInvertType::OpposeMaster);
+
+    upperRight.SelectProfileSlot(0, 0);
+    upperRight.Config_kP(0, 0);
+    upperRight.Config_kI(0, 0);
+    upperRight.Config_kD(0, 0);
 }
 
-double DoubleArm::getLowerAngle() {
-    return dutyCycleToDegrees(lowerEncoder.GetAbsolutePosition());
+void DoubleArm::ConfigureSensors() {
+    lowerEncoder.SetPositionOffset(0); //TODO: Get offsets so angle is relative to X axis when calling GetLowerAngle and GetUpperAngle.
+    upperEncoder.SetPositionOffset(0);
+
+    lowerRight.ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative);
+    upperRight.ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative);
+
+    lowerRight.SetSelectedSensorPosition(ConvertAngleToLowerFalconPos(GetLowerAngle()));
+    upperRight.SetSelectedSensorPosition(ConvertAngleToUpperFalconPos(GetUpperAngle()));
+
+    lowerRight.SetSensorPhase(false); // TODO: Check sensors phase
+    upperRight.SetSensorPhase(false);
 }
 
-double DoubleArm::getUpperAngle() {
-    return dutyCycleToDegrees(upperEncoder.GetAbsolutePosition());
+frc::Rotation2d DoubleArm::GetLowerAngle() {
+    return units::degree_t(lowerEncoder.GetAbsolutePosition() * 360.0);
 }
 
-double DoubleArm::dutyCycleToDegrees(double dutyCycleUnits) {
-    return dutyCycleUnits * 360;
+frc::Rotation2d DoubleArm::GetUpperAngle() {
+    return frc::Rotation2d(units::degree_t(upperEncoder.GetAbsolutePosition() * 360.0)) + GetLowerAngle();
 }
 
-double DoubleArm::dutyCycleToCTREUnits(double dutyCyclePos) {
-    return dutyCyclePos * 4096;
+double DoubleArm::ConvertAngleToLowerFalconPos(frc::Rotation2d angle) {
+    return angle.Degrees().value() / 360 * CODES_PER_LOWER_ROTATION;
+}
+double DoubleArm::ConvertAngleToUpperFalconPos(frc::Rotation2d angle) {
+    return angle.Degrees().value() / 360 * CODES_PER_UPPER_ROTATION;
 }

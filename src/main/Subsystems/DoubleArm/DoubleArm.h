@@ -21,7 +21,6 @@
 class DoubleArm: public frc2::SubsystemBase {
 public:
     DoubleArm();
-    void motorConfiguration();
     /**
      * Will be called periodically whenever the CommandScheduler runs.
      */
@@ -29,25 +28,39 @@ public:
     DoubleArmState GetCurrentState();
     frc::Translation2d GetEndpointCoord();
     void SetTargetCoord(frc::Translation2d targetCoord);
-    double getLowerAngle();
-    double getUpperAngle();
-    double dutyCycleToDegrees(double dutyCycleUnits);
-    double dutyCycleToCTREUnits(double dutyCyclePos);
+    frc::Rotation2d GetLowerAngle();
+    frc::Rotation2d GetUpperAngle();
+
 
 private:
+    void SetFalconTargetPos(DoubleArmState desiredState);
+
+    void ConfigureMotors();
+    void ConfigureSensors();
+
+    double ConvertAngleToUpperFalconPos(frc::Rotation2d angle);
+    double ConvertAngleToLowerFalconPos(frc::Rotation2d angle);
+
     DoubleArmKinematics kinematics{ 0.8382, 0.8382 };
     DoubleArmPlanner planner{ {3.0_mps, 5.0_mps_sq} , kinematics }; // Constraints are meters per second, max accel of meters per second squared
     frc::Field2d plotter;
 
+    const double FALCON_CODES_PER_REV = 4096;
+    const double LOWER_GEARBOX_REDUCTION = 96;
+    const double UPPER_GEARBOX_REDUCTION = 200;
+
+    const double CODES_PER_LOWER_ROTATION = LOWER_GEARBOX_REDUCTION * FALCON_CODES_PER_REV;
+    const double CODES_PER_UPPER_ROTATION = UPPER_GEARBOX_REDUCTION * FALCON_CODES_PER_REV;
+
     /* Lower Motors */
-    WPI_TalonFX lowerRight{ 9 };
-    WPI_TalonFX lowerRightInverted{ 10 };
-    WPI_TalonFX lowerLeft{ 11 };
-    WPI_TalonFX lowerLeftInverted{ 12 };
+    TalonFX lowerRight{ 9 };
+    TalonFX lowerRight2{ 10 };
+    TalonFX lowerLeft{ 11 };
+    TalonFX lowerLeft2{ 12 };
 
     /* Upper Motors */
-    WPI_TalonFX upperRight{ 13 };
-    WPI_TalonFX upperLeft{ 14 };
+    TalonFX upperRight{ 13 };
+    TalonFX upperLeft{ 14 };
 
     /* Encoders */
     frc::DutyCycleEncoder lowerEncoder{ 0 };
