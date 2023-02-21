@@ -4,8 +4,9 @@
 
 #include "DoubleArmPlanner.h"
 #include <frc/Timer.h>
+#include <iostream>
 
-DoubleArmPlanner::DoubleArmPlanner(PlannerProfile::Constraints constraints, DoubleArmKinematics kinematics): targetPointProfile(constraints, PlannerProfile::State{ PlannerProfile::Distance_t{0}, PlannerProfile::Velocity_t{0} }), kinematics(kinematics) {
+DoubleArmPlanner::DoubleArmPlanner(PlannerProfile::Constraints constraints, DoubleArmKinematics kinematics): constraints(constraints), targetPointProfile(constraints, PlannerProfile::State{ PlannerProfile::Distance_t{0}, PlannerProfile::Velocity_t{0} }), kinematics(kinematics) {
     trajectoryStartTime = frc::Timer::GetFPGATimestamp();
 }
 
@@ -19,9 +20,9 @@ void DoubleArmPlanner::SetTargetCoord(frc::Translation2d targetCoord, frc::Trans
     trajectoryStartTime = frc::Timer::GetFPGATimestamp();
 }
 
-DoubleArmState DoubleArmPlanner::CalculateCurrentTargetState() {
-    PlannerProfile::State desiredProfileState = targetPointProfile.Calculate(frc::Timer::GetFPGATimestamp() - trajectoryStartTime);
-
+std::optional<DoubleArmState> DoubleArmPlanner::CalculateCurrentTargetState() {
+    units::second_t elapsedTime = frc::Timer::GetFPGATimestamp() - trajectoryStartTime;
+    PlannerProfile::State desiredProfileState = targetPointProfile.Calculate(elapsedTime);
 
     frc::Translation2d displacementCoord{ units::meter_t(trajectoryAngle.Cos() * desiredProfileState.position), units::meter_t(trajectoryAngle.Sin() * desiredProfileState.position) };
 

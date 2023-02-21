@@ -2,27 +2,51 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-#include "DoubleArm.h"
 #include <math.h>
 #include <cmath>
+#include <frc/smartdashboard/SmartDashboard.h>
+#include "DoubleArm.h"
+#include <iostream>
 
-DoubleArm::DoubleArm() = default;
+DoubleArm::DoubleArm() {
+    planner.SetTargetCoord(GetEndpointCoord(), GetEndpointCoord());
 
-// This method will be called once per scheduler run
-void DoubleArm::Periodic() {}
-void SetArmPosition(double Angle1, double Angle2, double TargetX, double TargetY) {
-    double Length1 = 33;  //inches
-    double Length2 = 33;  //inches
+    frc::SmartDashboard::PutData(&plotter);
+};
+/**
+ * Will be called periodically whenever the CommandScheduler runs.
+ */
+void DoubleArm::Periodic() {
+    std::optional<DoubleArmState> desiredState = planner.CalculateCurrentTargetState();
+    if (desiredState.has_value()) {
+        DoubleArmState targetState = desiredState.value();
+        frc::SmartDashboard::PutNumber("DoubleArm/1.LowerAngleTarget", targetState.lowerAngle.Degrees().value());
+        frc::SmartDashboard::PutNumber("DoubleArm/2.UpperAngleTarget", targetState.upperAngle.Degrees().value());
 
-    double TargetAngle2 = (acos((pow(TargetX, 2) + pow(TargetY, 2) - pow(Length1, 2) - pow(Length2, 2) / (2 * Length1 * Length2)))) * -1;
-    double TargetAngle1 = atan2(TargetY, TargetX) + atan2((Length2 * sin(TargetAngle2)), (Length1 + Length2 * cos(TargetAngle2)));
+        auto targetCoord = kinematics.GetEndpointCoord(targetState);
+        plotter.SetRobotPose({ targetCoord + frc::Translation2d{4_m, 4_m}, 0_deg });
+        frc::SmartDashboard::PutNumber("DoubleArm/DesiredX", targetCoord.X().value());
+        frc::SmartDashboard::PutNumber("DoubleArm/DesiredY", targetCoord.Y().value());
+    }
 
-    double FinalMovementAngle2 = TargetAngle2 - Angle2;
-    double FinalMovementAngle1 = TargetAngle1 - Angle1;
+    frc::Translation2d currentCoord = GetEndpointCoord();
+    frc::SmartDashboard::PutNumber("DoubleArm/X", currentCoord.X().value());
+    frc::SmartDashboard::PutNumber("DoubleArm/Y", currentCoord.Y().value());
+    frc::SmartDashboard::PutNumber("DoubleArm/3.PlannerFinished", planner.IsFinished());
+
 }
 
+DoubleArmState DoubleArm::GetCurrentState() {
+    DoubleArmState state;
+    state.lowerAngle = 0_deg;
+    state.upperAngle = 0_deg;
+    return state;
+}
 
-//  acos(x) = cos^-1(x)
-//  atan2(x) = tan^-1(x)
-//  sin(x) = sin x
-//  cos(x) = cos x
+frc::Translation2d DoubleArm::GetEndpointCoord() {
+    return kinematics.GetEndpointCoord(GetCurrentState());
+}
+
+void DoubleArm::SetTargetCoord(frc::Translation2d targetCoord) {
+    planner.SetTargetCoord(targetCoord, GetEndpointCoord());
+}

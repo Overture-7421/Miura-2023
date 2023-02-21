@@ -5,6 +5,9 @@
 #include "DoubleArmKinematics.h"
 #include <units/length.h>
 #include <algorithm>
+#include <iostream>
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 DoubleArmKinematics::DoubleArmKinematics(double lowerLength, double upperLength) {
     this->lowerLength = lowerLength;
@@ -12,39 +15,40 @@ DoubleArmKinematics::DoubleArmKinematics(double lowerLength, double upperLength)
 }
 
 frc::Translation2d DoubleArmKinematics::GetEndpointCoord(DoubleArmState currentState) {
-    frc::Translation2d lowerSectionTrans = { units::meter_t(std::cos(deg2rad(currentState.lowerAngle)) * lowerLength) , units::meter_t(std::sin(deg2rad(currentState.lowerAngle) * lowerLength)) };
-    frc::Translation2d upperSectionTrans = { units::meter_t(std::cos(deg2rad(currentState.upperAngle)) * upperLength) , units::meter_t(std::sin(deg2rad(currentState.upperAngle) * upperLength)) };
+    frc::Translation2d lowerSectionTrans = { units::meter_t(currentState.lowerAngle.Cos() * lowerLength) , units::meter_t(currentState.lowerAngle.Sin() * lowerLength) };
+    frc::Translation2d upperSectionTrans = { units::meter_t(currentState.upperAngle.Cos() * upperLength) , units::meter_t(currentState.upperAngle.Sin() * upperLength) };
     return lowerSectionTrans + upperSectionTrans;
 }
 
-DoubleArmState DoubleArmKinematics::GetStateForTargetCoord(frc::Translation2d targetPoint) {
+std::optional<DoubleArmState> DoubleArmKinematics::GetStateForTargetCoord(frc::Translation2d targetPoint) {
     //Using https://robotacademy.net.au/lesson/inverse-kinematics-for-a-2-joint-robot-arm-using-geometry/
 
     double targetX = targetPoint.X().value();
     double targetY = targetPoint.Y().value();
 
     if (targetX == 0 && targetY == 0) {
-        throw ZeroCoordException();
+        return {};
     }
 
     double targetUpperAngle;
     double targetLowerAngle;
 
-    double cosParam = (pow(targetX, 2) + pow(targetY, 2) - pow(lowerLength, 2) - pow(upperLength, 2)) / (2 * lowerLength * upperLength);
+    double cosParam = (std::pow(targetX, 2) + std::pow(targetY, 2) - std::pow(lowerLength, 2) - std::pow(upperLength, 2)) / (2.0 * lowerLength * upperLength);
     cosParam = std::clamp(cosParam, -1.0, 1.0);
 
     if (targetX >= 0) { //Going forward, need joint to bend downwards
-        targetUpperAngle = acos(cosParam);
-        targetLowerAngle = atan2(targetY, targetX) - atan2((upperLength * sin(targetUpperAngle)), (lowerLength + upperLength * cos(targetUpperAngle)));
-    } else if (targetX < 0) { //Goind backward, need joint to also bend downwards
-        targetUpperAngle = -acos(cosParam);
-        targetLowerAngle = atan2(targetY, targetX) + atan2((upperLength * sin(targetUpperAngle)), (lowerLength + upperLength * cos(targetUpperAngle)));
+        targetUpperAngle = std::acos(cosParam);
+        targetLowerAngle = std::atan2(targetY, targetX) - std::atan2((upperLength * std::sin(targetUpperAngle)), (lowerLength + upperLength * std::cos(targetUpperAngle)));
+    } else { //Goind backward, need joint to also bend downwards
+        targetUpperAngle = -std::acos(cosParam);
+        targetLowerAngle = std::atan2(targetY, targetX) + std::atan2((upperLength * std::sin(targetUpperAngle)), (lowerLength + upperLength * std::cos(targetUpperAngle)));
+        targetUpperAngle *= -1;
     }
 
 
     DoubleArmState targetState;
-    targetState.lowerAngle = rad2deg(targetLowerAngle);
-    targetState.upperAngle = rad2deg(targetLowerAngle + targetUpperAngle);
+    targetState.lowerAngle = units::radian_t(targetLowerAngle);
+    targetState.upperAngle = units::radian_t(targetLowerAngle + targetUpperAngle);
 
     return targetState;
 }

@@ -9,12 +9,12 @@
 #include "../DoubleArmKinematics/DoubleArmState.h"
 #include "../DoubleArmKinematics/DoubleArmKinematics.h"
 
-typedef frc::TrapezoidProfile<units::meter> PlannerProfile;
+typedef frc::TrapezoidProfile<units::meters> PlannerProfile;
 class DoubleArmPlanner {
 public:
     DoubleArmPlanner(PlannerProfile::Constraints constraints, DoubleArmKinematics kinematics);
     void SetTargetCoord(frc::Translation2d targetCoord, frc::Translation2d currentCoord);
-    DoubleArmState CalculateCurrentTargetState();
+    std::optional<DoubleArmState> CalculateCurrentTargetState();
     bool IsFinished();
 private:
     units::second_t trajectoryStartTime;

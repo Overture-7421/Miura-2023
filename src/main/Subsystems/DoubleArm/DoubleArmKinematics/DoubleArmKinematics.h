@@ -4,6 +4,8 @@
 
 #pragma once
 #include <frc/geometry/Translation2d.h>
+#include <optional>
+
 #include "DoubleArmState.h"
 
 class DoubleArmKinematics {
@@ -12,7 +14,7 @@ public:
 
     frc::Translation2d GetEndpointCoord(DoubleArmState currentState);
 
-    DoubleArmState GetStateForTargetCoord(frc::Translation2d targetPoint);
+    std::optional<DoubleArmState> GetStateForTargetCoord(frc::Translation2d targetPoint);
 
 private:
 
@@ -27,7 +29,7 @@ private:
 
 class ZeroCoordException: public std::exception {
 public:
-    char* what() {
+    const char* what() {
         return "Invalid target coord requested to DoubleArmKinematics! X and Y cant be both 0...";
     }
 };
