@@ -17,7 +17,7 @@ void IntakeControl::Execute() {
     double reverse = Utils::ApplyAxisFilter(m_joystick->GetLeftTriggerAxis(), 0.3);
     double take = Utils::ApplyAxisFilter(m_joystick->GetRightTriggerAxis(), 0.3);
 
-    if (take > reverse && m_intake->getUltrasonic() > 7.0) { //change for competition (from 7.0 to anothwer value)
+    if (take > reverse) {
         m_intake->setVoltage(-4.0);
     } else if (take < reverse) {
         m_intake->setVoltage(4.0);

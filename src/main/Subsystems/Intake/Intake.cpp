@@ -8,8 +8,10 @@ Intake::Intake() {
     intakeMotor.SetNeutralMode(NeutralMode::Brake);
     intakeMotor.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_1_General, 20);
     intakeMotor.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_2_Feedback0, 255);
-    intakeMotor.ConfigOpenloopRamp(0, 1);
     intakeMotor.ConfigSupplyCurrentLimit(SupplyCurrentLimitConfiguration(true, 25, 0, 1));
+
+    conePiston.Set(frc::DoubleSolenoid::Value::kForward);
+    wristPiston.Set(frc::DoubleSolenoid::Value::kForward);
 }
 
 void Intake::setVoltage(double voltage) {
@@ -38,16 +40,4 @@ void Intake::setWristAuto(bool state) {
     } else {
         wristPiston.Set(frc::DoubleSolenoid::Value::kReverse);
     }
-}
-
-double Intake::getUltrasonic() {
-    double rawValue = ultrasonic.GetValue();
-    double scaleFactor = 5 / frc::RobotController::GetVoltage5V();
-    double distanceCentimeters = rawValue * scaleFactor * 0.125; //forzado?
-    return distanceCentimeters;
-}
-
-// This method will be called once per scheduler run
-void Intake::Periodic() {
-    frc::SmartDashboard::PutNumber("Sensor", getUltrasonic());
 }

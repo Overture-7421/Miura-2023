@@ -20,14 +20,11 @@ public:
     void setConeAuto(bool state);
     void setWristControl();
     void setWristAuto(bool state);
-    double getUltrasonic();
-
     void Periodic() override;
 
 private:
-    frc::AnalogInput ultrasonic{ 0 };
-    frc::DoubleSolenoid conePiston{ frc::PneumaticsModuleType::CTREPCM, 0, 1 };
-    frc::DoubleSolenoid wristPiston{ frc::PneumaticsModuleType::CTREPCM, 2, 3 };
+    frc::DoubleSolenoid conePiston{ frc::PneumaticsModuleType::CTREPCM, 2, 0 };
+    frc::DoubleSolenoid wristPiston{ frc::PneumaticsModuleType::CTREPCM, 3, 1 };
     WPI_TalonFX intakeMotor{ 15 };
 };
 

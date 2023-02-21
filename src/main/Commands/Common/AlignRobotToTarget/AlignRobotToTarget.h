@@ -48,8 +48,8 @@ private:
     pathplanner::PathConstraints constraints = { 1_mps, 1_mps_sq };
     std::unordered_map<std::string, frc::Pose2d> positionMap{
       {"Center", {1_m,0_m,{180_deg}}},
-      {"Right", {1_m,.48_m,{180_deg}}},
-      {"Left", {1_m,-.48_m,{180_deg}}},
+      {"Right", {1_m,0.48_m,{180_deg}}},
+      {"Left", {1_m,-0.48_m,{180_deg}}},
       {"Loading",{1_m,1_m,{180_deg}}}
     };
 };

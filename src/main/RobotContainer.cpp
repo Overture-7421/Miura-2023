@@ -31,7 +31,7 @@ void RobotContainer::ConfigureBindings() {
 
     // Mechanisms Controller Buttons
     conePiston.OnTrue(frc2::InstantCommand{ [this]() { this->intake.setConeControl();} }.ToPtr());
-    conePiston.OnTrue(frc2::InstantCommand{ [this]() { this->intake.setWristControl();} }.ToPtr());
+    wristPiston.OnTrue(frc2::InstantCommand{ [this]() { this->intake.setWristControl();} }.ToPtr());
 
 }
 
