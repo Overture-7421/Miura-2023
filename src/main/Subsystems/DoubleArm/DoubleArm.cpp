@@ -68,11 +68,22 @@ void DoubleArm::SetFalconTargetPos(DoubleArmState desiredState) {
 }
 
 void DoubleArm::ConfigureMotors() {
+    TalonFXConfiguration baseConfig;
+    baseConfig.voltageCompSaturation = 12.0;
+    baseConfig.supplyCurrLimit = SupplyCurrentLimitConfiguration(true, 20, 30, 100);
+
     /* Lower Motors */
-    lowerRight.ConfigFactoryDefault();
-    lowerRight2.ConfigFactoryDefault();
-    lowerLeft.ConfigFactoryDefault();
-    lowerLeft2.ConfigFactoryDefault();
+    lowerRight.ConfigAllSettings(baseConfig);
+    lowerRight.EnableVoltageCompensation(true);
+
+    lowerRight2.ConfigAllSettings(baseConfig);
+    lowerRight2.EnableVoltageCompensation(true);
+
+    lowerLeft.ConfigAllSettings(baseConfig);
+    lowerLeft.EnableVoltageCompensation(true);
+
+    lowerLeft2.ConfigAllSettings(baseConfig);
+    lowerLeft2.EnableVoltageCompensation(true);
 
     lowerRight2.Follow(lowerRight);
     lowerLeft2.Follow(lowerRight);
@@ -88,8 +99,11 @@ void DoubleArm::ConfigureMotors() {
     lowerRight.Config_kD(0, 0);
 
     /* Upper Motors */
-    upperRight.ConfigFactoryDefault();
-    upperLeft.ConfigFactoryDefault();
+    upperRight.ConfigAllSettings(baseConfig);
+    upperRight.EnableVoltageCompensation(true);
+
+    upperLeft.ConfigAllSettings(baseConfig);
+    upperLeft.EnableVoltageCompensation(true);
 
     upperLeft.Follow(upperRight);
     upperLeft.SetInverted(TalonFXInvertType::OpposeMaster);
