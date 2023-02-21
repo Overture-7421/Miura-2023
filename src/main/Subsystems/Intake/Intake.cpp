@@ -41,3 +41,5 @@ void Intake::setWristAuto(bool state) {
         wristPiston.Set(frc::DoubleSolenoid::Value::kReverse);
     }
 }
+
+void Intake::Periodic() {}

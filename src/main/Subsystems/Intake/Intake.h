@@ -4,13 +4,12 @@
 
 #pragma once
 
+#include <frc2/command/SubsystemBase.h>
 #include <ctre/Phoenix.h>
 #include <frc/AnalogInput.h>
 #include <frc/DoubleSolenoid.h>
 #include <frc/RobotController.h>
-#include <frc2/command/SubsystemBase.h>
 #include <frc/smartdashboard/SmartDashboard.h>
-
 
 class Intake: public frc2::SubsystemBase {
 public:
@@ -27,4 +26,3 @@ private:
     frc::DoubleSolenoid wristPiston{ frc::PneumaticsModuleType::CTREPCM, 3, 1 };
     WPI_TalonFX intakeMotor{ 15 };
 };
-
