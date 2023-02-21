@@ -21,7 +21,7 @@ private:
     frc::Rotation2d trajectoryAngle;
     frc::Translation2d startingCoord;
 
-    DoubleArmKinematics kinematics;
     PlannerProfile::Constraints constraints;
     PlannerProfile targetPointProfile;
+    DoubleArmKinematics kinematics;
 };
