@@ -24,27 +24,27 @@ class RobotContainer {
 public:
     RobotContainer();
 
-    frc2::CommandPtr GetAutonomousCommand();
+    // frc2::CommandPtr GetAutonomousCommand();
 
-    // Generates auto with pathplanner
-    frc2::CommandPtr CreateAuto(std::string pathName);
+    // // Generates auto with pathplanner
+    // frc2::CommandPtr CreateAuto(std::string pathName);
+    frc::XboxController controller{ 0 };
+    DoubleArm doubleArm;
 
 private:
     void ConfigureBindings();
 
     // Chassis driver controller and buttons
-    frc::XboxController controller{ 0 };
-    frc2::Trigger resetNavx{ [this] {return controller.GetStartButton();} };
-    frc2::Trigger alignCenter{ [this] {return controller.GetAButton();} }; //Change Button for final robot
-    frc2::Trigger alignRight{ [this] {return controller.GetRightBumper();} }; //Change Button for final robot
-    frc2::Trigger alignLeft{ [this] {return controller.GetLeftBumper();} }; //Change Button for final robot
+    // frc2::Trigger resetNavx{ [this] {return controller.GetStartButton();} };
+    // frc2::Trigger alignCenter{ [this] {return controller.GetAButton();} }; //Change Button for final robot
+    // frc2::Trigger alignRight{ [this] {return controller.GetRightBumper();} }; //Change Button for final robot
+    // frc2::Trigger alignLeft{ [this] {return controller.GetLeftBumper();} }; //Change Button for final robot
 
     // Subsystems
-    SwerveChassis swerveChassis;
-    VisionManager visionManager{ &swerveChassis };
-    DoubleArm doubleArm;
+    // SwerveChassis swerveChassis;
+    // VisionManager visionManager{ &swerveChassis };
     //Auto
-    frc::SendableChooser<std::string> pathChooser;
-    std::unordered_map<std::string, std::shared_ptr<frc2::Command>> eventMap;
+    // frc::SendableChooser<std::string> pathChooser;
+    // std::unordered_map<std::string, std::shared_ptr<frc2::Command>> eventMap;
 
 };

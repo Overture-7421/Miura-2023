@@ -9,7 +9,7 @@
 void Robot::RobotInit() {}
 
 void Robot::RobotPeriodic() {
-	frc2::CommandScheduler::GetInstance().Run();
+    frc2::CommandScheduler::GetInstance().Run();
 }
 
 void Robot::DisabledInit() {}
@@ -19,11 +19,11 @@ void Robot::DisabledPeriodic() {}
 void Robot::DisabledExit() {}
 
 void Robot::AutonomousInit() {
-	m_autonomousCommand = m_container.GetAutonomousCommand();
+    // m_autonomousCommand = m_container.GetAutonomousCommand();
 
-	if (m_autonomousCommand) {
-		m_autonomousCommand->Schedule();
-	}
+    // if (m_autonomousCommand) {
+    // 	m_autonomousCommand->Schedule();
+    // }
 }
 
 void Robot::AutonomousPeriodic() {}
@@ -31,17 +31,25 @@ void Robot::AutonomousPeriodic() {}
 void Robot::AutonomousExit() {}
 
 void Robot::TeleopInit() {
-	if (m_autonomousCommand) {
-		m_autonomousCommand->Cancel();
-	}
+    // if (m_autonomousCommand) {
+    //     m_autonomousCommand->Cancel();
+    // }
 }
 
-void Robot::TeleopPeriodic() {}
+void Robot::TeleopPeriodic() {
+    if (m_container.controller.GetRawButton(1)) {
+        m_container.doubleArm.SetTargetCoord({ 1.5_m, -0.1_m });
+    } else if (m_container.controller.GetRawButton(2)) {
+        m_container.doubleArm.SetTargetCoord({ 1.5_m, 0.7_m });
+    } else if (m_container.controller.GetRawButton(4)) {
+        m_container.doubleArm.SetTargetCoord({ 0.15_m, 0.05_m });
+    }
+}
 
 void Robot::TeleopExit() {}
 
 void Robot::TestInit() {
-	frc2::CommandScheduler::GetInstance().CancelAll();
+    frc2::CommandScheduler::GetInstance().CancelAll();
 }
 
 void Robot::TestPeriodic() {}
@@ -50,6 +58,6 @@ void Robot::TestExit() {}
 
 #ifndef RUNNING_FRC_TESTS
 int main() {
-	return frc::StartRobot<Robot>();
+    return frc::StartRobot<Robot>();
 }
 #endif

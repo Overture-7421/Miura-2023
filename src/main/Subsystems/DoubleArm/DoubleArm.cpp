@@ -5,8 +5,10 @@
 #include <math.h>
 #include <cmath>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/MathUtil.h>
 #include "DoubleArm.h"
 #include <iostream>
+#include <thread>
 
 DoubleArm::DoubleArm() {
     ConfigureMotors();
@@ -28,7 +30,7 @@ void DoubleArm::Periodic() {
 
     std::optional<DoubleArmState> desiredState = planner.CalculateCurrentTargetState();
     if (desiredState.has_value()) {
-        DoubleArmState targetState = desiredState.value();
+        targetState = desiredState.value();
         frc::SmartDashboard::PutNumber("DoubleArm/TargetLowerAngle", targetState.lowerAngle.Degrees().value());
         frc::SmartDashboard::PutNumber("DoubleArm/TargetUpperAngle", targetState.upperAngle.Degrees().value());
 
@@ -37,14 +39,27 @@ void DoubleArm::Periodic() {
         frc::SmartDashboard::PutNumber("DoubleArm/DesiredX", targetCoord.X().value());
         frc::SmartDashboard::PutNumber("DoubleArm/DesiredY", targetCoord.Y().value());
 
-        //   SetFalconTargetPos(targetState);
     }
+    SetFalconTargetPos(targetState);
 
     frc::Translation2d currentCoord = kinematics.GetEndpointCoord(currentState);
     frc::SmartDashboard::PutNumber("DoubleArm/X", currentCoord.X().value());
     frc::SmartDashboard::PutNumber("DoubleArm/Y", currentCoord.Y().value());
     frc::SmartDashboard::PutNumber("DoubleArm/PlannerFinished", planner.IsFinished());
 
+    frc::SmartDashboard::PutNumber("AngleLowCont", ConvertAngleToLowerFalconPos(GetLowerAngle()));
+    frc::SmartDashboard::PutNumber("AngleUpCont", ConvertAngleToUpperFalconPos(GetUpperAngle()));
+
+
+
+    // lowerRight.Set(ControlMode::Position, ConvertAngleToLowerFalconPos(desiredState.lowerAngle), DemandType_ArbitraryFeedForward, 0.03 * desiredState.lowerAngle.Cos());
+    //upperRight.Set(ControlMode::Position, frc::SmartDashboard::GetNumber("4.Target", 0.0), DemandType_ArbitraryFeedForward, 0.031 * currentState.upperAngle.Cos());
+
+    frc::SmartDashboard::PutNumber("5.TargetLower", lowerRight.GetClosedLoopTarget());
+    frc::SmartDashboard::PutNumber("5.TargetUpper", upperRight.GetClosedLoopTarget());
+
+    frc::SmartDashboard::PutNumber("5.CurrentPosLower", lowerRight.GetSelectedSensorPosition());
+    frc::SmartDashboard::PutNumber("5.CurrentPosUpper", upperRight.GetSelectedSensorPosition());
 }
 
 DoubleArmState DoubleArm::GetCurrentState() {
@@ -63,27 +78,32 @@ void DoubleArm::SetTargetCoord(frc::Translation2d targetCoord) {
 }
 
 void DoubleArm::SetFalconTargetPos(DoubleArmState desiredState) {
-    lowerRight.Set(ControlMode::Position, ConvertAngleToLowerFalconPos(desiredState.lowerAngle), DemandType_ArbitraryFeedForward, 0.0 * desiredState.lowerAngle.Cos());
-    upperRight.Set(ControlMode::Position, ConvertAngleToUpperFalconPos(desiredState.upperAngle), DemandType_ArbitraryFeedForward, 0.0 * desiredState.upperAngle.Cos());
+    lowerRight.Set(ControlMode::Position, ConvertAngleToLowerFalconPos(desiredState.lowerAngle), DemandType_ArbitraryFeedForward, 0.021 * desiredState.lowerAngle.Cos());
+    upperRight.Set(ControlMode::Position, ConvertAngleToUpperFalconPos(desiredState.upperAngle), DemandType_ArbitraryFeedForward, 0.031 * desiredState.upperAngle.Cos());
 }
 
 void DoubleArm::ConfigureMotors() {
     TalonFXConfiguration baseConfig;
     baseConfig.voltageCompSaturation = 12.0;
     baseConfig.supplyCurrLimit = SupplyCurrentLimitConfiguration(true, 20, 30, 100);
+    baseConfig.neutralDeadband = 0.001;
 
     /* Lower Motors */
     lowerRight.ConfigAllSettings(baseConfig);
     lowerRight.EnableVoltageCompensation(true);
+    lowerRight.SetNeutralMode(NeutralMode::Brake);
 
     lowerRight2.ConfigAllSettings(baseConfig);
     lowerRight2.EnableVoltageCompensation(true);
+    lowerRight2.SetNeutralMode(NeutralMode::Brake);
 
     lowerLeft.ConfigAllSettings(baseConfig);
     lowerLeft.EnableVoltageCompensation(true);
+    lowerLeft.SetNeutralMode(NeutralMode::Brake);
 
     lowerLeft2.ConfigAllSettings(baseConfig);
     lowerLeft2.EnableVoltageCompensation(true);
+    lowerLeft2.SetNeutralMode(NeutralMode::Brake);
 
     lowerRight2.Follow(lowerRight);
     lowerLeft2.Follow(lowerRight);
@@ -94,51 +114,56 @@ void DoubleArm::ConfigureMotors() {
     lowerLeft2.SetInverted(TalonFXInvertType::OpposeMaster);
 
     lowerRight.SelectProfileSlot(0, 0);
-    lowerRight.Config_kP(0, 0);
+    lowerRight.Config_kP(0, 0.02);
     lowerRight.Config_kI(0, 0);
     lowerRight.Config_kD(0, 0);
 
     /* Upper Motors */
     upperRight.ConfigAllSettings(baseConfig);
     upperRight.EnableVoltageCompensation(true);
+    upperRight.SetNeutralMode(NeutralMode::Brake);
 
-    upperLeft.ConfigAllSettings(baseConfig);
-    upperLeft.EnableVoltageCompensation(true);
+    // upperLeft.ConfigAllSettings(baseConfig);
+    // upperLeft.EnableVoltageCompensation(true);
+    // upperLeft.SetNeutralMode(NeutralMode::Coast);
 
-    upperLeft.Follow(upperRight);
-    upperLeft.SetInverted(TalonFXInvertType::OpposeMaster);
+    upperRight.SetInverted(true);
+    // upperLeft.SetInverted(InvertType::FollowMaster);
+    // upperLeft.Follow(upperRight);
 
     upperRight.SelectProfileSlot(0, 0);
-    upperRight.Config_kP(0, 0);
+    upperRight.Config_kP(0, 0.012);
     upperRight.Config_kI(0, 0);
     upperRight.Config_kD(0, 0);
 }
 
 void DoubleArm::ConfigureSensors() {
-    lowerEncoder.SetPositionOffset(0); //TODO: Get offsets so angle is relative to X axis when calling GetLowerAngle and GetUpperAngle.
-    upperEncoder.SetPositionOffset(0);
+    lowerRight.ConfigSelectedFeedbackSensor(FeedbackDevice::IntegratedSensor);
+    upperRight.ConfigSelectedFeedbackSensor(FeedbackDevice::IntegratedSensor);
 
-    lowerRight.ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative);
-    upperRight.ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative);
-
+    std::this_thread::sleep_for(std::chrono::seconds(2));
     lowerRight.SetSelectedSensorPosition(ConvertAngleToLowerFalconPos(GetLowerAngle()));
+    std::this_thread::sleep_for(std::chrono::seconds(2));
     upperRight.SetSelectedSensorPosition(ConvertAngleToUpperFalconPos(GetUpperAngle()));
-
-    lowerRight.SetSensorPhase(false); // TODO: Check sensors phase
-    upperRight.SetSensorPhase(false);
 }
 
 frc::Rotation2d DoubleArm::GetLowerAngle() {
-    return units::degree_t(lowerEncoder.GetAbsolutePosition() * 360.0);
+    return units::degree_t((lowerEncoder.GetAbsolutePosition() - 0.830) * 360.0);
 }
 
 frc::Rotation2d DoubleArm::GetUpperAngle() {
-    return frc::Rotation2d(units::degree_t(upperEncoder.GetAbsolutePosition() * 360.0)) + GetLowerAngle();
+    double rawVal = (-upperEncoder.GetAbsolutePosition() + 0.943098) * 360.0;
+    rawVal = frc::InputModulus(rawVal, -180.0, 180.0);
+    frc::Rotation2d angleToLowerArm = frc::Rotation2d(units::degree_t(rawVal));
+
+    frc::SmartDashboard::PutNumber("DoubleArm/AngleUpperToLower", angleToLowerArm.Degrees().value());
+    return angleToLowerArm + GetLowerAngle();
 }
 
 double DoubleArm::ConvertAngleToLowerFalconPos(frc::Rotation2d angle) {
     return angle.Degrees().value() / 360 * CODES_PER_LOWER_ROTATION;
 }
 double DoubleArm::ConvertAngleToUpperFalconPos(frc::Rotation2d angle) {
-    return angle.Degrees().value() / 360 * CODES_PER_UPPER_ROTATION;
+    frc::Rotation2d targetAngle = angle - GetLowerAngle();
+    return targetAngle.Degrees().value() / 360 * CODES_PER_UPPER_ROTATION;
 }
