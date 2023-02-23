@@ -11,8 +11,10 @@ void VisionManager::setAllianceColor() {
     frc::DriverStation::Alliance allianceColor = frc::DriverStation::GetAlliance();
     if (allianceColor == frc::DriverStation::Alliance::kBlue) {
         tagLayout.SetOrigin(frc::AprilTagFieldLayout::OriginPosition::kBlueAllianceWallRightSide);
+        poseEstimatorSet = true;
     } else {
         tagLayout.SetOrigin(frc::AprilTagFieldLayout::OriginPosition::kRedAllianceWallRightSide);
+        poseEstimatorSet = true;
     }
 
     // Set pose estimator
@@ -22,8 +24,6 @@ void VisionManager::setAllianceColor() {
         std::move(cameraEstimator),
         cameraToRobot
     };
-
-    poseEstimator->SetMultiTagFallbackStrategy(photonlib::PoseStrategy::LOWEST_AMBIGUITY);
 }
 
 //Update odometry with vision
@@ -50,6 +50,11 @@ std::optional<photonlib::PhotonPipelineResult> VisionManager::getCameraResult() 
 //Get AprilTagFieldLayout from driver station
 frc::AprilTagFieldLayout VisionManager::getField() {
     return tagLayout;
+}
+
+//Check if poseEstimator is set
+bool VisionManager::isPoseEstimatorSet() {
+    return poseEstimatorSet;
 }
 
 void VisionManager::Periodic() {}

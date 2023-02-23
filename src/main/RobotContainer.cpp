@@ -41,7 +41,10 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
 }
 
 void RobotContainer::setAllianceColor() {
-    visionManager.setAllianceColor();
+    frc::DriverStation::Alliance color = frc::DriverStation::GetAlliance();
+    if (color != frc::DriverStation::Alliance::kInvalid && frc::DriverStation::IsDSAttached()) {
+        visionManager.setAllianceColor();
+    }
 }
 
 frc2::CommandPtr RobotContainer::CreateAuto(std::string pathName) {

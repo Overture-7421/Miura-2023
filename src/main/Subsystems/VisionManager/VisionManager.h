@@ -23,6 +23,7 @@ public:
     std::optional<photonlib::EstimatedRobotPose> update(frc::Pose2d estimatedPose);
     std::optional<photonlib::PhotonPipelineResult> getCameraResult();
     frc::AprilTagFieldLayout getField();
+    bool isPoseEstimatorSet();
     void Periodic() override;
 
 private:
@@ -30,8 +31,9 @@ private:
     photonlib::PhotonCamera cameraEstimator{ "IMX219" };
     photonlib::PhotonCamera camera{ "IMX219" };
     frc::AprilTagFieldLayout tagLayout{ frc::LoadAprilTagLayoutField(frc::AprilTagField::k2023ChargedUp) };
-    frc::Transform3d cameraToRobot{ {0.02672_m, 0.21183_m, 0.8775_m}, frc::Rotation3d{} };
+    frc::Transform3d cameraToRobot{ {3.65_cm, 21.183_cm, 87.75_cm}, {0_deg, 13.168_deg, 0_deg} };
     photonlib::PhotonPoseEstimator* poseEstimator;
+    bool poseEstimatorSet = false;
 
     /* Subsystems */
     SwerveChassis* swerveChassis;

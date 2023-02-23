@@ -6,7 +6,9 @@
 #include "Characterization/SwerveCharacterization.h"
 #include <frc2/command/CommandScheduler.h>
 
-void Robot::RobotInit() {}
+void Robot::RobotInit() {
+    m_container.setAllianceColor();
+}
 
 void Robot::RobotPeriodic() {
     frc2::CommandScheduler::GetInstance().Run();
