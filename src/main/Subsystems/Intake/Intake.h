@@ -6,9 +6,7 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <ctre/Phoenix.h>
-#include <frc/AnalogInput.h>
 #include <frc/DoubleSolenoid.h>
-#include <frc/RobotController.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 
 class Intake: public frc2::SubsystemBase {
