@@ -148,11 +148,11 @@ void DoubleArm::ConfigureSensors() {
 }
 
 frc::Rotation2d DoubleArm::GetLowerAngle() {
-    return units::degree_t((lowerEncoder.GetAbsolutePosition() - 0.830) * 360.0);
+    return units::degree_t((lowerEncoder.GetAbsolutePosition() - 0.8425) * 360.0);
 }
 
 frc::Rotation2d DoubleArm::GetUpperAngle() {
-    double rawVal = (-upperEncoder.GetAbsolutePosition() + 0.943098) * 360.0;
+    double rawVal = (-upperEncoder.GetAbsolutePosition() + 0.5037) * 360.0;
     rawVal = frc::InputModulus(rawVal, -180.0, 180.0);
     frc::Rotation2d angleToLowerArm = frc::Rotation2d(units::degree_t(rawVal));
 
