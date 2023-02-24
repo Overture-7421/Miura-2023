@@ -96,14 +96,21 @@ void DoubleArm::ConfigureMotors() {
     lowerRight2.ConfigAllSettings(baseConfig);
     lowerRight2.EnableVoltageCompensation(true);
     lowerRight2.SetNeutralMode(NeutralMode::Brake);
+    lowerRight2.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_1_General, 255);
+    lowerRight2.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_2_Feedback0, 255);
+
 
     lowerLeft.ConfigAllSettings(baseConfig);
     lowerLeft.EnableVoltageCompensation(true);
     lowerLeft.SetNeutralMode(NeutralMode::Brake);
+    lowerLeft.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_1_General, 255);
+    lowerLeft.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_2_Feedback0, 255);
 
     lowerLeft2.ConfigAllSettings(baseConfig);
     lowerLeft2.EnableVoltageCompensation(true);
     lowerLeft2.SetNeutralMode(NeutralMode::Brake);
+    lowerLeft2.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_1_General, 255);
+    lowerLeft2.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_2_Feedback0, 255);
 
     lowerRight2.Follow(lowerRight);
     lowerLeft2.Follow(lowerRight);
@@ -130,6 +137,9 @@ void DoubleArm::ConfigureMotors() {
     upperRight.SetInverted(true);
     // upperLeft.SetInverted(InvertType::FollowMaster);
     // upperLeft.Follow(upperRight);
+    // upperLeft.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_1_General, 255)
+    // upperLeft.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_2_Feedback0, 255);
+
 
     upperRight.SelectProfileSlot(0, 0);
     upperRight.Config_kP(0, 0.012);
