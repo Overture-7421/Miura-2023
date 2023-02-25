@@ -15,6 +15,7 @@
 
 #include "Subsystems/SwerveChassis/SwerveChassis.h"
 #include "Subsystems/VisionManager/VisionManager.h"
+#include "Subsystems/DoubleArm/DoubleArm.h"
 #include "Subsystems/Intake/Intake.h"
 
 #include "Commands/Teleop/Drive/Drive.h"
@@ -25,12 +26,11 @@
 class RobotContainer {
 public:
     RobotContainer();
-
     frc2::CommandPtr GetAutonomousCommand();
     void setVisionManager();
 
-    // Generates auto with pathplanner
-    frc2::CommandPtr CreateAuto(std::string pathName);
+    // // Generates auto with pathplanner
+    // frc2::CommandPtr CreateAuto(std::string pathName
 
 private:
     void ConfigureBindings();
@@ -51,7 +51,8 @@ private:
     SwerveChassis swerveChassis;
     VisionManager visionManager{ &swerveChassis };
     Intake intake;
-
+    DoubleArm doubleArm;
+    
     //Auto
     frc::SendableChooser<std::string> pathChooser;
     std::unordered_map<std::string, std::shared_ptr<frc2::Command>> eventMap;

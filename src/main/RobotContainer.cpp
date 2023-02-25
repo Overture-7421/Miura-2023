@@ -11,10 +11,9 @@ RobotContainer::RobotContainer() {
     swerveChassis.SetDefaultCommand(Drive(&swerveChassis, &controller));
     visionManager.SetDefaultCommand(UpdateVisionOdometry(&visionManager));
     intake.SetDefaultCommand(IntakeControl(&intake, &mechanisms));
-
+    
     //Set choosers for auto
     pathChooser.SetDefaultOption("OutOfCommunity&Balance", "OutOfCommunity&Balance");
-
     frc::SmartDashboard::PutData("Auto Chooser", &pathChooser);
 
     ConfigureBindings();
@@ -30,12 +29,6 @@ void RobotContainer::ConfigureBindings() {
     // Mechanisms Controller Buttons
     conePiston.OnTrue(frc2::InstantCommand{ [this]() { this->intake.setConeControl();} }.ToPtr());
     wristPiston.OnTrue(frc2::InstantCommand{ [this]() { this->intake.setWristControl();} }.ToPtr());
-
-}
-
-frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
-    // Set alliance color for pose estimation and correct on the fly path generation
-    return CreateAuto(pathChooser.GetSelected());
 }
 
 void RobotContainer::setVisionManager() {
