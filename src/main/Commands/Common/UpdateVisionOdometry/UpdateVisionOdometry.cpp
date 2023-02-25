@@ -14,7 +14,9 @@ void UpdateVisionOdometry::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void UpdateVisionOdometry::Execute() {
-    visionManager->updateOdometry();
+    if (visionManager->isPoseEstimatorSet()) {
+        visionManager->updateOdometry();
+    }
 }
 
 // Called once the command ends or is interrupted.

@@ -18,20 +18,20 @@
 
 class SwerveModule: public frc2::SubsystemBase {
 public:
-    SwerveModule( int rotatorID, int wheelID, int canCoderID, double offSet, std::string name = "" );
+    SwerveModule(int rotatorID, int wheelID, int canCoderID, double offSet, std::string name = "");
     double getSpeed();
     double getDistance();
-    double getMeters( double codes );
-    void SetRotatorVoltage( double rotatorVoltage );
-    void SetWheelVoltage( double wheelVoltage );
+    double getMeters(double codes);
+    void SetRotatorVoltage(double rotatorVoltage);
+    void SetWheelVoltage(double wheelVoltage);
     double getAngle();
-    double getRotatorPID( double setPoint );
+    double getRotatorPID(double setPoint);
     // double getWheelPID(double setPoint);
     frc::SwerveModuleState getState();
-    void setState( frc::SwerveModuleState state );
+    void setState(frc::SwerveModuleState state);
     frc::SwerveModulePosition getPosition();
-    void setRotatorPIDValues( double kP, double kI, double kD, double f );
-    void setUseRawVoltageSpeed( bool set );
+    void setRotatorPIDValues(double kP, double kI, double kD, double f);
+    void setUseRawVoltageSpeed(bool set);
     void setVoltages();
 
     /**
@@ -56,9 +56,9 @@ private:
     double wheelF = 0;
 
     //FeedForward
-    units::volt_t ks{ 0.53793 };
-    units::volt_t kv{ 2.284 };
-    units::volt_t ka{ 0.25576 };
+    units::volt_t ks{ 0.59082 };
+    units::volt_t kv{ 2.2896 };
+    units::volt_t ka{ 0.45179 };
 
     frc::SimpleMotorFeedforward<units::meters> driveFeedForward{ ks, kv / 1_mps, ka / 1_mps_sq };
 

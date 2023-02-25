@@ -25,62 +25,62 @@
 
 class SwerveChassis: public frc2::SubsystemBase {
 public:
-  SwerveChassis();
-  void setTargetAngle(double targetAngle);
-  void setSpeed(frc::ChassisSpeeds speeds);
-  void setWheelVoltage(double voltage);
-  frc::Pose2d getOdometry();
-  void resetOdometry(frc::Pose2d initPose);
-  double getHeadingRate();
-  const frc::SwerveDriveKinematics<4>& getKinematics();
-  void addVisionMeasurement(frc::Pose2d pose, units::second_t latency);
-  void setModuleStates(wpi::array<frc::SwerveModuleState, 4> desiredStates);
-  wpi::array<frc::SwerveModuleState, 4> getModuleStates();
-  wpi::array<frc::SwerveModulePosition, 4> getModulePosition();
+    SwerveChassis();
+    void setTargetAngle(double targetAngle);
+    void setSpeed(frc::ChassisSpeeds speeds);
+    void setWheelVoltage(double voltage);
+    frc::Pose2d getOdometry();
+    void resetOdometry(frc::Pose2d initPose);
+    double getHeadingRate();
+    const frc::SwerveDriveKinematics<4>& getKinematics();
+    void addVisionMeasurement(frc::Pose2d pose, units::second_t latency);
+    void setModuleStates(wpi::array<frc::SwerveModuleState, 4> desiredStates);
+    wpi::array<frc::SwerveModuleState, 4> getModuleStates();
+    wpi::array<frc::SwerveModulePosition, 4> getModulePosition();
 
-  /**
-   * Will be called periodically whenever the CommandScheduler runs.
-   */
-  void Periodic() override;
+    /**
+     * Will be called periodically whenever the CommandScheduler runs.
+     */
+    void Periodic() override;
 
-  void resetNavx();
+    void resetNavx();
 
 private:
-  SwerveModule backRightModule{ 1, 2, 9, -138.7, "BackRightModule" };
-  SwerveModule backLeftModule{ 3, 4, 10, -65.3, "BackLeftModule" };
-  SwerveModule frontLeftModule{ 5, 6, 11, -150, "FrontLeftModule" };
-  SwerveModule frontRightModule{ 7, 8, 12, -161.89, "FrontRightModule" };
+    SwerveModule backRightModule{ 1, 2, 16, 26.91, "BackRightModule" };
+    SwerveModule backLeftModule{ 3, 4, 17, -61.4, "BackLeftModule" };
+    SwerveModule frontLeftModule{ 5, 6, 18, -72.3, "FrontLeftModule" };
+    SwerveModule frontRightModule{ 7, 8, 19, -47.95, "FrontRightModule" };
 
-  double wheelVoltage;
-  double targetAngle;
+    double wheelVoltage;
+    double targetAngle;
 
-  double linearX;
-  double linearY;
-  double angular;
+    double linearX;
+    double linearY;
+    double angular;
 
-  std::array<frc::Translation2d, 4> modulePos{
-      frc::Translation2d(10.36_in, 10.36_in),   // front left
-      frc::Translation2d(10.36_in, -10.36_in),  // front right
-      frc::Translation2d(-10.36_in, -10.36_in), // back right
-      frc::Translation2d(-10.36_in, 10.36_in)   // back left
-  };
+    std::array<frc::Translation2d, 4> modulePos{
+        frc::Translation2d(10.36_in, 10.36_in),   // front left
+        frc::Translation2d(10.36_in, -10.36_in),  // front right
+        frc::Translation2d(-10.36_in, -10.36_in), // back right
+        frc::Translation2d(-10.36_in, 10.36_in)   // back left
+    };
 
-  AHRS navx{ frc::SPI::Port::kMXP };
-  frc::SwerveDriveKinematics<4> kinematics{ modulePos };
+    AHRS navx{ frc::SPI::Port::kMXP };
+    frc::SwerveDriveKinematics<4> kinematics{ modulePos };
 
-  std::array<frc::SwerveModulePosition, 4> odometryPos{
-    frontLeftModule.getPosition(),
-    frontRightModule.getPosition(),
-    backLeftModule.getPosition(),
-    frontRightModule.getPosition(),
-  };
+    std::array<frc::SwerveModulePosition, 4> odometryPos{
+      frontLeftModule.getPosition(),
+      frontRightModule.getPosition(),
+      backLeftModule.getPosition(),
+      frontRightModule.getPosition(),
+    };
 
-  frc::SwerveDrivePoseEstimator<4> odometry{
-    kinematics,
-    frc::Rotation2d{},
-    odometryPos,
-    frc::Pose2d{}
-  };
+    frc::SwerveDrivePoseEstimator<4> odometry{
+      kinematics,
+      frc::Rotation2d{},
+      odometryPos,
+      frc::Pose2d{}
+    };
 
-  frc::Field2d field2d;
+    frc::Field2d field2d;
 };
