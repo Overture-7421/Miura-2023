@@ -42,7 +42,7 @@ private:
     double ConvertAngleToLowerFalconPos(frc::Rotation2d angle);
 
     DoubleArmKinematics kinematics{ 0.8382, 0.8382 };
-    DoubleArmPlanner planner{ {.3_mps, 0.2_mps_sq} , kinematics }; // Constraints are meters per second, max accel of meters per second squared
+    DoubleArmPlanner planner{ {3.5_mps, 2.5_mps_sq} , kinematics }; // Constraints are meters per second, max accel of meters per second squared
     frc::Field2d plotter;
     DoubleArmState targetState;
 

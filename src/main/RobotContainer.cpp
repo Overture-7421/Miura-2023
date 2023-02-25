@@ -29,7 +29,11 @@ void RobotContainer::ConfigureBindings() {
     // Mechanisms Controller Buttons
     conePiston.OnTrue(frc2::InstantCommand{ [this]() { this->intake.setConeControl();} }.ToPtr());
     wristPiston.OnTrue(frc2::InstantCommand{ [this]() { this->intake.setWristControl();} }.ToPtr());
-    groundPickUp.OnTrue(frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 1.5_m, -0.1_m });} }.ToPtr());
+    lowerPosition.OnTrue(frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 0.25_m, 0.13_m });} }.ToPtr()); // Closed
+    groundPickUp.OnTrue(frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 1.45_m, -0.42_m });} }.ToPtr()); // Ground
+    middlePosition.OnTrue(frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 0.83_m, 0.25_m });} }.ToPtr()); // Middle
+    upperPosition.OnTrue(frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 1.22_m, 0.78_m });} }.ToPtr()); // Upper
+
 }
 
 void RobotContainer::setVisionManager() {
