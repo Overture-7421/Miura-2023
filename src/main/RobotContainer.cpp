@@ -40,6 +40,11 @@ void RobotContainer::setVisionManager() {
 
 }
 
+frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
+    // Set alliance color for pose estimation and correct on the fly path generation
+    return CreateAuto(pathChooser.GetSelected());
+}
+
 frc2::CommandPtr RobotContainer::CreateAuto(std::string pathName) {
     std::vector<pathplanner::PathPlannerTrajectory> examplePath = pathplanner::PathPlanner::loadPathGroup(pathName, { pathplanner::PathConstraints(4_mps, 4_mps_sq),
     pathplanner::PathConstraints(4_mps, 4_mps_sq),
