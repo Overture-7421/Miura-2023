@@ -4,26 +4,44 @@
 
 #include "VisionManager.h"
 
-VisionManager::VisionManager(SwerveChassis* swerveChassis): swerveChassis(swerveChassis) {}
-
-void VisionManager::setAllianceColor() {
+VisionManager::VisionManager(SwerveChassis* swerveChassis): swerveChassis(swerveChassis) {
     // Set alliance color for the poseEstimator
+    tagLayout = std::make_shared<frc::AprilTagFieldLayout>(frc::LoadAprilTagLayoutField(frc::AprilTagField::k2023ChargedUp));
+
+    // poseEstimator = new photonlib::PhotonPoseEstimator{
+    //         *tagLayout.get(),
+    //         photonlib::PoseStrategy::MULTI_TAG_PNP,
+    //         std::move(photonlib::PhotonCamera{ "IMX219" }),
+    //         cameraToRobot
+    // };
+
+}
+
+//Set alliance color for the poseEstimator
+void VisionManager::setAllianceColor() {
     frc::DriverStation::Alliance allianceColor = frc::DriverStation::GetAlliance();
+
     if (allianceColor == frc::DriverStation::Alliance::kBlue) {
-        tagLayout.SetOrigin(frc::AprilTagFieldLayout::OriginPosition::kBlueAllianceWallRightSide);
+        tagLayout->SetOrigin(frc::AprilTagFieldLayout::OriginPosition::kBlueAllianceWallRightSide);
+        frc::SmartDashboard::PutString("Alliance", "Blue");
         poseEstimatorSet = true;
+
     } else {
-        tagLayout.SetOrigin(frc::AprilTagFieldLayout::OriginPosition::kRedAllianceWallRightSide);
+        tagLayout->SetOrigin(frc::AprilTagFieldLayout::OriginPosition::kRedAllianceWallRightSide);
         poseEstimatorSet = true;
+
+        frc::SmartDashboard::PutString("Alliance", "Red");
     }
 
-    // Set pose estimator
     poseEstimator = new photonlib::PhotonPoseEstimator{
-        tagLayout,
-        photonlib::PoseStrategy::MULTI_TAG_PNP,
-        std::move(cameraEstimator),
-        cameraToRobot
+            *tagLayout.get(),
+            photonlib::PoseStrategy::MULTI_TAG_PNP,
+            std::move(photonlib::PhotonCamera{ "IMX219" }),
+            cameraToRobot
     };
+
+    poseEstimator->SetMultiTagFallbackStrategy(photonlib::PoseStrategy::LOWEST_AMBIGUITY);
+
 }
 
 //Update odometry with vision
@@ -49,7 +67,7 @@ std::optional<photonlib::PhotonPipelineResult> VisionManager::getCameraResult() 
 
 //Get AprilTagFieldLayout from driver station
 frc::AprilTagFieldLayout VisionManager::getField() {
-    return tagLayout;
+    return *tagLayout.get();
 }
 
 //Check if poseEstimator is set

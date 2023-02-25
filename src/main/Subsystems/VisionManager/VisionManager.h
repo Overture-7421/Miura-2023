@@ -18,8 +18,8 @@
 class VisionManager: public frc2::SubsystemBase {
 public:
     VisionManager(SwerveChassis* chassis);
-    void setAllianceColor();
     void updateOdometry();
+    void setAllianceColor();
     std::optional<photonlib::EstimatedRobotPose> update(frc::Pose2d estimatedPose);
     std::optional<photonlib::PhotonPipelineResult> getCameraResult();
     frc::AprilTagFieldLayout getField();
@@ -28,10 +28,9 @@ public:
 
 private:
     /* PhotonVision */
-    photonlib::PhotonCamera cameraEstimator{ "IMX219" };
     photonlib::PhotonCamera camera{ "IMX219" };
-    frc::AprilTagFieldLayout tagLayout{ frc::LoadAprilTagLayoutField(frc::AprilTagField::k2023ChargedUp) };
-    frc::Transform3d cameraToRobot{ {3.65_cm, 21.183_cm, 87.75_cm}, {0_deg, 13.168_deg, 0_deg} };
+    std::shared_ptr<frc::AprilTagFieldLayout> tagLayout;
+    frc::Transform3d cameraToRobot{ {3.641_cm, 23.225_cm, 87.564_cm}, {0_deg, 12_deg, 0_deg} };
     photonlib::PhotonPoseEstimator* poseEstimator;
     bool poseEstimatorSet = false;
 

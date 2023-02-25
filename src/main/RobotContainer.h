@@ -27,7 +27,7 @@ public:
     RobotContainer();
 
     frc2::CommandPtr GetAutonomousCommand();
-    void setAllianceColor();
+    void setVisionManager();
 
     // Generates auto with pathplanner
     frc2::CommandPtr CreateAuto(std::string pathName);

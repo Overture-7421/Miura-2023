@@ -12,10 +12,8 @@ RobotContainer::RobotContainer() {
     visionManager.SetDefaultCommand(UpdateVisionOdometry(&visionManager));
     intake.SetDefaultCommand(IntakeControl(&intake, &mechanisms));
 
-
     //Set choosers for auto
     pathChooser.SetDefaultOption("OutOfCommunity&Balance", "OutOfCommunity&Balance");
-
 
     frc::SmartDashboard::PutData("Auto Chooser", &pathChooser);
 
@@ -40,11 +38,12 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     return CreateAuto(pathChooser.GetSelected());
 }
 
-void RobotContainer::setAllianceColor() {
+void RobotContainer::setVisionManager() {
     frc::DriverStation::Alliance color = frc::DriverStation::GetAlliance();
     if (color != frc::DriverStation::Alliance::kInvalid && frc::DriverStation::IsDSAttached()) {
         visionManager.setAllianceColor();
     }
+
 }
 
 frc2::CommandPtr RobotContainer::CreateAuto(std::string pathName) {
