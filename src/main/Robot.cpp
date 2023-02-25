@@ -40,15 +40,7 @@ void Robot::TeleopInit() {
     m_container.setVisionManager();
 }
 
-void Robot::TeleopPeriodic() {
-    if (m_container.controller.GetRawButton(3)) {
-        m_container.doubleArm.SetTargetCoord({ 1.5_m, -0.1_m });
-    } else if (m_container.controller.GetRawButton(4)) {
-        m_container.doubleArm.SetTargetCoord({ 1.1_m, 1.3_m }); //Altura Máxima
-    } else if (m_container.controller.GetRawButton(1)) {
-        m_container.doubleArm.SetTargetCoord({ 0.25_m, 0.13_m }); //Posición Inicial
-    }
-}
+void Robot::TeleopPeriodic() {}
 
 void Robot::TeleopExit() {}
 

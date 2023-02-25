@@ -29,8 +29,8 @@ public:
     frc2::CommandPtr GetAutonomousCommand();
     void setVisionManager();
 
-    // // Generates auto with pathplanner
-    // frc2::CommandPtr CreateAuto(std::string pathName
+    // Generates auto with pathplanner
+    frc2::CommandPtr CreateAuto(std::string pathName);
 
 private:
     void ConfigureBindings();
@@ -46,13 +46,18 @@ private:
     frc::XboxController mechanisms{ 1 };
     frc2::Trigger conePiston{ [this] {return mechanisms.GetRightBumper();} };
     frc2::Trigger wristPiston{ [this] {return mechanisms.GetLeftBumper();} };
+    frc2::Trigger groundPickUp{ [this] {return mechanisms.GetAButton();} };
+    frc2::Trigger lowerPosition{ [this] {return mechanisms.GetBButton();} };
+    frc2::Trigger middlePosition{ [this] {return mechanisms.GetXButton();} };
+    frc2::Trigger upperPosition{ [this] {return mechanisms.GetYButton();} };
+
 
     // Subsystems
     SwerveChassis swerveChassis;
     VisionManager visionManager{ &swerveChassis };
     Intake intake;
     DoubleArm doubleArm;
-    
+
     //Auto
     frc::SendableChooser<std::string> pathChooser;
     std::unordered_map<std::string, std::shared_ptr<frc2::Command>> eventMap;

@@ -11,7 +11,7 @@ RobotContainer::RobotContainer() {
     swerveChassis.SetDefaultCommand(Drive(&swerveChassis, &controller));
     visionManager.SetDefaultCommand(UpdateVisionOdometry(&visionManager));
     intake.SetDefaultCommand(IntakeControl(&intake, &mechanisms));
-    
+
     //Set choosers for auto
     pathChooser.SetDefaultOption("OutOfCommunity&Balance", "OutOfCommunity&Balance");
     frc::SmartDashboard::PutData("Auto Chooser", &pathChooser);
@@ -29,6 +29,7 @@ void RobotContainer::ConfigureBindings() {
     // Mechanisms Controller Buttons
     conePiston.OnTrue(frc2::InstantCommand{ [this]() { this->intake.setConeControl();} }.ToPtr());
     wristPiston.OnTrue(frc2::InstantCommand{ [this]() { this->intake.setWristControl();} }.ToPtr());
+    groundPickUp.OnTrue(frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 1.5_m, -0.1_m });} }.ToPtr());
 }
 
 void RobotContainer::setVisionManager() {
