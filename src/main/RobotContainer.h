@@ -44,12 +44,17 @@ private:
 
     // Mechanism Controller
     frc::XboxController mechanisms{ 1 };
+
+    //Pneumatics
     frc2::Trigger conePiston{ [this] {return mechanisms.GetRightBumper();} };
     frc2::Trigger wristPiston{ [this] {return mechanisms.GetLeftBumper();} };
-    frc2::Trigger groundPickUp{ [this] {return mechanisms.GetAButton();} };
-    frc2::Trigger lowerPosition{ [this] {return mechanisms.GetBButton();} };
-    frc2::Trigger middlePosition{ [this] {return mechanisms.GetXButton();} };
-    frc2::Trigger upperPosition{ [this] {return mechanisms.GetYButton();} };
+
+    //Positions
+    frc2::Trigger upperPosition{ [this] {return mechanisms.GetYButton();} }; //Upper
+    frc2::Trigger middlePosition{ [this] {return mechanisms.GetXButton();} }; //Middle
+    frc2::Trigger groundPickUp{ [this] {return mechanisms.GetAButton();} }; //Ground
+    frc2::Trigger portalPosition{ [this] {return mechanisms.GetBButton();} }; //Portal
+    frc2::Trigger lowerPosition{ [this] {return mechanisms.GetPOV(0.75);} }; //Closed
 
 
     // Subsystems
