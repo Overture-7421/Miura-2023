@@ -41,14 +41,14 @@ private:
     double ConvertAngleToLowerFalconPos
     (frc::Rotation2d angle);
 
-    DoubleArmKinematics kinematics{ 0.8382, 0.8382 };
+    DoubleArmKinematics kinematics{ 0.68648, 0.6731 };
     DoubleArmPlanner planner{ {5_mps, 5_mps_sq} , kinematics }; // Constraints are meters per second, max accel of meters per second squared
     frc::Field2d plotter;
     DoubleArmState targetState;
 
     const double FALCON_CODES_PER_REV = 2048;
     const double LOWER_GEARBOX_REDUCTION = 96;
-    const double UPPER_GEARBOX_REDUCTION = 200;
+    const double UPPER_GEARBOX_REDUCTION = 95.2;
 
     const double CODES_PER_LOWER_ROTATION = LOWER_GEARBOX_REDUCTION * FALCON_CODES_PER_REV;
     const double CODES_PER_UPPER_ROTATION = UPPER_GEARBOX_REDUCTION * FALCON_CODES_PER_REV;
