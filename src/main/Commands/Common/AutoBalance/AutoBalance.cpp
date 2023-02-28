@@ -11,8 +11,8 @@ AutoBalance::AutoBalance(SwerveChassis* swerveChassis): m_swerveChassis(swerveCh
 
 // Called when the command is initially scheduled.
 void AutoBalance::Initialize() {
-    xController.SetTolerance(3);
-    rController.SetTolerance(3);
+    xController.SetTolerance(0);
+    rController.SetTolerance(0);
 }
 
 // Called repeatedly when this Command is scheduled to run
