@@ -78,7 +78,7 @@ void DoubleArm::SetTargetCoord(frc::Translation2d targetCoord) {
 }
 
 void DoubleArm::SetFalconTargetPos(DoubleArmState desiredState) {
-    lowerRight.Set(ControlMode::Position, ConvertAngleToLowerFalconPos(desiredState.lowerAngle), DemandType_ArbitraryFeedForward, 0.021 * desiredState.lowerAngle.Cos());
+    lowerRight.Set(ControlMode::Position, ConvertAngleToLowerFalconPos(desiredState.lowerAngle), DemandType_ArbitraryFeedForward, 0.055 * desiredState.lowerAngle.Cos());
     upperRight.Set(ControlMode::Position, ConvertAngleToUpperFalconPos(desiredState.upperAngle), DemandType_ArbitraryFeedForward, 0.031 * desiredState.upperAngle.Cos());
 }
 
