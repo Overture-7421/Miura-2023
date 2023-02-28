@@ -60,8 +60,8 @@ private:
     TalonFX lowerLeft2{ 12 };
 
     /* Upper Motors */
-    TalonFX upperRight{ 14 }; // 14
-    //TalonFX upperLeft{ 13 };
+    TalonFX upperRight{ 14 };
+    TalonFX upperLeft{ 13 };
 
     /* Encoders */
     frc::DutyCycleEncoder lowerEncoder{ 1 };

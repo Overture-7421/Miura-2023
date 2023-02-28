@@ -85,7 +85,7 @@ void DoubleArm::SetFalconTargetPos(DoubleArmState desiredState) {
 void DoubleArm::ConfigureMotors() {
     TalonFXConfiguration baseConfig;
     baseConfig.voltageCompSaturation = 12.0;
-    baseConfig.supplyCurrLimit = SupplyCurrentLimitConfiguration(true, 20, 30, 100);
+    baseConfig.supplyCurrLimit = SupplyCurrentLimitConfiguration(true, 20, 25, 0);
     baseConfig.neutralDeadband = 0.001;
 
     /* Lower Motors */
@@ -130,15 +130,15 @@ void DoubleArm::ConfigureMotors() {
     upperRight.EnableVoltageCompensation(true);
     upperRight.SetNeutralMode(NeutralMode::Brake);
 
-    // upperLeft.ConfigAllSettings(baseConfig);
-    // upperLeft.EnableVoltageCompensation(true);
-    // upperLeft.SetNeutralMode(NeutralMode::Coast);
+    upperLeft.ConfigAllSettings(baseConfig);
+    upperLeft.EnableVoltageCompensation(true);
+    upperLeft.SetNeutralMode(NeutralMode::Coast);
 
     upperRight.SetInverted(true);
-    // upperLeft.SetInverted(InvertType::FollowMaster);
-    // upperLeft.Follow(upperRight);
-    // upperLeft.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_1_General, 255)
-    // upperLeft.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_2_Feedback0, 255);
+    upperLeft.SetInverted(InvertType::FollowMaster);
+    upperLeft.Follow(upperRight);
+    upperLeft.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_1_General, 255);
+    upperLeft.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_2_Feedback0, 255);
 
 
     upperRight.SelectProfileSlot(0, 0);
