@@ -7,14 +7,6 @@
 VisionManager::VisionManager(SwerveChassis* swerveChassis): swerveChassis(swerveChassis) {
     // Set alliance color for the poseEstimator
     tagLayout = std::make_shared<frc::AprilTagFieldLayout>(frc::LoadAprilTagLayoutField(frc::AprilTagField::k2023ChargedUp));
-
-    // poseEstimator = new photonlib::PhotonPoseEstimator{
-    //         *tagLayout.get(),
-    //         photonlib::PoseStrategy::MULTI_TAG_PNP,
-    //         std::move(photonlib::PhotonCamera{ "IMX219" }),
-    //         cameraToRobot
-    // };
-
 }
 
 //Set alliance color for the poseEstimator
@@ -23,14 +15,10 @@ void VisionManager::setAllianceColor() {
 
     if (allianceColor == frc::DriverStation::Alliance::kBlue) {
         tagLayout->SetOrigin(frc::AprilTagFieldLayout::OriginPosition::kBlueAllianceWallRightSide);
-        frc::SmartDashboard::PutString("Alliance", "Blue");
         poseEstimatorSet = true;
-
     } else {
         tagLayout->SetOrigin(frc::AprilTagFieldLayout::OriginPosition::kRedAllianceWallRightSide);
         poseEstimatorSet = true;
-
-        frc::SmartDashboard::PutString("Alliance", "Red");
     }
 
     poseEstimator = new photonlib::PhotonPoseEstimator{
@@ -39,7 +27,6 @@ void VisionManager::setAllianceColor() {
             std::move(photonlib::PhotonCamera{ "IMX219" }),
             cameraToRobot
     };
-
 }
 
 //Update odometry with vision
@@ -54,7 +41,7 @@ void VisionManager::updateOdometry() {
 
 //Get EstimatedRobotPose from PhotonVision
 std::optional<photonlib::EstimatedRobotPose> VisionManager::update(frc::Pose2d estimatedPose) {
-    poseEstimator->SetReferencePose(frc::Pose3d(estimatedPose));
+    // poseEstimator->SetReferencePose(frc::Pose3d(estimatedPose));
     return poseEstimator->Update();
 }
 

@@ -32,7 +32,7 @@ void AlignRobotToTarget::calculateAlignPose() {
         } else if (!result.HasTargets()) {
             End(true);
         }
-    } else if (!cameraResult.has_value()) {
+    } else if (!cameraResult) {
         End(true);
     }
 
