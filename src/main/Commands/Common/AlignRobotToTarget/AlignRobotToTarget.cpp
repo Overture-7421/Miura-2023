@@ -17,8 +17,8 @@ void AlignRobotToTarget::calculateAlignPose() {
 
     // Create PathPoints
     std::vector<pathplanner::PathPoint> pathPoints = {
-        { chassisPose.Translation(), chassisPose.Rotation(), chassisPose.Rotation() },
-        { targetPose.Translation(), targetPose.Rotation(), targetPose.Rotation() }
+        { chassisPose.Translation(), {0_deg}, chassisPose.Rotation() },
+        { targetPose.Translation(), {0_deg}, targetPose.Rotation() }
     };
 
     // Create trajector with constraints
