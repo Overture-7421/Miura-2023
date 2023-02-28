@@ -42,7 +42,7 @@ private:
     (frc::Rotation2d angle);
 
     DoubleArmKinematics kinematics{ 0.68648, 0.6731 };
-    DoubleArmPlanner planner{ {5_mps, 5_mps_sq} , kinematics }; // Constraints are meters per second, max accel of meters per second squared
+    DoubleArmPlanner planner{ {4.5_mps, 4.5_mps_sq} , kinematics }; // Constraints are meters per second, max accel of meters per second squared
     frc::Field2d plotter;
     DoubleArmState targetState;
 
