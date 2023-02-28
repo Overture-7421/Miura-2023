@@ -45,11 +45,18 @@ private:
     std::string position;
     pathplanner::PPSwerveControllerCommand* alignCommand;
     pathplanner::PathPlannerTrajectory trajectory;
-    pathplanner::PathConstraints constraints = { 1_mps, 1_mps_sq };
+    pathplanner::PathConstraints constraints = { 2_mps, 2_mps_sq };
+    units::meter_t xPosition{ 2.2_m };
     std::unordered_map<std::string, frc::Pose2d> positionMap{
-      {"Center", {1_m,0_m,{180_deg}}},
-      {"Right", {1_m,0.48_m,{180_deg}}},
-      {"Left", {1_m,-0.48_m,{180_deg}}},
-      {"Loading",{1_m,1_m,{180_deg}}}
+      {"1-Left", {xPosition, 5_m, {180_deg}}},
+      {"1-Center", {xPosition, 4.42_m, {180_deg}}},
+      {"1-Right", {xPosition, 3.86_m, {180_deg}}},
+      {"2-Left", {xPosition, 3.30_m, {180_deg}}},
+      {"2-Center", {xPosition, 2.75_m, {180_deg}}},
+      {"2-Right", {xPosition, 2.19_m, {180_deg}}},
+      {"3-Left", {xPosition, 1.63_m, {180_deg}}},
+      {"3-Center", {xPosition, 1.06_m, {180_deg}}},
+      {"3-Right", {xPosition, 0.53_m, {180_deg}}},
+      {"Loading",{14.5_m, 6.7_m, {0_deg}}}
     };
 };

@@ -11,31 +11,18 @@ AlignRobotToTarget::AlignRobotToTarget(SwerveChassis* swerveChassis, VisionManag
 
 /* Method for calculating the desiredPosition for path generation */
 void AlignRobotToTarget::calculateAlignPose() {
-    std::optional<photonlib::PhotonPipelineResult> cameraResult = visionManager->getCameraResult();
-    if (cameraResult.has_value()) {
-        photonlib::PhotonPipelineResult result = cameraResult.value();
-        if (result.HasTargets()) {
-            int tagID = result.GetBestTarget().GetFiducialId();
-            frc::Pose2d targetpose = visionManager->getField().GetTagPose(tagID).value().ToPose2d();
 
-            frc::Pose2d visionPose = targetpose.TransformBy({ positionMap[position].Translation(), positionMap[position].Rotation() });
-            frc::Pose2d chassisPose = swerveChassis->getOdometry();
+    frc::Pose2d targetPose = positionMap[position];
+    frc::Pose2d chassisPose = swerveChassis->getOdometry();
 
-            // Create PathPoints
-            std::vector<pathplanner::PathPoint> pathPoints = {
-                { chassisPose.Translation(), chassisPose.Rotation(), chassisPose.Rotation() },
-                { visionPose.Translation(), visionPose.Rotation(), visionPose.Rotation() }
-            };
+    // Create PathPoints
+    std::vector<pathplanner::PathPoint> pathPoints = {
+        { chassisPose.Translation(), chassisPose.Rotation(), chassisPose.Rotation() },
+        { targetPose.Translation(), targetPose.Rotation(), targetPose.Rotation() }
+    };
 
-            // Create trajector with constraints
-            trajectory = pathplanner::PathPlanner::generatePath(constraints, pathPoints);
-        } else if (!result.HasTargets()) {
-            End(true);
-        }
-    } else if (!cameraResult) {
-        End(true);
-    }
-
+    // Create trajector with constraints
+    trajectory = pathplanner::PathPlanner::generatePath(constraints, pathPoints);
 }
 
 // Called when the command is initially scheduled.
@@ -51,7 +38,7 @@ void AlignRobotToTarget::Initialize() {
         { 0,0,0 },
         [this](auto speeds) { swerveChassis->setModuleStates(speeds); },
         { swerveChassis },
-        false
+        true
     );
 
     alignCommand->Initialize();

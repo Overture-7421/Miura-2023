@@ -22,6 +22,7 @@
 #include "Commands/Common/AlignRobotToTarget/AlignRobotToTarget.h"
 #include "Commands/Common/UpdateVisionOdometry/UpdateVisionOdometry.h"
 #include "Commands/Common/IntakeControl/IntakeControl.h"
+#include "Commands/Common/AutoBalance/AutoBalance.h"
 
 class RobotContainer {
 public:
@@ -37,10 +38,19 @@ private:
 
     // Chassis driver controller and buttons
     frc::XboxController controller{ 0 };
-    frc2::Trigger resetNavx{ [this] {return controller.GetStartButton();} };
-    frc2::Trigger alignCenter{ [this] {return controller.GetAButton();} }; //Change Button for final robot
-    frc2::Trigger alignRight{ [this] {return controller.GetRightBumper();} }; //Change Button for final robot
-    frc2::Trigger alignLeft{ [this] {return controller.GetLeftBumper();} }; //Change Button for final robot
+    frc2::Trigger resetNavx{ [this] {return controller.GetBackButton();} };
+    frc2::Trigger alignOneLeft{ [this] {return controller.GetLeftBumper() && controller.GetXButton();} };
+    frc2::Trigger alignOneCenter{ [this] {return controller.GetLeftBumper() && controller.GetAButton();} };
+    frc2::Trigger alignOneRight{ [this] {return controller.GetLeftBumper() && controller.GetBButton();} };
+    frc2::Trigger alignTwoLeft{ [this] {return controller.GetRightBumper() && controller.GetLeftBumper() && controller.GetXButton();} };
+    frc2::Trigger alignTwoCenter{ [this] {return controller.GetRightBumper() && controller.GetLeftBumper() && controller.GetAButton();} };
+    frc2::Trigger alignTwoRight{ [this] {return controller.GetRightBumper() && controller.GetLeftBumper() && controller.GetBButton();} };
+    frc2::Trigger alignThreeLeft{ [this] {return controller.GetRightBumper() && controller.GetXButton();} };
+    frc2::Trigger alignThreeCenter{ [this] {return controller.GetRightBumper() && controller.GetAButton();} };
+    frc2::Trigger alignThreeRight{ [this] {return controller.GetRightBumper() && controller.GetBButton();} };
+    frc2::Trigger alignLoading{ [this] {return controller.GetYButton();} };
+    frc2::Trigger autoBalance{ [this] {return controller.GetStartButton();} };
+
 
     // Mechanism Controller
     frc::XboxController mechanisms{ 1 };

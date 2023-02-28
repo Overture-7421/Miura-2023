@@ -37,6 +37,8 @@ public:
     void setModuleStates(wpi::array<frc::SwerveModuleState, 4> desiredStates);
     wpi::array<frc::SwerveModuleState, 4> getModuleStates();
     wpi::array<frc::SwerveModulePosition, 4> getModulePosition();
+    double getPitch();
+    double getYaw();
 
     /**
      * Will be called periodically whenever the CommandScheduler runs.

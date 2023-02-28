@@ -117,7 +117,15 @@ wpi::array<frc::SwerveModulePosition, 4> SwerveChassis::getModulePosition() {
     return modulePositions;
 }
 
+// Get robot pitch angle
+double SwerveChassis::getPitch() {
+    return navx.GetPitch();
+}
 
+// Get Yaw angle
+double SwerveChassis::getYaw() {
+    return navx.GetYaw();
+}
 
 // This method will be called once per scheduler run
 void SwerveChassis::Periodic() {
@@ -130,7 +138,7 @@ void SwerveChassis::Periodic() {
     frc::SmartDashboard::PutNumber("OdometryX", estimatedPos.X().value());
     frc::SmartDashboard::PutNumber("OdometryY", estimatedPos.Y().value());
     frc::SmartDashboard::PutNumber("AnglenaveX", estimatedPos.Rotation().Degrees().value());
-
+    frc::SmartDashboard::PutNumber("AnglenaveY", navx.GetYaw());
 
     field2d.SetRobotPose(getOdometry());
 }
