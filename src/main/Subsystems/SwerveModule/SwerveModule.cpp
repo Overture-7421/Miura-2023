@@ -14,11 +14,11 @@ SwerveModule::SwerveModule(int rotatorID, int wheelID, int canCoderID, double of
     canCoder.ConfigSensorDirection(false);
     rotator.SetInverted(true);
 
-    // wheel.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_1_General, 20);
-    // wheel.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_2_Feedback0, 255);
+    wheel.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_1_General, 20);
+    wheel.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_2_Feedback0, 255);
 
-    // rotator.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_1_General, 20);
-    // rotator.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_2_Feedback0, 255);
+    rotator.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_1_General, 20);
+    rotator.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_2_Feedback0, 255);
 
     wheel.SetNeutralMode(NeutralMode::Brake);
     rotator.SetNeutralMode(NeutralMode::Coast);

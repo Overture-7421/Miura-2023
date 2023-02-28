@@ -42,9 +42,9 @@ private:
     frc2::Trigger alignOneLeft{ [this] {return controller.GetLeftBumper() && controller.GetXButton();} };
     frc2::Trigger alignOneCenter{ [this] {return controller.GetLeftBumper() && controller.GetAButton();} };
     frc2::Trigger alignOneRight{ [this] {return controller.GetLeftBumper() && controller.GetBButton();} };
-    frc2::Trigger alignTwoLeft{ [this] {return controller.GetRightBumper() && controller.GetLeftBumper() && controller.GetXButton();} };
-    frc2::Trigger alignTwoCenter{ [this] {return controller.GetRightBumper() && controller.GetLeftBumper() && controller.GetAButton();} };
-    frc2::Trigger alignTwoRight{ [this] {return controller.GetRightBumper() && controller.GetLeftBumper() && controller.GetBButton();} };
+    frc2::Trigger alignTwoLeft{ [this] {return (controller.GetLeftTriggerAxis() || controller.GetRightTriggerAxis()) && controller.GetXButton();} };
+    frc2::Trigger alignTwoCenter{ [this] {return (controller.GetLeftTriggerAxis() || controller.GetRightTriggerAxis()) && controller.GetAButton();} };
+    frc2::Trigger alignTwoRight{ [this] {return (controller.GetLeftTriggerAxis() || controller.GetRightTriggerAxis()) && controller.GetBButton();} };
     frc2::Trigger alignThreeLeft{ [this] {return controller.GetRightBumper() && controller.GetXButton();} };
     frc2::Trigger alignThreeCenter{ [this] {return controller.GetRightBumper() && controller.GetAButton();} };
     frc2::Trigger alignThreeRight{ [this] {return controller.GetRightBumper() && controller.GetBButton();} };

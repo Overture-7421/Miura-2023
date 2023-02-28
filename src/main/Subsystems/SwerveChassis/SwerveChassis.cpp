@@ -66,7 +66,7 @@ frc::Pose2d SwerveChassis::getOdometry() {
 }
 
 void SwerveChassis::resetOdometry(frc::Pose2d initPose) {
-    odometry.ResetPosition(frc::Rotation2d{ units::degree_t{navx.GetAngle()} }, getModulePosition(), initPose);
+    odometry.ResetPosition(frc::Rotation2d{ units::degree_t{-navx.GetAngle()} }, getModulePosition(), initPose);
 }
 
 double SwerveChassis::getHeadingRate() {
@@ -82,7 +82,7 @@ void SwerveChassis::addVisionMeasurement(frc::Pose2d pose, units::second_t times
 }
 
 void SwerveChassis::resetNavx() {
-    navx.ZeroYaw();
+
 }
 
 void SwerveChassis::setModuleStates(wpi::array<frc::SwerveModuleState, 4> desiredStates) {
@@ -124,7 +124,7 @@ double SwerveChassis::getPitch() {
 
 // Get Yaw angle
 double SwerveChassis::getYaw() {
-    return navx.GetYaw();
+    return getOdometry().Rotation().Degrees().value();
 }
 
 // This method will be called once per scheduler run
@@ -138,7 +138,6 @@ void SwerveChassis::Periodic() {
     frc::SmartDashboard::PutNumber("OdometryX", estimatedPos.X().value());
     frc::SmartDashboard::PutNumber("OdometryY", estimatedPos.Y().value());
     frc::SmartDashboard::PutNumber("AnglenaveX", estimatedPos.Rotation().Degrees().value());
-    frc::SmartDashboard::PutNumber("AnglenaveY", navx.GetYaw());
 
     field2d.SetRobotPose(getOdometry());
 }
