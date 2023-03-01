@@ -38,13 +38,31 @@ void RobotContainer::ConfigureBindings() {
     conePiston.OnTrue(frc2::InstantCommand{ [this]() { this->intake.setConeControl();} }.ToPtr());
     wristPiston.OnTrue(frc2::InstantCommand{ [this]() { this->intake.setWristControl();} }.ToPtr());
 
-    lowerPosition.OnTrue(frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 0.19_m, 0.03_m });} }.ToPtr()); // Closed
-    groundPickUp.OnTrue(frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 1_m, -.75_m });} }.ToPtr()); // Ground
-    middlePosition.OnTrue(frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 0.76_m, 0.2_m });} }.ToPtr()); // Middle
+    lowerPosition.OnTrue(frc2::SequentialCommandGroup{
+            frc2::InstantCommand{ [this]() { this->intake.setWristAuto(true);} },
+            frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 0.19_m, 0.03_m });} }
+        }.ToPtr()); // Closed
 
-    upperPosition.OnTrue(frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 1.15_m, 0.62_m });} }.ToPtr()); // Upper
-    portalPosition.OnTrue(frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 0.82_m, 0.21_m  });} }.ToPtr()); // Portal
+    groundPickUp.OnTrue(frc2::SequentialCommandGroup{
+        frc2::InstantCommand{ [this]() { this->intake.setWristAuto(true);} },
+        frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({  1_m, -.75_m });} }
+        }.ToPtr()); // Ground
 
+    middlePosition.OnTrue(frc2::SequentialCommandGroup{
+    frc2::InstantCommand{ [this]() { this->intake.setWristAuto(false);} },
+    frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({  0.76_m, 0.2_m });} }
+        }.ToPtr()); // Middle
+
+    upperPosition.OnTrue(frc2::SequentialCommandGroup{
+        frc2::InstantCommand{ [this]() { this->intake.setWristAuto(true);} },
+        frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({  1.15_m, 0.62_m });} }
+        }.ToPtr()); // upper
+
+
+    portalPosition.OnTrue(frc2::SequentialCommandGroup{
+        frc2::InstantCommand{ [this]() { this->intake.setWristAuto(false);} },
+        frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({  0.82_m, 0.23_m  });} }
+        }.ToPtr()); // Portal
 }
 
 void RobotContainer::setVisionManager() {
