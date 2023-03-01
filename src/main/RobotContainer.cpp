@@ -37,11 +37,13 @@ void RobotContainer::ConfigureBindings() {
     // Mechanisms Controller Buttons
     conePiston.OnTrue(frc2::InstantCommand{ [this]() { this->intake.setConeControl();} }.ToPtr());
     wristPiston.OnTrue(frc2::InstantCommand{ [this]() { this->intake.setWristControl();} }.ToPtr());
-    lowerPosition.OnTrue(frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 0.25_m, 0.7_m });} }.ToPtr()); // Closed
-    groundPickUp.OnTrue(frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ .40_m, .10_m });} }.ToPtr()); // Ground
-    middlePosition.OnTrue(frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 0.83_m, 0.25_m });} }.ToPtr()); // Middle
-    upperPosition.OnTrue(frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 1.22_m, 0.78_m });} }.ToPtr()); // Upper
-    portalPosition.OnTrue(frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 0.83_m, 0.37_m  });} }.ToPtr()); // Portal
+
+    lowerPosition.OnTrue(frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 0.19_m, 0.03_m });} }.ToPtr()); // Closed
+    groundPickUp.OnTrue(frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 1_m, -.75_m });} }.ToPtr()); // Ground
+    middlePosition.OnTrue(frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 0.76_m, 0.2_m });} }.ToPtr()); // Middle
+
+    upperPosition.OnTrue(frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 1.15_m, 0.62_m });} }.ToPtr()); // Upper
+    portalPosition.OnTrue(frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 0.82_m, 0.21_m  });} }.ToPtr()); // Portal
 
 }
 

@@ -78,14 +78,14 @@ void DoubleArm::SetTargetCoord(frc::Translation2d targetCoord) {
 }
 
 void DoubleArm::SetFalconTargetPos(DoubleArmState desiredState) {
-    lowerRight.Set(ControlMode::Position, ConvertAngleToLowerFalconPos(desiredState.lowerAngle), DemandType_ArbitraryFeedForward, 0.055 * desiredState.lowerAngle.Cos());
-    upperRight.Set(ControlMode::Position, ConvertAngleToUpperFalconPos(desiredState.upperAngle), DemandType_ArbitraryFeedForward, 0.031 * desiredState.upperAngle.Cos());
+    lowerRight.Set(ControlMode::Position, ConvertAngleToLowerFalconPos(desiredState.lowerAngle), DemandType_ArbitraryFeedForward, 0.180 * desiredState.lowerAngle.Cos());
+    upperRight.Set(ControlMode::Position, ConvertAngleToUpperFalconPos(desiredState.upperAngle), DemandType_ArbitraryFeedForward, 0.060 * desiredState.upperAngle.Cos());
 }
 
 void DoubleArm::ConfigureMotors() {
     TalonFXConfiguration baseConfig;
     baseConfig.voltageCompSaturation = 12.0;
-    baseConfig.supplyCurrLimit = SupplyCurrentLimitConfiguration(true, 20, 25, 0);
+    baseConfig.supplyCurrLimit = SupplyCurrentLimitConfiguration(true, 25, 30, 0);
     baseConfig.neutralDeadband = 0.001;
 
     /* Lower Motors */
@@ -121,7 +121,7 @@ void DoubleArm::ConfigureMotors() {
     lowerLeft2.SetInverted(TalonFXInvertType::OpposeMaster);
 
     lowerRight.SelectProfileSlot(0, 0);
-    lowerRight.Config_kP(0, 0.02);
+    lowerRight.Config_kP(0, 0.05);
     lowerRight.Config_kI(0, 0);
     lowerRight.Config_kD(0, 0);
 
