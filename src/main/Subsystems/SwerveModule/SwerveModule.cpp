@@ -78,9 +78,9 @@ frc::SwerveModulePosition SwerveModule::getPosition() {
 
 void SwerveModule::Periodic() {
 
-    frc::SmartDashboard::PutNumber(name + "/Distance", getDistance());
-    frc::SmartDashboard::PutNumber(name + "/Angle", getAngle());
-    frc::SmartDashboard::PutNumber(name + "/RawAngle", canCoder.GetAbsolutePosition());
+    // frc::SmartDashboard::PutNumber(name + "/Distance", getDistance());
+    // frc::SmartDashboard::PutNumber(name + "/Angle", getAngle());
+    // frc::SmartDashboard::PutNumber(name + "/RawAngle", canCoder.GetAbsolutePosition());
 }
 
 void SwerveModule::setRotatorPIDValues(double kP, double kI, double kD, double f) {

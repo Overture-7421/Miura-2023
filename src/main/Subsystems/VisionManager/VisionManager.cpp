@@ -23,12 +23,10 @@ void VisionManager::setAllianceColor() {
 
     poseEstimator = new photonlib::PhotonPoseEstimator{
             *tagLayout.get(),
-            photonlib::PoseStrategy::MULTI_TAG_PNP,
+            photonlib::PoseStrategy::LOWEST_AMBIGUITY,
             std::move(photonlib::PhotonCamera{ "IMX219" }),
             cameraToRobot
     };
-
-    poseEstimator->SetMultiTagFallbackStrategy(photonlib::PoseStrategy::LOWEST_AMBIGUITY);
 }
 
 //Update odometry with vision

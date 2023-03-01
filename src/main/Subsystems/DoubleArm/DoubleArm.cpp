@@ -132,7 +132,7 @@ void DoubleArm::ConfigureMotors() {
 
     upperLeft.ConfigAllSettings(baseConfig);
     upperLeft.EnableVoltageCompensation(true);
-    upperLeft.SetNeutralMode(NeutralMode::Coast);
+    upperLeft.SetNeutralMode(NeutralMode::Brake);
 
     upperRight.SetInverted(true);
     upperLeft.SetInverted(InvertType::FollowMaster);

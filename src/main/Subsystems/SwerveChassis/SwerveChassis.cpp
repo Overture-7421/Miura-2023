@@ -135,8 +135,8 @@ void SwerveChassis::Periodic() {
 
     odometry.Update(frc::Rotation2d(units::degree_t(-navx.GetAngle())), getModulePosition());
     auto estimatedPos = getOdometry();
-    frc::SmartDashboard::PutNumber("OdometryX", estimatedPos.X().value());
-    frc::SmartDashboard::PutNumber("OdometryY", estimatedPos.Y().value());
+    // frc::SmartDashboard::PutNumber("OdometryX", estimatedPos.X().value());
+    // frc::SmartDashboard::PutNumber("OdometryY", estimatedPos.Y().value());
     frc::SmartDashboard::PutNumber("AnglenaveX", estimatedPos.Rotation().Degrees().value());
 
     field2d.SetRobotPose(getOdometry());
