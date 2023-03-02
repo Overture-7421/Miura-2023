@@ -9,6 +9,7 @@
 #include <frc/smartdashboard/SendableChooser.h>
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/SequentialCommandGroup.h>
+#include <frc2/command/WaitCommand.h>
 #include <pathplanner/lib/auto/SwerveAutoBuilder.h>
 #include <pathplanner/lib/PathPlanner.h>
 
@@ -19,16 +20,16 @@
 
 class CreateAuto: public frc2::CommandHelper<frc2::CommandBase, CreateAuto> {
 public:
-    CreateAuto(SwerveChassis* swerveChassis, DoubleArm* doubleArm, Intake* intake);
-    void addCommandsToMap();
-    frc2::CommandPtr GenerateAuto();
+	CreateAuto(SwerveChassis* swerveChassis, DoubleArm* doubleArm, Intake* intake);
+	void addCommandsToMap();
+	frc2::CommandPtr GenerateAuto();
 
 private:
-    SwerveChassis* m_SwerveChassis;
-    DoubleArm* m_DoubleArm;
-    Intake* m_Intake;
+	SwerveChassis* m_SwerveChassis;
+	DoubleArm* m_DoubleArm;
+	Intake* m_Intake;
 
-    //Auto
-    frc::SendableChooser<std::string> pathChooser;
-    std::unordered_map<std::string, std::shared_ptr<frc2::Command>> eventMap;
+	//Auto
+	frc::SendableChooser<std::string> pathChooser;
+	std::unordered_map<std::string, std::shared_ptr<frc2::Command>> eventMap;
 };
