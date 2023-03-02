@@ -6,19 +6,16 @@
 
 #include <frc2/command/Command.h>
 #include <frc/XboxController.h>
-#include <frc/smartdashboard/SendableChooser.h>
 #include <frc2/command/button/Trigger.h>
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/SequentialCommandGroup.h>
-#include <pathplanner/lib/auto/SwerveAutoBuilder.h>
-#include <pathplanner/lib/PathPlanner.h>
-#include <vector>
 
 #include "Subsystems/SwerveChassis/SwerveChassis.h"
 #include "Subsystems/VisionManager/VisionManager.h"
 #include "Subsystems/DoubleArm/DoubleArm.h"
 #include "Subsystems/Intake/Intake.h"
 
+#include "Commands/Autonomous/CreateAuto.h"
 #include "Commands/Teleop/Drive/Drive.h"
 #include "Commands/Common/AlignRobotToTarget/AlignRobotToTarget.h"
 #include "Commands/Common/UpdateVisionOdometry/UpdateVisionOdometry.h"
@@ -30,9 +27,6 @@ public:
     RobotContainer();
     frc2::CommandPtr GetAutonomousCommand();
     void setVisionManager();
-
-    // Generates auto with pathplanner
-    frc2::CommandPtr CreateAuto(std::string pathName);
 
 private:
     void ConfigureBindings();
@@ -52,7 +46,6 @@ private:
     frc2::Trigger alignLoading{ [this] {return controller.GetYButton();} };
     frc2::Trigger autoBalance{ [this] {return controller.GetStartButton();} };
 
-
     // Mechanism Controller
     frc::XboxController mechanisms{ 1 };
 
@@ -67,15 +60,12 @@ private:
     frc2::Trigger portalPosition{ [this] {return mechanisms.GetBButton();} }; //Portal
     frc2::Trigger lowerPosition{ [this] {return mechanisms.GetPOV(0.75);} }; //Closed
 
-
     // Subsystems
     SwerveChassis swerveChassis;
     VisionManager visionManager{ &swerveChassis };
     Intake intake;
     DoubleArm doubleArm;
 
-    //Auto
-    frc::SendableChooser<std::string> pathChooser;
-    std::unordered_map<std::string, std::shared_ptr<frc2::Command>> eventMap;
-
+    // Auto
+    CreateAuto createAuto{ &swerveChassis, &doubleArm, &intake };
 };

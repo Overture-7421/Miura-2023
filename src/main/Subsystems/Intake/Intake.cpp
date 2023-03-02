@@ -10,7 +10,7 @@ Intake::Intake() {
     intakeMotor.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_2_Feedback0, 255);
     intakeMotor.ConfigSupplyCurrentLimit(SupplyCurrentLimitConfiguration(true, 25, 0, 1));
 
-    conePiston.Set(frc::DoubleSolenoid::Value::kForward);
+    conePiston.Set(frc::DoubleSolenoid::Value::kReverse);
     wristPiston.Set(frc::DoubleSolenoid::Value::kForward);
 }
 
