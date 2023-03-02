@@ -30,8 +30,8 @@ void CreateAuto::addCommandsToMap() {
 
     frc2::InstantCommand closedPos{ [this]() { this->m_DoubleArm->SetTargetCoord({ 0.21_m, 0.05_m });} };
     frc2::InstantCommand groundPos{ [this]() { this->m_DoubleArm->SetTargetCoord({ 1_m, -.73_m });} };
-    frc2::InstantCommand bottomPos{ [this]() {this->m_DoubleArm->SetTargetCoord({ 0.76_m, 0.22_m });} };
-    frc2::InstantCommand upperPos{ [this]() {this->m_DoubleArm->SetTargetCoord({ 1.15_m, 0.62_m });} };
+    frc2::InstantCommand middlePos{ [this]() {this->m_DoubleArm->SetTargetCoord({ 0.76_m, 0.22_m });} };
+    frc2::InstantCommand upperPos{ [this]() {this->m_DoubleArm->SetTargetCoord({ 1.17_m, 0.63_m });} };
 
     frc2::InstantCommand intakePiece{ [this]() {this->m_Intake->setVoltage(-6.0);} };
     frc2::InstantCommand stopIntake{ [this]() {this->m_Intake->setVoltage(0);} };
@@ -44,7 +44,7 @@ void CreateAuto::addCommandsToMap() {
     eventMap.emplace("wristDown", std::make_shared<frc2::InstantCommand>(wristDown));
     eventMap.emplace("closedPos", std::make_shared<frc2::InstantCommand>(closedPos));
     eventMap.emplace("groundPos", std::make_shared<frc2::InstantCommand>(groundPos));
-    eventMap.emplace("bottomPos", std::make_shared<frc2::InstantCommand>(bottomPos));
+    eventMap.emplace("middlePos", std::make_shared<frc2::InstantCommand>(middlePos));
     eventMap.emplace("upperPos", std::make_shared<frc2::InstantCommand>(upperPos));
     eventMap.emplace("wait-0.5s", std::make_shared<frc2::WaitCommand>(0.5_s));
     eventMap.emplace("wait-1s", std::make_shared<frc2::WaitCommand>(1_s));
