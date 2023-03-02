@@ -30,7 +30,7 @@ void CreateAuto::addCommandsToMap() {
 
     frc2::InstantCommand closedPos{ [this]() { this->m_DoubleArm->SetTargetCoord({ 0.21_m, 0.05_m });} };
     frc2::InstantCommand groundPos{ [this]() { this->m_DoubleArm->SetTargetCoord({ 1_m, -.73_m });} };
-    frc2::InstantCommand bottomPos{ [this]() {this->m_DoubleArm->SetTargetCoord({ 0.76_m, 0.2_m });} };
+    frc2::InstantCommand bottomPos{ [this]() {this->m_DoubleArm->SetTargetCoord({ 0.76_m, 0.22_m });} };
     frc2::InstantCommand upperPos{ [this]() {this->m_DoubleArm->SetTargetCoord({ 1.15_m, 0.62_m });} };
 
     frc2::InstantCommand intakePiece{ [this]() {this->m_Intake->setVoltage(-6.0);} };

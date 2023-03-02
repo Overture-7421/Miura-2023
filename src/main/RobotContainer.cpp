@@ -47,7 +47,7 @@ void RobotContainer::ConfigureBindings() {
 
     middlePosition.OnTrue(frc2::SequentialCommandGroup{
         frc2::InstantCommand{ [this]() { this->intake.setWristAuto(false);} },
-            frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 0.76_m, 0.2_m });} }
+            frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 0.76_m, 0.22_m });} }
         }.ToPtr()); // Middle
 
     upperPosition.OnTrue(frc2::SequentialCommandGroup{
