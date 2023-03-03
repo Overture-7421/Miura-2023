@@ -66,18 +66,54 @@ private:
 	Intake intake;
 	DoubleArm doubleArm;
 
+	// Commands
+
+
 	// Auto
 	frc::SendableChooser<frc2::Command*> pathChooser;
 	pathplanner::SwerveAutoBuilder autoBuilder;
 	std::unordered_map<std::string, std::shared_ptr<frc2::Command>> eventMap{
-
+		{"DropUpperCone", std::make_shared<frc2::SequentialCommandGroup>(
+			frc2::InstantCommand{ [this]() { this->intake.setWristAuto(true);} },
+			frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 1.2_m, 0.63_m });} },
+			frc2::WaitCommand{ 1.5_s },
+			frc2::InstantCommand{ [this]() {this->intake.setWristAuto(false);} },
+			frc2::InstantCommand{ [this]() {this->intake.setConeAuto(false);} }
+		)},
+		{ "DropMiddleCone", std::make_shared<frc2::SequentialCommandGroup>(
+			frc2::InstantCommand{ [this]() { this->intake.setWristAuto(true);} },
+			frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 0.76_m, 0.22_m });} },
+			frc2::WaitCommand{ 1.5_s },
+			frc2::InstantCommand{ [this]() {this->intake.setWristAuto(false);} },
+			frc2::InstantCommand{ [this]() {this->intake.setConeAuto(false);} }
+		) },
+		{ "CloseArm", std::make_shared<frc2::SequentialCommandGroup>(
+			frc2::InstantCommand{ [this]() {this->intake.setVoltage(0);} },
+			frc2::InstantCommand{ [this]() { this->intake.setWristAuto(true);} },
+			frc2::InstantCommand{ [this]() { this->intake.setConeAuto(true);} },
+			frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 0.21_m, 0.05_m });} },
+			frc2::WaitCommand{ 1.5_s }
+		) },
+		{ "GroundPickUp", std::make_shared<frc2::SequentialCommandGroup>(
+			frc2::InstantCommand{ [this]() { this->intake.setWristAuto(true);} },
+			frc2::InstantCommand{ [this]() { this->intake.setConeAuto(true);} },
+			frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 1_m, -.73_m });} },
+			frc2::WaitCommand{ 1.5_s },
+			frc2::InstantCommand{ [this]() {this->intake.setVoltage(-4);} }
+		) }
 	};
 
 	static std::vector<pathplanner::PathPlannerTrajectory> outBarrierTrajectory;
 	static std::vector<pathplanner::PathPlannerTrajectory> outCenterTrajectory;
 	static std::vector<pathplanner::PathPlannerTrajectory> outLoadingTrajectory;
+	static std::vector<pathplanner::PathPlannerTrajectory> barrier1PieceTrajectory;
+	static std::vector<pathplanner::PathPlannerTrajectory> loading1PieceTrajectory;
+	static std::vector<pathplanner::PathPlannerTrajectory> center1PieceTrajectory;
 
 	frc2::CommandPtr outBarrier;
 	frc2::CommandPtr outCenter;
 	frc2::CommandPtr outLoading;
+	frc2::CommandPtr barrier1Piece;
+	frc2::CommandPtr loading1Piece;
+	frc2::CommandPtr center1Piece;
 };

@@ -9,6 +9,9 @@
 std::vector<pathplanner::PathPlannerTrajectory> RobotContainer::outBarrierTrajectory = pathplanner::PathPlanner::loadPathGroup("OutBarrier", { pathplanner::PathConstraints(3_mps, 2_mps_sq) });
 std::vector<pathplanner::PathPlannerTrajectory> RobotContainer::outLoadingTrajectory = pathplanner::PathPlanner::loadPathGroup("OutLoading", { pathplanner::PathConstraints(3_mps, 2_mps_sq) });
 std::vector<pathplanner::PathPlannerTrajectory> RobotContainer::outCenterTrajectory = pathplanner::PathPlanner::loadPathGroup("OutCenter", { pathplanner::PathConstraints(3_mps, 2_mps_sq) });
+std::vector<pathplanner::PathPlannerTrajectory> RobotContainer::barrier1PieceTrajectory = pathplanner::PathPlanner::loadPathGroup("Barrier_1_Piece", { pathplanner::PathConstraints(3_mps, 2_mps_sq) });
+std::vector<pathplanner::PathPlannerTrajectory> RobotContainer::loading1PieceTrajectory = pathplanner::PathPlanner::loadPathGroup("Loading_1_Piece", { pathplanner::PathConstraints(3_mps, 2_mps_sq) });
+std::vector<pathplanner::PathPlannerTrajectory> RobotContainer::center1PieceTrajectory = pathplanner::PathPlanner::loadPathGroup("Center_1_Piece", { pathplanner::PathConstraints(3_mps, 2_mps_sq) });
 
 RobotContainer::RobotContainer():
 	autoBuilder(
@@ -24,7 +27,10 @@ RobotContainer::RobotContainer():
 	),
 	outBarrier(autoBuilder.fullAuto(outBarrierTrajectory)),
 	outCenter(autoBuilder.fullAuto(outCenterTrajectory)),
-	outLoading(autoBuilder.fullAuto(outLoadingTrajectory)) {
+	outLoading(autoBuilder.fullAuto(outLoadingTrajectory)),
+	barrier1Piece(autoBuilder.fullAuto(barrier1PieceTrajectory)),
+	loading1Piece(autoBuilder.fullAuto(loading1PieceTrajectory)),
+	center1Piece(autoBuilder.fullAuto(center1PieceTrajectory)) {
 	//Set default commands
 	swerveChassis.SetDefaultCommand(Drive(&swerveChassis, &controller));
 	intake.SetDefaultCommand(IntakeControl(&intake, &mechanisms));

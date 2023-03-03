@@ -17,10 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "upperPos",
-          "wristDown",
-          "wait-0.5s",
-          "coneOpen"
+          "DropMiddleCone"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "minimum",
@@ -44,13 +41,11 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "wristUp",
-          "closedPos",
-          "coneClosed"
+          "CloseArm"
         ],
         "executionBehavior": "sequential",
-        "waitBehavior": "none",
-        "waitTime": 0
+        "waitBehavior": "minimum",
+        "waitTime": 2.5
       }
     }
   ],

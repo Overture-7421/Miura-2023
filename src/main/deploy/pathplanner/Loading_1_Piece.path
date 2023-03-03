@@ -17,10 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "upperPos",
-          "wait-1.5s",
-          "wristDown",
-          "coneOpen"
+          "DropUpperCone"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "minimum",
@@ -30,15 +27,15 @@
     {
       "anchorPoint": {
         "x": 2.2873642936277845,
-        "y": 4.797504115312592
+        "y": 4.85
       },
       "prevControl": {
         "x": 2.1364302869035408,
-        "y": 4.797504115312592
+        "y": 4.85
       },
       "nextControl": {
         "x": 2.438298300352028,
-        "y": 4.797504115312592
+        "y": 4.85
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -47,11 +44,11 @@
       "isStopPoint": true,
       "stopEvent": {
         "names": [
-          "closedPos"
+          "CloseArm"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "minimum",
-        "waitTime": 2.0
+        "waitTime": 2.5
       }
     },
     {
