@@ -21,12 +21,13 @@ DoubleArm::DoubleArm() {
  * Will be called periodically whenever the CommandScheduler runs.
  */
 void DoubleArm::Periodic() {
-    // auto currentState = GetCurrentState();
-    // frc::SmartDashboard::PutNumber("DoubleArm/CurrentLowerAngle", currentState.lowerAngle.Degrees().value());
-    // frc::SmartDashboard::PutNumber("DoubleArm/CurrentUpperAngle", currentState.upperAngle.Degrees().value());
+    //auto currentState = GetCurrentState();
+    //frc::SmartDashboard::PutNumber("DoubleArm/CurrentLowerAngle", currentState.lowerAngle.Degrees().value());
+    //frc::SmartDashboard::PutNumber("DoubleArm/CurrentUpperAngle", currentState.upperAngle.Degrees().value());
 
-    // frc::SmartDashboard::PutNumber("DoubleArm/EncoderLowerRaw", lowerEncoder.GetAbsolutePosition());
-    // frc::SmartDashboard::PutNumber("DoubleArm/EncoderUpperRaw", upperEncoder.GetAbsolutePosition());
+    //frc::SmartDashboard::PutNumber("DoubleArm/EncoderLowerRaw", lowerEncoder.GetAbsolutePosition());
+    //frc::SmartDashboard::PutNumber("DoubleArm/EncoderUpperRaw", upperEncoder.GetAbsolutePosition());
+
 
     std::optional<DoubleArmState> desiredState = planner.CalculateCurrentTargetState();
     if (desiredState.has_value()) {
@@ -158,11 +159,11 @@ void DoubleArm::ConfigureSensors() {
 }
 
 frc::Rotation2d DoubleArm::GetLowerAngle() {
-    return units::degree_t((lowerEncoder.GetAbsolutePosition() - 0.8455) * 360.0);
+    return units::degree_t((lowerEncoder.GetAbsolutePosition() - 0.8480) * 360.0);
 }
 
 frc::Rotation2d DoubleArm::GetUpperAngle() {
-    double rawVal = (-upperEncoder.GetAbsolutePosition() + 0.4485) * 360.0;
+    double rawVal = (-upperEncoder.GetAbsolutePosition() + 0.5425) * 360.0;
     rawVal = frc::InputModulus(rawVal, -180.0, 180.0);
     frc::Rotation2d angleToLowerArm = frc::Rotation2d(units::degree_t(rawVal));
 
