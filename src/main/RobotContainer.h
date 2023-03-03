@@ -67,39 +67,49 @@ private:
     DoubleArm doubleArm;
 
     // Commands
+    frc2::InstantCommand wristUp{ [this]() { this->intake.setWristAuto(true);} };
+    frc2::InstantCommand wristDown{ [this]() {this->intake.setWristAuto(false);} };
+    frc2::InstantCommand coneClosed{ [this]() {this->intake.setConeAuto(false);} };
 
+    frc2::InstantCommand upperPos{ [this]() {this->doubleArm.SetTargetCoord({ 1.2_m, 0.63_m });} };
+    frc2::InstantCommand middlePos{ [this]() {this->doubleArm.SetTargetCoord({ 0.76_m, 0.22_m });} };
+    frc2::InstantCommand closedPos{ [this]() {this->doubleArm.SetTargetCoord({ 0.21_m, 0.05_m });} };
+    frc2::InstantCommand groundPos{ [this]() {this->doubleArm.SetTargetCoord({ 1_m, -.73_m });} };
+
+    frc2::InstantCommand stopIntake{ [this]() {this->intake.setVoltage(0);} };
+    frc2::InstantCommand startIntake{ [this]() {this->intake.setVoltage(-4);} };
 
     // Auto
     frc::SendableChooser<frc2::Command*> pathChooser;
     pathplanner::SwerveAutoBuilder autoBuilder;
     std::unordered_map<std::string, std::shared_ptr<frc2::Command>> eventMap{
         {"DropUpperCone", std::make_shared<frc2::SequentialCommandGroup>(
-            frc2::InstantCommand{ [this]() { this->intake.setWristAuto(true);} },
-            frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 1.2_m, 0.63_m });} },
+            wristUp,
+            upperPos,
             frc2::WaitCommand{ 2_s },
-            frc2::InstantCommand{ [this]() {this->intake.setWristAuto(false);} },
-            frc2::InstantCommand{ [this]() {this->intake.setConeAuto(false);} }
+            wristDown,
+            coneClosed
         )},
         { "DropMiddleCone", std::make_shared<frc2::SequentialCommandGroup>(
-            frc2::InstantCommand{ [this]() { this->intake.setWristAuto(true);} },
-            frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 0.76_m, 0.22_m });} },
+            wristUp,
+            middlePos,
             frc2::WaitCommand{ 2_s },
-            frc2::InstantCommand{ [this]() {this->intake.setWristAuto(false);} },
-            frc2::InstantCommand{ [this]() {this->intake.setConeAuto(false);} }
+            wristDown,
+            coneClosed
         ) },
         { "CloseArm", std::make_shared<frc2::SequentialCommandGroup>(
-            frc2::InstantCommand{ [this]() {this->intake.setVoltage(0);} },
-            frc2::InstantCommand{ [this]() { this->intake.setWristAuto(true);} },
-            frc2::InstantCommand{ [this]() { this->intake.setConeAuto(true);} },
-            frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 0.21_m, 0.05_m });} },
+            stopIntake,
+            wristUp,
+            coneClosed,
+            closedPos,
             frc2::WaitCommand{ 2_s }
         ) },
         { "GroundPickUp", std::make_shared<frc2::SequentialCommandGroup>(
-            frc2::InstantCommand{ [this]() { this->intake.setWristAuto(true);} },
-            frc2::InstantCommand{ [this]() { this->intake.setConeAuto(true);} },
-            frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 1_m, -.73_m });} },
+            wristUp,
+            coneClosed,
+            groundPos,
             frc2::WaitCommand{ 2_s },
-            frc2::InstantCommand{ [this]() {this->intake.setVoltage(-4);} }
+            startIntake
         ) }
     };
 
