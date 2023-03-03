@@ -24,96 +24,106 @@
 
 class RobotContainer {
 public:
-	RobotContainer();
-	frc2::Command* GetAutonomousCommand();
-	void setVisionManager();
+    RobotContainer();
+    frc2::Command* GetAutonomousCommand();
+    void setVisionManager();
 
 private:
-	void ConfigureBindings();
+    void ConfigureBindings();
 
-	// Chassis driver controller and buttons
-	frc::XboxController controller{ 0 };
-	frc2::Trigger resetNavx{ [this] {return controller.GetBackButton();} };
-	frc2::Trigger alignOneLeft{ [this] {return controller.GetLeftBumper() && controller.GetXButton();} };
-	frc2::Trigger alignOneCenter{ [this] {return controller.GetLeftBumper() && controller.GetAButton();} };
-	frc2::Trigger alignOneRight{ [this] {return controller.GetLeftBumper() && controller.GetBButton();} };
-	frc2::Trigger alignTwoLeft{ [this] {return (controller.GetLeftTriggerAxis() || controller.GetRightTriggerAxis()) && controller.GetXButton();} };
-	frc2::Trigger alignTwoCenter{ [this] {return (controller.GetLeftTriggerAxis() || controller.GetRightTriggerAxis()) && controller.GetAButton();} };
-	frc2::Trigger alignTwoRight{ [this] {return (controller.GetLeftTriggerAxis() || controller.GetRightTriggerAxis()) && controller.GetBButton();} };
-	frc2::Trigger alignThreeLeft{ [this] {return controller.GetRightBumper() && controller.GetXButton();} };
-	frc2::Trigger alignThreeCenter{ [this] {return controller.GetRightBumper() && controller.GetAButton();} };
-	frc2::Trigger alignThreeRight{ [this] {return controller.GetRightBumper() && controller.GetBButton();} };
-	frc2::Trigger alignLoading{ [this] {return controller.GetYButton();} };
-	frc2::Trigger autoBalance{ [this] {return controller.GetStartButton();} };
+    // Chassis driver controller and buttons
+    frc::XboxController controller{ 0 };
+    frc2::Trigger resetNavx{ [this] {return controller.GetBackButton();} };
+    frc2::Trigger alignOneLeft{ [this] {return controller.GetLeftBumper() && controller.GetXButton();} };
+    frc2::Trigger alignOneCenter{ [this] {return controller.GetLeftBumper() && controller.GetAButton();} };
+    frc2::Trigger alignOneRight{ [this] {return controller.GetLeftBumper() && controller.GetBButton();} };
+    frc2::Trigger alignTwoLeft{ [this] {return (controller.GetLeftTriggerAxis() || controller.GetRightTriggerAxis()) && controller.GetXButton();} };
+    frc2::Trigger alignTwoCenter{ [this] {return (controller.GetLeftTriggerAxis() || controller.GetRightTriggerAxis()) && controller.GetAButton();} };
+    frc2::Trigger alignTwoRight{ [this] {return (controller.GetLeftTriggerAxis() || controller.GetRightTriggerAxis()) && controller.GetBButton();} };
+    frc2::Trigger alignThreeLeft{ [this] {return controller.GetRightBumper() && controller.GetXButton();} };
+    frc2::Trigger alignThreeCenter{ [this] {return controller.GetRightBumper() && controller.GetAButton();} };
+    frc2::Trigger alignThreeRight{ [this] {return controller.GetRightBumper() && controller.GetBButton();} };
+    frc2::Trigger alignLoading{ [this] {return controller.GetYButton();} };
+    frc2::Trigger autoBalance{ [this] {return controller.GetStartButton();} };
 
-	// Mechanism Controller
-	frc::XboxController mechanisms{ 1 };
+    // Mechanism Controller
+    frc::XboxController mechanisms{ 1 };
 
-	//Pneumatics
-	frc2::Trigger conePiston{ [this] {return mechanisms.GetRightBumper();} };
-	frc2::Trigger wristPiston{ [this] {return mechanisms.GetLeftBumper();} };
+    //Pneumatics
+    frc2::Trigger conePiston{ [this] {return mechanisms.GetRightBumper();} };
+    frc2::Trigger wristPiston{ [this] {return mechanisms.GetLeftBumper();} };
 
-	//Positions
-	frc2::Trigger upperPosition{ [this] {return mechanisms.GetYButton();} }; //Upper
-	frc2::Trigger middlePosition{ [this] {return mechanisms.GetXButton();} }; //Middle
-	frc2::Trigger groundPickUp{ [this] {return mechanisms.GetAButton();} }; //Ground
-	frc2::Trigger portalPosition{ [this] {return mechanisms.GetBButton();} }; //Portal
-	frc2::Trigger lowerPosition{ [this] {return mechanisms.GetPOV(0.75);} }; //Closed
+    //Positions
+    frc2::Trigger upperPosition{ [this] {return mechanisms.GetYButton();} }; //Upper
+    frc2::Trigger middlePosition{ [this] {return mechanisms.GetXButton();} }; //Middle
+    frc2::Trigger groundPickUp{ [this] {return mechanisms.GetAButton();} }; //Ground
+    frc2::Trigger portalPosition{ [this] {return mechanisms.GetBButton();} }; //Portal
+    frc2::Trigger lowerPosition{ [this] {return mechanisms.GetPOV(0.75);} }; //Closed
 
-	// Subsystems
-	SwerveChassis swerveChassis;
-	VisionManager visionManager{ &swerveChassis };
-	Intake intake;
-	DoubleArm doubleArm;
+    // Subsystems
+    SwerveChassis swerveChassis;
+    VisionManager visionManager{ &swerveChassis };
+    Intake intake;
+    DoubleArm doubleArm;
 
-	// Commands
+    // Commands
+    frc2::InstantCommand wristUp{ [this]() { this->intake.setWristAuto(true);} };
+    frc2::InstantCommand wristDown{ [this]() {this->intake.setWristAuto(false);} };
+    frc2::InstantCommand coneClosed{ [this]() {this->intake.setConeAuto(false);} };
 
+    frc2::InstantCommand upperPos{ [this]() {this->doubleArm.SetTargetCoord({ 1.2_m, 0.63_m });} };
+    frc2::InstantCommand middlePos{ [this]() {this->doubleArm.SetTargetCoord({ 0.76_m, 0.22_m });} };
+    frc2::InstantCommand closedPos{ [this]() {this->doubleArm.SetTargetCoord({ 0.21_m, 0.05_m });} };
+    frc2::InstantCommand groundPos{ [this]() {this->doubleArm.SetTargetCoord({ 1_m, -.73_m });} };
 
-	// Auto
-	frc::SendableChooser<frc2::Command*> pathChooser;
-	pathplanner::SwerveAutoBuilder autoBuilder;
-	std::unordered_map<std::string, std::shared_ptr<frc2::Command>> eventMap{
-		{"DropUpperCone", std::make_shared<frc2::SequentialCommandGroup>(
-			frc2::InstantCommand{ [this]() { this->intake.setWristAuto(true);} },
-			frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 1.2_m, 0.63_m });} },
-			frc2::WaitCommand{ 2_s },
-			frc2::InstantCommand{ [this]() {this->intake.setWristAuto(false);} },
-			frc2::InstantCommand{ [this]() {this->intake.setConeAuto(false);} }
-		)},
-		{ "DropMiddleCone", std::make_shared<frc2::SequentialCommandGroup>(
-			frc2::InstantCommand{ [this]() { this->intake.setWristAuto(true);} },
-			frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 0.76_m, 0.22_m });} },
-			frc2::WaitCommand{ 2_s },
-			frc2::InstantCommand{ [this]() {this->intake.setWristAuto(false);} },
-			frc2::InstantCommand{ [this]() {this->intake.setConeAuto(false);} }
-		) },
-		{ "CloseArm", std::make_shared<frc2::SequentialCommandGroup>(
-			frc2::InstantCommand{ [this]() {this->intake.setVoltage(0);} },
-			frc2::InstantCommand{ [this]() { this->intake.setWristAuto(true);} },
-			frc2::InstantCommand{ [this]() { this->intake.setConeAuto(true);} },
-			frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 0.21_m, 0.05_m });} },
-			frc2::WaitCommand{ 2_s }
-		) },
-		{ "GroundPickUp", std::make_shared<frc2::SequentialCommandGroup>(
-			frc2::InstantCommand{ [this]() { this->intake.setWristAuto(true);} },
-			frc2::InstantCommand{ [this]() { this->intake.setConeAuto(true);} },
-			frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 1_m, -.73_m });} },
-			frc2::WaitCommand{ 2_s },
-			frc2::InstantCommand{ [this]() {this->intake.setVoltage(-4);} }
-		) }
-	};
+    frc2::InstantCommand stopIntake{ [this]() {this->intake.setVoltage(0);} };
+    frc2::InstantCommand startIntake{ [this]() {this->intake.setVoltage(-4);} };
 
-	static std::vector<pathplanner::PathPlannerTrajectory> outBarrierTrajectory;
-	static std::vector<pathplanner::PathPlannerTrajectory> outCenterTrajectory;
-	static std::vector<pathplanner::PathPlannerTrajectory> outLoadingTrajectory;
-	static std::vector<pathplanner::PathPlannerTrajectory> barrier1PieceTrajectory;
-	static std::vector<pathplanner::PathPlannerTrajectory> loading1PieceTrajectory;
-	static std::vector<pathplanner::PathPlannerTrajectory> center1PieceTrajectory;
+    // Auto
+    frc::SendableChooser<frc2::Command*> pathChooser;
+    pathplanner::SwerveAutoBuilder autoBuilder;
+    std::unordered_map<std::string, std::shared_ptr<frc2::Command>> eventMap{
+        {"DropUpperCone", std::make_shared<frc2::SequentialCommandGroup>(
+            wristUp,
+            upperPos,
+            frc2::WaitCommand{ 2_s },
+            wristDown,
+            coneClosed
+        )},
+        { "DropMiddleCone", std::make_shared<frc2::SequentialCommandGroup>(
+            wristUp,
+            middlePos,
+            frc2::WaitCommand{ 2_s },
+            wristDown,
+            coneClosed
+        ) },
+        { "CloseArm", std::make_shared<frc2::SequentialCommandGroup>(
+            stopIntake,
+            wristUp,
+            coneClosed,
+            closedPos,
+            frc2::WaitCommand{ 2_s }
+        ) },
+        { "GroundPickUp", std::make_shared<frc2::SequentialCommandGroup>(
+            wristUp,
+            coneClosed,
+            groundPos,
+            frc2::WaitCommand{ 2_s },
+            startIntake
+        ) }
+    };
 
-	frc2::CommandPtr outBarrier;
-	frc2::CommandPtr outCenter;
-	frc2::CommandPtr outLoading;
-	frc2::CommandPtr barrier1Piece;
-	frc2::CommandPtr loading1Piece;
-	frc2::CommandPtr center1Piece;
+    static std::vector<pathplanner::PathPlannerTrajectory> outBarrierTrajectory;
+    static std::vector<pathplanner::PathPlannerTrajectory> outCenterTrajectory;
+    static std::vector<pathplanner::PathPlannerTrajectory> outLoadingTrajectory;
+    static std::vector<pathplanner::PathPlannerTrajectory> barrier1PieceTrajectory;
+    static std::vector<pathplanner::PathPlannerTrajectory> loading1PieceTrajectory;
+    static std::vector<pathplanner::PathPlannerTrajectory> center1PieceTrajectory;
+
+    frc2::CommandPtr outBarrier;
+    frc2::CommandPtr outCenter;
+    frc2::CommandPtr outLoading;
+    frc2::CommandPtr barrier1Piece;
+    frc2::CommandPtr loading1Piece;
+    frc2::CommandPtr center1Piece;
 };
