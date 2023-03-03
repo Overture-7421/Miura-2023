@@ -45,7 +45,7 @@ public:
      */
     void Periodic() override;
 
-    void resetNavx();
+    void resetNavx(double angle = 0);
 
 private:
     SwerveModule backRightModule{ 1, 2, 16, 26.91, "BackRightModule" };

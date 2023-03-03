@@ -9,7 +9,7 @@
 void Robot::RobotInit() {}
 
 void Robot::RobotPeriodic() {
-	frc2::CommandScheduler::GetInstance().Run();
+    frc2::CommandScheduler::GetInstance().Run();
 }
 
 void Robot::DisabledInit() {}
@@ -19,11 +19,11 @@ void Robot::DisabledPeriodic() {}
 void Robot::DisabledExit() {}
 
 void Robot::AutonomousInit() {
-	m_autonomousCommand = m_container.GetAutonomousCommand();
+    m_autonomousCommand = m_container.GetAutonomousCommand();
 
-	if (m_autonomousCommand != nullptr) {
-		m_autonomousCommand->Schedule();
-	}
+    if (m_autonomousCommand != nullptr) {
+        m_autonomousCommand->Schedule();
+    }
 }
 
 void Robot::AutonomousPeriodic() {}
@@ -31,11 +31,13 @@ void Robot::AutonomousPeriodic() {}
 void Robot::AutonomousExit() {}
 
 void Robot::TeleopInit() {
-	if (m_autonomousCommand != nullptr) {
-		m_autonomousCommand->Cancel();
-		m_autonomousCommand = nullptr;
-	}
-	m_container.setVisionManager();
+    if (m_autonomousCommand != nullptr) {
+        m_autonomousCommand->Cancel();
+        m_autonomousCommand = nullptr;
+    }
+    m_container.setVisionManager();
+
+    m_container.swerveChassis.resetNavx(180);
 }
 
 void Robot::TeleopPeriodic() {}
@@ -43,7 +45,7 @@ void Robot::TeleopPeriodic() {}
 void Robot::TeleopExit() {}
 
 void Robot::TestInit() {
-	frc2::CommandScheduler::GetInstance().CancelAll();
+    frc2::CommandScheduler::GetInstance().CancelAll();
 }
 
 void Robot::TestPeriodic() {}
@@ -52,6 +54,6 @@ void Robot::TestExit() {}
 
 #ifndef RUNNING_FRC_TESTS
 int main() {
-	return frc::StartRobot<Robot>();
+    return frc::StartRobot<Robot>();
 }
 #endif

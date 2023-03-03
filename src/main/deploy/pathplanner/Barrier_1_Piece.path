@@ -17,7 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "DropUpperCone"
+          "DropMiddleCone"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "minimum",

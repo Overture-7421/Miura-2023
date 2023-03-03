@@ -78,11 +78,13 @@ const frc::SwerveDriveKinematics<4>& SwerveChassis::getKinematics() {
 }
 
 void SwerveChassis::addVisionMeasurement(frc::Pose2d pose, units::second_t timestamp) {
-    odometry.AddVisionMeasurement(pose, timestamp);
+    // odometry.AddVisionMeasurement(pose, timestamp);
 }
 
-void SwerveChassis::resetNavx() {
-    navx.ZeroYaw();
+void SwerveChassis::resetNavx(double angle) {
+    frc::Pose2d actualOdometry = getOdometry();
+    frc::Pose2d newOdometry{ actualOdometry.X(), actualOdometry.Y(), units::degree_t(angle) };
+    resetOdometry(newOdometry);
 }
 
 void SwerveChassis::setModuleStates(wpi::array<frc::SwerveModuleState, 4> desiredStates) {

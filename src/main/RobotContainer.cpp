@@ -6,12 +6,12 @@
 
 #include <frc2/command/Commands.h>
 
-std::vector<pathplanner::PathPlannerTrajectory> RobotContainer::outBarrierTrajectory = pathplanner::PathPlanner::loadPathGroup("OutBarrier", { pathplanner::PathConstraints(3_mps, 2_mps_sq) });
-std::vector<pathplanner::PathPlannerTrajectory> RobotContainer::outLoadingTrajectory = pathplanner::PathPlanner::loadPathGroup("OutLoading", { pathplanner::PathConstraints(3_mps, 2_mps_sq) });
-std::vector<pathplanner::PathPlannerTrajectory> RobotContainer::outCenterTrajectory = pathplanner::PathPlanner::loadPathGroup("OutCenter", { pathplanner::PathConstraints(3_mps, 2_mps_sq) });
-std::vector<pathplanner::PathPlannerTrajectory> RobotContainer::barrier1PieceTrajectory = pathplanner::PathPlanner::loadPathGroup("Barrier_1_Piece", { pathplanner::PathConstraints(3_mps, 2_mps_sq) });
-std::vector<pathplanner::PathPlannerTrajectory> RobotContainer::loading1PieceTrajectory = pathplanner::PathPlanner::loadPathGroup("Loading_1_Piece", { pathplanner::PathConstraints(3_mps, 2_mps_sq) });
-std::vector<pathplanner::PathPlannerTrajectory> RobotContainer::center1PieceTrajectory = pathplanner::PathPlanner::loadPathGroup("Center_1_Piece", { pathplanner::PathConstraints(3_mps, 2_mps_sq) });
+std::vector<pathplanner::PathPlannerTrajectory> RobotContainer::outBarrierTrajectory = pathplanner::PathPlanner::loadPathGroup("OutBarrier", { pathplanner::PathConstraints(2_mps, 1.5_mps_sq) });
+std::vector<pathplanner::PathPlannerTrajectory> RobotContainer::outLoadingTrajectory = pathplanner::PathPlanner::loadPathGroup("OutLoading", { pathplanner::PathConstraints(2_mps, 1.5_mps_sq) });
+std::vector<pathplanner::PathPlannerTrajectory> RobotContainer::outCenterTrajectory = pathplanner::PathPlanner::loadPathGroup("OutCenter", { pathplanner::PathConstraints(2_mps, 1.5_mps_sq) });
+std::vector<pathplanner::PathPlannerTrajectory> RobotContainer::barrier1PieceTrajectory = pathplanner::PathPlanner::loadPathGroup("Barrier_1_Piece", { pathplanner::PathConstraints(2_mps, 1.5_mps_sq) });
+std::vector<pathplanner::PathPlannerTrajectory> RobotContainer::loading1PieceTrajectory = pathplanner::PathPlanner::loadPathGroup("Loading_1_Piece", { pathplanner::PathConstraints(1.5_mps, 0.5_mps_sq) });
+std::vector<pathplanner::PathPlannerTrajectory> RobotContainer::center1PieceTrajectory = pathplanner::PathPlanner::loadPathGroup("Center_1_Piece", { pathplanner::PathConstraints(2_mps, 1.5_mps_sq) });
 
 RobotContainer::RobotContainer():
     autoBuilder(
@@ -35,6 +35,15 @@ RobotContainer::RobotContainer():
     swerveChassis.SetDefaultCommand(Drive(&swerveChassis, &controller));
     intake.SetDefaultCommand(IntakeControl(&intake, &mechanisms));
 
+    dropMiddle = new frc2::SequentialCommandGroup(
+        wristDown,
+        middlePos,
+        frc2::WaitCommand{ 1.5_s },
+        coneOpen,
+        frc2::WaitCommand{ 0.5_s },
+        closedPos
+    );
+
     //Set choosers for auto
     pathChooser.AddOption("OutBarrier", outBarrier.get());
     pathChooser.AddOption("OutLoading", outLoading.get());
@@ -42,6 +51,7 @@ RobotContainer::RobotContainer():
     pathChooser.AddOption("Barrier1Piece", barrier1Piece.get());
     pathChooser.AddOption("Loading1Piece", loading1Piece.get());
     pathChooser.AddOption("Center1Piece", center1Piece.get());
+    pathChooser.AddOption("Drop Middle", &dropMiddle);
     pathChooser.SetDefaultOption("None", nullptr);
     frc::SmartDashboard::PutData("Auto Chooser", &pathChooser);
 

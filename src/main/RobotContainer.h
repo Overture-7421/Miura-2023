@@ -27,6 +27,7 @@ public:
     RobotContainer();
     frc2::Command* GetAutonomousCommand();
     void setVisionManager();
+    SwerveChassis swerveChassis;
 
 private:
     void ConfigureBindings();
@@ -61,7 +62,6 @@ private:
     frc2::Trigger lowerPosition{ [this] {return mechanisms.GetPOV(0.75);} }; //Closed
 
     // Subsystems
-    SwerveChassis swerveChassis;
     VisionManager visionManager{ &swerveChassis };
     Intake intake;
     DoubleArm doubleArm;
@@ -70,6 +70,7 @@ private:
     frc2::InstantCommand wristUp{ [this]() { this->intake.setWristAuto(true);}, {&intake} };
     frc2::InstantCommand wristDown{ [this]() {this->intake.setWristAuto(false);}, {&intake} };
     frc2::InstantCommand coneClosed{ [this]() {this->intake.setConeAuto(false);}, {&intake} };
+    frc2::InstantCommand coneOpen{ [this]() {this->intake.setConeAuto(true);}, {&intake} };
 
     frc2::InstantCommand upperPos{ [this]() {this->doubleArm.SetTargetCoord({ 1.2_m, 0.63_m });}, {&doubleArm} };
     frc2::InstantCommand middlePos{ [this]() {this->doubleArm.SetTargetCoord({ 0.76_m, 0.22_m });}, {&doubleArm} };
@@ -83,34 +84,35 @@ private:
     frc::SendableChooser<frc2::Command*> pathChooser;
     pathplanner::SwerveAutoBuilder autoBuilder;
     std::unordered_map<std::string, std::shared_ptr<frc2::Command>> eventMap{
-        {"DropUpperCone", std::make_shared<frc2::SequentialCommandGroup>(
-            wristUp,
-            upperPos,
-            frc2::WaitCommand{ 2_s },
-            wristDown,
-            coneClosed
-        )},
-        { "DropMiddleCone", std::make_shared<frc2::SequentialCommandGroup>(
-            wristUp,
-            middlePos,
-            frc2::WaitCommand{ 2_s },
-            wristDown,
-            coneClosed
-        ) },
-        { "CloseArm", std::make_shared<frc2::SequentialCommandGroup>(
-            stopIntake,
-            wristUp,
-            coneClosed,
-            closedPos,
-            frc2::WaitCommand{ 2_s }
-        ) },
-        { "GroundPickUp", std::make_shared<frc2::SequentialCommandGroup>(
-            wristUp,
-            coneClosed,
-            groundPos,
-            frc2::WaitCommand{ 2_s },
-            startIntake
-        ) }
+        // {"DropUpperCone", std::make_shared<frc2::SequentialCommandGroup>(
+        //     wristUp,
+        //     upperPos,
+        //     frc2::WaitCommand{ 2_s },
+        //     wristDown,
+        //     coneOpen
+        // )},
+        // { "DropMiddleCone", std::make_shared<frc2::SequentialCommandGroup>(
+        //     wristDown,
+        // middlePos,
+        // frc2::WaitCommand{ 1.5_s },
+        // coneOpen,
+        // frc2::WaitCommand{ 0.5_s },
+        // closedPos
+        // ) },
+        // { "CloseArm", std::make_shared<frc2::SequentialCommandGroup>(
+        //     stopIntake,
+        //     wristUp,
+        //     coneClosed,
+        //     closedPos,
+        //     frc2::WaitCommand{ 2_s }
+        // ) },
+        // { "GroundPickUp", std::make_shared<frc2::SequentialCommandGroup>(
+        //     wristUp,
+        //     coneClosed,
+        //     groundPos,
+        //     frc2::WaitCommand{ 2_s },
+        //     startIntake
+        // ) }
     };
 
     static std::vector<pathplanner::PathPlannerTrajectory> outBarrierTrajectory;
@@ -126,4 +128,6 @@ private:
     frc2::CommandPtr barrier1Piece;
     frc2::CommandPtr loading1Piece;
     frc2::CommandPtr center1Piece;
+
+    frc2::SequentialCommandGroup* dropMiddle;
 };
