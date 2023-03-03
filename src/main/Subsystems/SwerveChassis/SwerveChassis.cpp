@@ -82,7 +82,7 @@ void SwerveChassis::addVisionMeasurement(frc::Pose2d pose, units::second_t times
 }
 
 void SwerveChassis::resetNavx() {
-
+    navx.ZeroYaw();
 }
 
 void SwerveChassis::setModuleStates(wpi::array<frc::SwerveModuleState, 4> desiredStates) {
