@@ -39,6 +39,9 @@ RobotContainer::RobotContainer():
 	pathChooser.AddOption("OutBarrier", outBarrier.get());
 	pathChooser.AddOption("OutLoading", outLoading.get());
 	pathChooser.AddOption("OutCenter", outCenter.get());
+	pathChooser.AddOption("Barrier1Piece", barrier1Piece.get());
+	pathChooser.AddOption("Loading1Piece", loading1Piece.get());
+	pathChooser.AddOption("Center1Piece", center1Piece.get());
 	pathChooser.SetDefaultOption("None", nullptr);
 	frc::SmartDashboard::PutData("Auto Chooser", &pathChooser);
 
