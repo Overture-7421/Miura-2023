@@ -31,7 +31,7 @@ void CreateAuto::addCommandsToMap() {
     frc2::InstantCommand closedPos{ [this]() { this->m_DoubleArm->SetTargetCoord({ 0.21_m, 0.05_m });} };
     frc2::InstantCommand groundPos{ [this]() { this->m_DoubleArm->SetTargetCoord({ 1_m, -.73_m });} };
     frc2::InstantCommand middlePos{ [this]() {this->m_DoubleArm->SetTargetCoord({ 0.76_m, 0.22_m });} };
-    frc2::InstantCommand upperPos{ [this]() {this->m_DoubleArm->SetTargetCoord({ 1.17_m, 0.63_m });} };
+    frc2::InstantCommand upperPos{ [this]() {this->m_DoubleArm->SetTargetCoord({ 1.2_m, 0.63_m });} };
 
     frc2::InstantCommand intakePiece{ [this]() {this->m_Intake->setVoltage(-6.0);} };
     frc2::InstantCommand stopIntake{ [this]() {this->m_Intake->setVoltage(0);} };
@@ -57,11 +57,7 @@ frc2::CommandPtr CreateAuto::GenerateAuto() {
         return frc2::CommandPtr(nullptr);
     } else {
         addCommandsToMap();
-        std::vector<pathplanner::PathPlannerTrajectory> examplePath = pathplanner::PathPlanner::loadPathGroup(pathChooser.GetSelected(), { pathplanner::PathConstraints(4_mps, 4_mps_sq),
-        pathplanner::PathConstraints(4_mps, 4_mps_sq),
-        pathplanner::PathConstraints(.5_mps, 2_mps_sq), });
-
-
+        std::vector<pathplanner::PathPlannerTrajectory> examplePath = pathplanner::PathPlanner::loadPathGroup(pathChooser.GetSelected(), { pathplanner::PathConstraints(3_mps, 3_mps_sq) });
         pathplanner::SwerveAutoBuilder autoBuilder(
             [this]() { return m_SwerveChassis->getOdometry(); }, // Function to supply current robot pose
             [this](auto initPose) { m_SwerveChassis->resetOdometry(initPose); }, // Function used to reset odometry at the beginning of auto

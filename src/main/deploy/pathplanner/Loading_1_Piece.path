@@ -19,7 +19,7 @@
         "names": [
           "upperPos",
           "wristDown",
-          "wait-0.5s",
+          "wait-1s",
           "coneOpen"
         ],
         "executionBehavior": "sequential",
@@ -47,23 +47,21 @@
       "isStopPoint": true,
       "stopEvent": {
         "names": [
-          "closedPos",
-          "wristUp",
-          "coneClosed"
+          "closedPos"
         ],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
+        "executionBehavior": "sequential",
+        "waitBehavior": "minimum",
+        "waitTime": 2.0
       }
     },
     {
       "anchorPoint": {
-        "x": 5.510637366102319,
-        "y": 4.59
+        "x": 3.901332853609718,
+        "y": 4.760967621219097
       },
       "prevControl": {
-        "x": 4.635425260400153,
-        "y": 4.578482390757884
+        "x": 3.0261207479075516,
+        "y": 4.749450011976981
       },
       "nextControl": null,
       "holonomicAngle": 0,
