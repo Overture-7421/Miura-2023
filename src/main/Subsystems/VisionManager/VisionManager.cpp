@@ -4,25 +4,21 @@
 
 #include "VisionManager.h"
 
-VisionManager::VisionManager(SwerveChassis* swerveChassis): swerveChassis(swerveChassis) {
-    // Set alliance color for the poseEstimator
-    tagLayout = std::make_shared<frc::AprilTagFieldLayout>(frc::LoadAprilTagLayoutField(frc::AprilTagField::k2023ChargedUp));
-}
+VisionManager::VisionManager(SwerveChassis* swerveChassis): swerveChassis(swerveChassis) {}
 
 //Set alliance color for the poseEstimator
 void VisionManager::setAllianceColor() {
     frc::DriverStation::Alliance allianceColor = frc::DriverStation::GetAlliance();
 
     if (allianceColor == frc::DriverStation::Alliance::kBlue) {
-        tagLayout->SetOrigin(frc::AprilTagFieldLayout::OriginPosition::kBlueAllianceWallRightSide);
-        poseEstimatorSet = true;
+        tagLayout.SetOrigin(frc::AprilTagFieldLayout::OriginPosition::kBlueAllianceWallRightSide);
     } else {
-        tagLayout->SetOrigin(frc::AprilTagFieldLayout::OriginPosition::kRedAllianceWallRightSide);
-        poseEstimatorSet = true;
+        tagLayout.SetOrigin(frc::AprilTagFieldLayout::OriginPosition::kRedAllianceWallRightSide);
     }
 
+    poseEstimatorSet = true;
     poseEstimator = new photonlib::PhotonPoseEstimator{
-            *tagLayout.get(),
+            tagLayout,
             photonlib::PoseStrategy::LOWEST_AMBIGUITY,
             std::move(photonlib::PhotonCamera{ "IMX219" }),
             cameraToRobot
@@ -50,14 +46,13 @@ std::optional<photonlib::PhotonPipelineResult> VisionManager::getCameraResult() 
     return camera.GetLatestResult();
 }
 
-//Get AprilTagFieldLayout from driver station
-frc::AprilTagFieldLayout VisionManager::getField() {
-    return *tagLayout.get();
-}
-
 //Check if poseEstimator is set
 bool VisionManager::isPoseEstimatorSet() {
     return poseEstimatorSet;
 }
 
-void VisionManager::Periodic() {}
+void VisionManager::Periodic() {
+    if (isPoseEstimatorSet()) {
+        updateOdometry();
+    }
+}

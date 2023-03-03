@@ -18,7 +18,6 @@
 #include "Commands/Autonomous/CreateAuto.h"
 #include "Commands/Teleop/Drive/Drive.h"
 #include "Commands/Common/AlignRobotToTarget/AlignRobotToTarget.h"
-#include "Commands/Common/UpdateVisionOdometry/UpdateVisionOdometry.h"
 #include "Commands/Common/IntakeControl/IntakeControl.h"
 #include "Commands/Common/AutoBalance/AutoBalance.h"
 
@@ -27,6 +26,7 @@ public:
     RobotContainer();
     frc2::CommandPtr GetAutonomousCommand();
     void setVisionManager();
+    void addCommandsToMap();
 
 private:
     void ConfigureBindings();
@@ -67,5 +67,5 @@ private:
     DoubleArm doubleArm;
 
     // Auto
-    CreateAuto createAuto{ &swerveChassis, &doubleArm, &intake };
+    frc::SendableChooser<std::string> pathChooser;
 };

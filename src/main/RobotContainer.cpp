@@ -9,8 +9,21 @@
 RobotContainer::RobotContainer() {
     //Set default commands
     swerveChassis.SetDefaultCommand(Drive(&swerveChassis, &controller));
-    visionManager.SetDefaultCommand(UpdateVisionOdometry(&visionManager));
     intake.SetDefaultCommand(IntakeControl(&intake, &mechanisms));
+
+    //Set choosers for auto
+    pathChooser.AddOption("Barrier_1_Piece", "Barrier_1_Piece");
+    pathChooser.AddOption("Barrier_2_Piece", "Barrier_2_Piece");
+    pathChooser.AddOption("Loading_1_Piece", "Barrier_1_Piece");
+    pathChooser.AddOption("Loading_2_Piece", "Barrier_2_Piece");
+    pathChooser.AddOption("Center_1_Piece", "Center_1_Piece");
+    pathChooser.AddOption("OutBarrier", "OutBarrier");
+    pathChooser.AddOption("OutLoading", "OutLoading");
+    pathChooser.AddOption("OutCenter", "OutCenter");
+    pathChooser.SetDefaultOption("None", "None");
+    frc::SmartDashboard::PutData("Auto Chooser", &pathChooser);
+
+    addCommandsToMap();
 
     ConfigureBindings();
 }
@@ -60,8 +73,6 @@ void RobotContainer::ConfigureBindings() {
         frc2::InstantCommand{ [this]() { this->intake.setWristAuto(false);} },
             frc2::InstantCommand{ [this]() {this->doubleArm.SetTargetCoord({ 0.82_m, 0.23_m });} }
         }.ToPtr()); // Portal
-
-
 }
 
 void RobotContainer::setVisionManager() {
@@ -69,7 +80,6 @@ void RobotContainer::setVisionManager() {
     if (color != frc::DriverStation::Alliance::kInvalid && frc::DriverStation::IsDSAttached()) {
         visionManager.setAllianceColor();
     }
-
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
