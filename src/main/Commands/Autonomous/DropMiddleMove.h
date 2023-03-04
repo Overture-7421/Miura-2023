@@ -39,14 +39,13 @@ static frc2::CommandPtr DropMiddleMove(SwerveChassis* m_swerveChassis, DoubleArm
         true
     );
 
-    frc2::CommandPtr commandMove = autoBuilder.fullAuto(outLoadingTrajectory);
     return frc2::cmd::Sequence(
         SetWrist(m_intake, false).ToPtr(),
         SetArmCoordinate(m_doubleArm, { 0.76_m, 0.22_m }).ToPtr(), //Middle
-        SetCone(m_intake, false).ToPtr(),
+        SetCone(m_intake, true).ToPtr(),
         frc2::WaitCommand{ 0.5_s }.ToPtr(),
         SetArmCoordinate(m_doubleArm, { 0.21_m, 0.05_m }).ToPtr(), //Closed
-        std::move(commandMove)
+        autoBuilder.fullAuto(outLoadingTrajectory)
     );
 }
 
