@@ -9,7 +9,6 @@
 RobotContainer::RobotContainer() {
 
     //Set default commands
-    swerveChassis.SetDefaultCommand(Drive(&swerveChassis, &controller));
     intake.SetDefaultCommand(IntakeControl(&intake, &mechanisms));
 
     //Set choosers for auto
@@ -23,16 +22,16 @@ RobotContainer::RobotContainer() {
 void RobotContainer::ConfigureBindings() {
     // Chassis Controller Buttons
     resetNavx.OnTrue(frc2::InstantCommand{ [this]() {this->swerveChassis.resetNavx();} }.ToPtr());
-    alignOneLeft.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "1-Left").ToPtr());
-    alignOneCenter.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "1-Center").ToPtr());
-    alignOneRight.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "1-Right").ToPtr());
-    alignTwoLeft.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "2-Left").ToPtr());
-    alignTwoCenter.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "2-Center").ToPtr());
-    alignTwoRight.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "2-Right").ToPtr());
-    alignThreeLeft.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "3-Left").ToPtr());
-    alignThreeCenter.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "3-Center").ToPtr());
-    alignThreeRight.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "3-Right").ToPtr());
-    alignLoading.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "Loading").ToPtr());
+    // alignOneLeft.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "1-Left").ToPtr());
+    // alignOneCenter.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "1-Center").ToPtr());
+    // alignOneRight.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "1-Right").ToPtr());
+    // alignTwoLeft.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "2-Left").ToPtr());
+    // alignTwoCenter.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "2-Center").ToPtr());
+    // alignTwoRight.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "2-Right").ToPtr());
+    // alignThreeLeft.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "3-Left").ToPtr());
+    // alignThreeCenter.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "3-Center").ToPtr());
+    // alignThreeRight.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "3-Right").ToPtr());
+    // alignLoading.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "Loading").ToPtr());
     autoBalance.WhileTrue(AutoBalance(&swerveChassis).ToPtr());
 
     // Mechanisms Controller Buttons
@@ -67,13 +66,17 @@ void RobotContainer::ConfigureBindings() {
         }.ToPtr()); // Portal
 }
 
-void RobotContainer::setVisionManager() {
-    frc::DriverStation::Alliance color = frc::DriverStation::GetAlliance();
-    if (color != frc::DriverStation::Alliance::kInvalid && frc::DriverStation::IsDSAttached()) {
-        visionManager.setAllianceColor();
-    }
-}
+// void RobotContainer::setVisionManager() {
+//     frc::DriverStation::Alliance color = frc::DriverStation::GetAlliance();
+//     if (color != frc::DriverStation::Alliance::kInvalid && frc::DriverStation::IsDSAttached()) {
+//         visionManager.setAllianceColor();
+//     }
+// }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
     return pathChooser.GetSelected();
+}
+
+void RobotContainer::setDriveCommand() {
+    swerveChassis.SetDefaultCommand(Drive(&swerveChassis, &controller));
 }

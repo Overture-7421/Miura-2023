@@ -35,9 +35,9 @@ void Robot::TeleopInit() {
         m_autonomousCommand->Cancel();
         m_autonomousCommand = nullptr;
     }
-    m_container.setVisionManager();
-
-    m_container.swerveChassis.resetNavx(180);
+    // m_container.setVisionManager();
+    m_container.setDriveCommand();
+    // m_container.swerveChassis.resetNavx(180);
 }
 
 void Robot::TeleopPeriodic() {}

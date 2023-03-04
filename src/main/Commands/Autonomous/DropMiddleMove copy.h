@@ -26,26 +26,26 @@
 
 static frc2::CommandPtr DropMiddleMove(SwerveChassis* m_swerveChassis, DoubleArm* m_doubleArm, Intake* m_intake) {
     std::vector<pathplanner::PathPlannerTrajectory> outLoadingTrajectory = pathplanner::PathPlanner::loadPathGroup("OutLoading", { pathplanner::PathConstraints(2_mps, 1.5_mps_sq) });
-    std::unordered_map<std::string, std::shared_ptr<frc2::Command>> eventMap{};
     pathplanner::SwerveAutoBuilder autoBuilder(
         [m_swerveChassis = m_swerveChassis]() { return m_swerveChassis->getOdometry(); },
         [m_swerveChassis = m_swerveChassis](auto initPose) { m_swerveChassis->resetOdometry(initPose); },
         m_swerveChassis->getKinematics(),
-        pathplanner::PIDConstants(5.0, 0.0, 0.0),
-        pathplanner::PIDConstants(0.5, 0.0, 0.0),
+        pathplanner::PIDConstants(0.02, 0.0, 0.0),
+        pathplanner::PIDConstants(0.0, 0.0, 0.0),
         [m_swerveChassis = m_swerveChassis](auto speeds) { m_swerveChassis->setModuleStates(speeds); },
-        eventMap,
+        {},
         { m_swerveChassis },
         true
     );
 
     return frc2::cmd::Sequence(
+        frc2::InstantCommand( [m_swerveChassis = m_swerveChassis]() {m_swerveChassis->resetOdometry({1.81_m, 4.97_m, {180_deg}});} ).ToPtr(),
         SetWrist(m_intake, false).ToPtr(),
         SetArmCoordinate(m_doubleArm, { 0.76_m, 0.22_m }).ToPtr(), //Middle
         SetCone(m_intake, true).ToPtr(),
         frc2::WaitCommand{ 0.5_s }.ToPtr(),
         SetArmCoordinate(m_doubleArm, { 0.21_m, 0.05_m }).ToPtr(), //Closed
-        autoBuilder.fullAuto(outLoadingTrajectory)
+        autoBuilder.followPath(outLoadingTrajectory[0])
     );
 }
 

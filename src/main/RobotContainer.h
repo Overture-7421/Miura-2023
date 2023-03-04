@@ -30,7 +30,8 @@ class RobotContainer {
 public:
     RobotContainer();
     frc2::Command* GetAutonomousCommand();
-    void setVisionManager();
+    void setDriveCommand();
+    // void setVisionManager();
     SwerveChassis swerveChassis;
 
 private:
@@ -66,7 +67,6 @@ private:
     frc2::Trigger lowerPosition{ [this] {return mechanisms.GetPOV(0.75);} }; //Closed
 
     // Subsystems
-    VisionManager visionManager{ &swerveChassis };
     Intake intake;
     DoubleArm doubleArm;
 
