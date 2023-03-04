@@ -24,13 +24,13 @@
 class Drive
     : public frc2::CommandHelper<frc2::CommandBase, Drive> {
 public:
-    Drive( SwerveChassis* swerveChassis, frc::XboxController* controller );
+    Drive(SwerveChassis* swerveChassis, frc::XboxController* controller);
 
     void Initialize() override;
 
     void Execute() override;
 
-    void End( bool interrupted ) override;
+    void End(bool interrupted) override;
 
     bool IsFinished() override;
 
@@ -38,8 +38,8 @@ private:
     SwerveChassis* m_swerveChassis;
 
     /* Constants */
-    units::meters_per_second_squared_t maxAcceleration{ 15 };
-    units::radians_per_second_squared_t maxRotation{ 18 };
+    units::meters_per_second_squared_t maxAcceleration{ 12 };
+    units::radians_per_second_squared_t maxRotation{ 16 };
 
     /* Limiters */
     frc::SlewRateLimiter<units::meters_per_second> xLimiter{ maxAcceleration };
