@@ -10,9 +10,6 @@
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc/smartdashboard/SendableChooser.h>
-#include <pathplanner/lib/auto/SwerveAutoBuilder.h>
-#include <pathplanner/lib/PathPlanner.h>
-#include <pathplanner/lib/PathPlannerTrajectory.h>
 
 #include "Subsystems/SwerveChassis/SwerveChassis.h"
 #include "Subsystems/VisionManager/VisionManager.h"
@@ -23,6 +20,10 @@
 #include "Commands/Common/AlignRobotToTarget/AlignRobotToTarget.h"
 #include "Commands/Common/IntakeControl/IntakeControl.h"
 #include "Commands/Common/AutoBalance/AutoBalance.h"
+#include "Commands/Common/SetWrist/SetWrist.h"
+#include "Commands/Common/SetCone/SetCone.h"
+#include "Commands/Common/SetintakeSpeed/SetIntakeSpeed.h"
+#include "Commands/Common/SetArmCoordinate/SetArmCoordinate.h"
 #include "Commands/Autonomous/DropMiddleMove.h"
 
 class RobotContainer {
@@ -69,40 +70,7 @@ private:
     Intake intake;
     DoubleArm doubleArm;
 
-    // Commands
-    frc2::InstantCommand wristUp{ [this]() { this->intake.setWristAuto(true);}, {&intake} };
-    frc2::InstantCommand wristDown{ [this]() {this->intake.setWristAuto(false);}, {&intake} };
-    frc2::InstantCommand coneClosed{ [this]() {this->intake.setConeAuto(false);}, {&intake} };
-    frc2::InstantCommand coneOpen{ [this]() {this->intake.setConeAuto(true);}, {&intake} };
-
-    frc2::InstantCommand upperPos{ [this]() {this->doubleArm.SetTargetCoord({ 1.2_m, 0.63_m });}, {&doubleArm} };
-    frc2::InstantCommand middlePos{ [this]() {this->doubleArm.SetTargetCoord({ 0.76_m, 0.22_m });}, {&doubleArm} };
-    frc2::InstantCommand closedPos{ [this]() {this->doubleArm.SetTargetCoord({ 0.21_m, 0.05_m });}, {&doubleArm} };
-    frc2::InstantCommand groundPos{ [this]() {this->doubleArm.SetTargetCoord({ 1_m, -.73_m });}, {&doubleArm} };
-
-    frc2::InstantCommand stopIntake{ [this]() {this->intake.setVoltage(0);}, {&intake} };
-    frc2::InstantCommand startIntake{ [this]() {this->intake.setVoltage(-4);}, {&intake} };
-
-    // Auto
+    //Auto
     frc::SendableChooser<frc2::Command*> pathChooser;
-    pathplanner::SwerveAutoBuilder autoBuilder;
-    std::unordered_map<std::string, std::shared_ptr<frc2::Command>> eventMap{
-    };
-
-    static std::vector<pathplanner::PathPlannerTrajectory> outBarrierTrajectory;
-    static std::vector<pathplanner::PathPlannerTrajectory> outCenterTrajectory;
-    static std::vector<pathplanner::PathPlannerTrajectory> outLoadingTrajectory;
-    static std::vector<pathplanner::PathPlannerTrajectory> barrier1PieceTrajectory;
-    static std::vector<pathplanner::PathPlannerTrajectory> loading1PieceTrajectory;
-    static std::vector<pathplanner::PathPlannerTrajectory> center1PieceTrajectory;
-
-    frc2::CommandPtr outBarrier;
-    frc2::CommandPtr outCenter;
-    frc2::CommandPtr outLoading;
-    frc2::CommandPtr barrier1Piece;
-    frc2::CommandPtr loading1Piece;
-    frc2::CommandPtr center1Piece;
-
-
     frc2::CommandPtr dropMiddleMove = DropMiddleMove(&swerveChassis, &doubleArm, &intake);
 };

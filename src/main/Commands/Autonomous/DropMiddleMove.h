@@ -17,6 +17,10 @@
 #include "Subsystems/DoubleArm/DoubleArm.h"
 #include "Subsystems/Intake/Intake.h"
 #include "Subsystems/SwerveChassis/SwerveChassis.h"
+#include "Commands/Common/SetWrist/SetWrist.h"
+#include "Commands/Common/SetCone/SetCone.h"
+#include "Commands/Common/SetintakeSpeed/SetIntakeSpeed.h"
+#include "Commands/Common/SetArmCoordinate/SetArmCoordinate.h"
 
 #include "Commands/Common/SetArmCoordinate/SetArmCoordinate.h"
 
@@ -37,11 +41,11 @@ static frc2::CommandPtr DropMiddleMove(SwerveChassis* m_swerveChassis, DoubleArm
 
     frc2::CommandPtr commandMove = autoBuilder.fullAuto(outLoadingTrajectory);
     return frc2::cmd::Sequence(
-        frc2::InstantCommand{ [m_intake = m_intake]() {m_intake->setWristAuto(false);} }.ToPtr(),
-        SetArmCoordinate(m_doubleArm, { 0.76_m, 0.22_m }).ToPtr(),
-        frc2::InstantCommand{ [m_intake = m_intake]() {m_intake->setConeAuto(true);} }.ToPtr(),
+        SetWrist(m_intake, false).ToPtr(),
+        SetArmCoordinate(m_doubleArm, { 0.76_m, 0.22_m }).ToPtr(), //Middle
+        SetCone(m_intake, false).ToPtr(),
         frc2::WaitCommand{ 0.5_s }.ToPtr(),
-        SetArmCoordinate(m_doubleArm, { 0.21_m, 0.05_m }).ToPtr(),
+        SetArmCoordinate(m_doubleArm, { 0.21_m, 0.05_m }).ToPtr(), //Closed
         std::move(commandMove)
     );
 }
