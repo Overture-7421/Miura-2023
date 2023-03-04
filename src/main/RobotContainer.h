@@ -11,6 +11,8 @@
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc/smartdashboard/SendableChooser.h>
 #include <pathplanner/lib/auto/SwerveAutoBuilder.h>
+#include <pathplanner/lib/PathPlanner.h>
+#include <pathplanner/lib/PathPlannerTrajectory.h>
 
 #include "Subsystems/SwerveChassis/SwerveChassis.h"
 #include "Subsystems/VisionManager/VisionManager.h"
@@ -21,6 +23,7 @@
 #include "Commands/Common/AlignRobotToTarget/AlignRobotToTarget.h"
 #include "Commands/Common/IntakeControl/IntakeControl.h"
 #include "Commands/Common/AutoBalance/AutoBalance.h"
+#include "Commands/Autonomous/DropMiddleMove.h"
 
 class RobotContainer {
 public:
@@ -84,35 +87,6 @@ private:
     frc::SendableChooser<frc2::Command*> pathChooser;
     pathplanner::SwerveAutoBuilder autoBuilder;
     std::unordered_map<std::string, std::shared_ptr<frc2::Command>> eventMap{
-        // {"DropUpperCone", std::make_shared<frc2::SequentialCommandGroup>(
-        //     wristUp,
-        //     upperPos,
-        //     frc2::WaitCommand{ 2_s },
-        //     wristDown,
-        //     coneOpen
-        // )},
-        // { "DropMiddleCone", std::make_shared<frc2::SequentialCommandGroup>(
-        //     wristDown,
-        // middlePos,
-        // frc2::WaitCommand{ 1.5_s },
-        // coneOpen,
-        // frc2::WaitCommand{ 0.5_s },
-        // closedPos
-        // ) },
-        // { "CloseArm", std::make_shared<frc2::SequentialCommandGroup>(
-        //     stopIntake,
-        //     wristUp,
-        //     coneClosed,
-        //     closedPos,
-        //     frc2::WaitCommand{ 2_s }
-        // ) },
-        // { "GroundPickUp", std::make_shared<frc2::SequentialCommandGroup>(
-        //     wristUp,
-        //     coneClosed,
-        //     groundPos,
-        //     frc2::WaitCommand{ 2_s },
-        //     startIntake
-        // ) }
     };
 
     static std::vector<pathplanner::PathPlannerTrajectory> outBarrierTrajectory;
@@ -129,5 +103,6 @@ private:
     frc2::CommandPtr loading1Piece;
     frc2::CommandPtr center1Piece;
 
-    frc2::SequentialCommandGroup* dropMiddle;
+
+    frc2::CommandPtr dropMiddleMove = DropMiddleMove(&swerveChassis, &doubleArm, &intake);
 };

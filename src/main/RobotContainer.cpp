@@ -35,14 +35,14 @@ RobotContainer::RobotContainer():
     swerveChassis.SetDefaultCommand(Drive(&swerveChassis, &controller));
     intake.SetDefaultCommand(IntakeControl(&intake, &mechanisms));
 
-    dropMiddle = new frc2::SequentialCommandGroup(
-        wristDown,
-        middlePos,
-        frc2::WaitCommand{ 1.5_s },
-        coneOpen,
-        frc2::WaitCommand{ 0.5_s },
-        closedPos
-    );
+    // dropMiddle = new frc2::SequentialCommandGroup(
+    //     wristDown,
+    //     middlePos,
+    //     frc2::WaitCommand{ 1.5_s },
+    //     coneOpen,
+    //     frc2::WaitCommand{ 0.5_s },
+    //     closedPos
+    // );
 
     //Set choosers for auto
     pathChooser.AddOption("OutBarrier", outBarrier.get());
@@ -51,7 +51,7 @@ RobotContainer::RobotContainer():
     pathChooser.AddOption("Barrier1Piece", barrier1Piece.get());
     pathChooser.AddOption("Loading1Piece", loading1Piece.get());
     pathChooser.AddOption("Center1Piece", center1Piece.get());
-    pathChooser.AddOption("Drop Middle", &dropMiddle);
+    pathChooser.AddOption("Drop Middle", dropMiddleMove.get());
     pathChooser.SetDefaultOption("None", nullptr);
     frc::SmartDashboard::PutData("Auto Chooser", &pathChooser);
 
