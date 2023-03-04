@@ -55,8 +55,9 @@ void RobotContainer::ConfigureBindings() {
         }.ToPtr()); // Middle
 
     upperPosition.OnTrue(frc2::SequentialCommandGroup{
-        SetWrist(&intake, true),
+        SetWrist(&intake, false),
         SetArmCoordinate(&doubleArm,{ 1.2_m, 0.63_m }),
+        SetWrist(&intake, true)
         }.ToPtr()); // upper
 
 

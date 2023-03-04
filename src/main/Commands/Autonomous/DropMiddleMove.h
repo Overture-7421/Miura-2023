@@ -39,7 +39,7 @@ static frc2::CommandPtr DropMiddleMove(SwerveChassis* m_swerveChassis, DoubleArm
     );
 
     return frc2::cmd::Sequence(
-        frc2::InstantCommand( [m_swerveChassis = m_swerveChassis]() {m_swerveChassis->resetOdometry({1.81_m, 4.97_m, {180_deg}});} ).ToPtr(),
+        frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->resetOdometry({ 1.81_m, 4.97_m, {180_deg} });}).ToPtr(),
         SetWrist(m_intake, false).ToPtr(),
         SetArmCoordinate(m_doubleArm, { 0.76_m, 0.22_m }).ToPtr(), //Middle
         SetCone(m_intake, true).ToPtr(),
