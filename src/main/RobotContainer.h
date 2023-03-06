@@ -24,7 +24,9 @@
 #include "Commands/Common/SetCone/SetCone.h"
 #include "Commands/Common/SetintakeSpeed/SetIntakeSpeed.h"
 #include "Commands/Common/SetArmCoordinate/SetArmCoordinate.h"
-#include "Commands/Autonomous/DropMiddleMove.h"
+#include "Commands/Autonomous/LoadingMiddle.h"
+#include "Commands/Autonomous/BarrierMiddle.h"
+#include "Commands/Autonomous/LoadingDouble.h"
 
 class RobotContainer {
 public:
@@ -72,5 +74,7 @@ private:
 
     //Auto
     frc::SendableChooser<frc2::Command*> pathChooser;
-    frc2::CommandPtr dropMiddleMove = DropMiddleMove(&swerveChassis, &doubleArm, &intake);
+    frc2::CommandPtr loadingMiddle = LoadingMiddle(&swerveChassis, &doubleArm, &intake);
+    frc2::CommandPtr barrierMiddle = BarrierMiddle(&swerveChassis, &doubleArm, &intake);
+    frc2::CommandPtr loadingDouble = LoadingDouble(&swerveChassis, &doubleArm, &intake);
 };

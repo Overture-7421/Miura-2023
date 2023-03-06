@@ -12,7 +12,11 @@ RobotContainer::RobotContainer() {
     intake.SetDefaultCommand(IntakeControl(&intake, &mechanisms));
 
     //Set choosers for auto
-    pathChooser.AddOption("Drop Middle", dropMiddleMove.get());
+    pathChooser.AddOption("Loading Middle", loadingMiddle.get());
+    pathChooser.AddOption("Barrier Middle", barrierMiddle.get());
+    // pathChooser.AddOption("Loading Double", loadingDouble.get());
+
+
     pathChooser.SetDefaultOption("None", nullptr);
     frc::SmartDashboard::PutData("Auto Chooser", &pathChooser);
 
@@ -56,7 +60,7 @@ void RobotContainer::ConfigureBindings() {
 
     upperPosition.OnTrue(frc2::SequentialCommandGroup{
         SetWrist(&intake, false),
-        SetArmCoordinate(&doubleArm,{ 1.2_m, 0.63_m }),
+        SetArmCoordinate(&doubleArm,{ 1.21_m, 0.64_m }),
         SetWrist(&intake, true)
         }.ToPtr()); // upper
 
