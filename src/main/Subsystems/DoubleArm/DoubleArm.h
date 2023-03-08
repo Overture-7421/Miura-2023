@@ -17,7 +17,7 @@
 #include "DoubleArmPlanner/DoubleArmPlanner.h"
 
 
-
+typedef frc::TrapezoidProfile<units::meters> PlannerProfile;
 class DoubleArm: public frc2::SubsystemBase {
 public:
     DoubleArm();
@@ -27,7 +27,7 @@ public:
     void Periodic() override;
     DoubleArmState GetCurrentState();
     frc::Translation2d GetEndpointCoord();
-    void SetTargetCoord(frc::Translation2d targetCoord);
+    void SetTargetCoord(frc::Translation2d targetCoord, PlannerProfile::Constraints constraints);
     frc::Rotation2d GetLowerAngle();
     frc::Rotation2d GetUpperAngle();
 
@@ -42,7 +42,7 @@ private:
     (frc::Rotation2d angle);
 
     DoubleArmKinematics kinematics{ 0.68648, 0.6731 };
-    DoubleArmPlanner planner{ {1.5_mps, 2_mps_sq} , kinematics }; // Constraints are meters per second, max accel of meters per second squared
+    DoubleArmPlanner planner{ kinematics }; // Constraints are meters per second, max accel of meters per second squared
     // frc::Field2d plotter;
     DoubleArmState targetState;
 

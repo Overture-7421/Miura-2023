@@ -16,10 +16,11 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
+typedef frc::TrapezoidProfile<units::meters> PlannerProfile;
 class SetArmCoordinate
     : public frc2::CommandHelper<frc2::CommandBase, SetArmCoordinate> {
 public:
-    SetArmCoordinate(DoubleArm* doubleArm, frc::Translation2d target);
+    SetArmCoordinate(DoubleArm* doubleArm, frc::Translation2d target, PlannerProfile::Constraints constraints);
 
     void Initialize() override;
 
@@ -32,5 +33,6 @@ public:
 private:
     DoubleArm* doubleArm;
     frc::Translation2d target;
+    PlannerProfile::Constraints constraints;
 
 };

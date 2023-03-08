@@ -6,12 +6,12 @@
 #include <frc/Timer.h>
 #include <iostream>
 
-DoubleArmPlanner::DoubleArmPlanner(PlannerProfile::Constraints constraints, DoubleArmKinematics kinematics): constraints(constraints), targetPointProfile(constraints, PlannerProfile::State{ PlannerProfile::Distance_t{0}, PlannerProfile::Velocity_t{0} }), kinematics(kinematics) {
+DoubleArmPlanner::DoubleArmPlanner(DoubleArmKinematics kinematics): targetPointProfile({ 1.5_mps, 2_mps_sq }, PlannerProfile::State{ PlannerProfile::Distance_t{0}, PlannerProfile::Velocity_t{0} }), kinematics(kinematics) {
     trajectoryStartTime = frc::Timer::GetFPGATimestamp();
 }
 
-void DoubleArmPlanner::SetTargetCoord(frc::Translation2d targetCoord, frc::Translation2d currentCoord) {
-
+void DoubleArmPlanner::SetTargetCoord(frc::Translation2d targetCoord, frc::Translation2d currentCoord, PlannerProfile::Constraints constraints) {
+    this->constraints = constraints;
     double travelDistance = currentCoord.Distance(targetCoord).value();
     trajectoryAngle = (targetCoord - currentCoord).Angle();
     startingCoord = currentCoord;

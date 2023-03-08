@@ -10,6 +10,7 @@
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc/smartdashboard/SendableChooser.h>
+#include <pathplanner/lib/auto/SwerveAutoBuilder.h>
 
 #include "Subsystems/SwerveChassis/SwerveChassis.h"
 #include "Subsystems/VisionManager/VisionManager.h"
@@ -27,6 +28,9 @@
 #include "Commands/Autonomous/LoadingMiddle.h"
 #include "Commands/Autonomous/BarrierMiddle.h"
 #include "Commands/Autonomous/LoadingDouble.h"
+
+#include <Subsystems/DoubleArm/ArmConstants.h>
+using namespace ArmConstants;
 
 class RobotContainer {
 public:
@@ -73,8 +77,20 @@ private:
     DoubleArm doubleArm;
 
     //Auto
+    pathplanner::SwerveAutoBuilder autoBuilder{
+        [this]() { return swerveChassis.getOdometry(); },
+        [this](auto initPose) { swerveChassis.resetOdometry(initPose); },
+        swerveChassis.getKinematics(),
+        pathplanner::PIDConstants(0.02, 0.0, 0.0),
+        pathplanner::PIDConstants(0.02, 0.0, 0.0),
+        [this](auto speeds) { swerveChassis.setModuleStates(speeds); },
+        {},
+        { &swerveChassis },
+        true
+    };
+
     frc::SendableChooser<frc2::Command*> pathChooser;
-    frc2::CommandPtr loadingMiddle = LoadingMiddle(&swerveChassis, &doubleArm, &intake);
-    frc2::CommandPtr barrierMiddle = BarrierMiddle(&swerveChassis, &doubleArm, &intake);
-    frc2::CommandPtr loadingDouble = LoadingDouble(&swerveChassis, &doubleArm, &intake);
+    frc2::CommandPtr loadingMiddle = LoadingMiddle(&swerveChassis, &doubleArm, &intake, &autoBuilder);
+    frc2::CommandPtr barrierMiddle = BarrierMiddle(&swerveChassis, &doubleArm, &intake, &autoBuilder);
+    frc2::CommandPtr loadingDouble = LoadingDouble(&swerveChassis, &doubleArm, &intake, &autoBuilder);
 };

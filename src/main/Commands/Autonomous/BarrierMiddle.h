@@ -22,30 +22,22 @@
 #include "Commands/Common/SetintakeSpeed/SetIntakeSpeed.h"
 #include "Commands/Common/SetArmCoordinate/SetArmCoordinate.h"
 
-#include "Commands/Common/SetArmCoordinate/SetArmCoordinate.h"
+#include <Subsystems/DoubleArm/ArmConstants.h>
 
-static frc2::CommandPtr BarrierMiddle(SwerveChassis* m_swerveChassis, DoubleArm* m_doubleArm, Intake* m_intake) {
+using namespace ArmConstants;
+
+static frc2::CommandPtr BarrierMiddle(SwerveChassis* m_swerveChassis, DoubleArm* m_doubleArm, Intake* m_intake, pathplanner::SwerveAutoBuilder* autoBuilder) {
     std::vector<pathplanner::PathPlannerTrajectory> outLoadingTrajectory = pathplanner::PathPlanner::loadPathGroup("OutBarrier", { pathplanner::PathConstraints(2_mps, 1.5_mps_sq) });
-    pathplanner::SwerveAutoBuilder autoBuilder(
-        [m_swerveChassis = m_swerveChassis]() { return m_swerveChassis->getOdometry(); },
-        [m_swerveChassis = m_swerveChassis](auto initPose) { m_swerveChassis->resetOdometry(initPose); },
-        m_swerveChassis->getKinematics(),
-        pathplanner::PIDConstants(0.02, 0.0, 0.0),
-        pathplanner::PIDConstants(0.0, 0.0, 0.0),
-        [m_swerveChassis = m_swerveChassis](auto speeds) { m_swerveChassis->setModuleStates(speeds); },
-        {},
-        { m_swerveChassis },
-        true
-    );
+
 
     return frc2::cmd::Sequence(
         frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->resetOdometry({ 1.8_m, 0.5_m, {180_deg} });}).ToPtr(),
         SetWrist(m_intake, false).ToPtr(),
-        SetArmCoordinate(m_doubleArm, { 0.76_m, 0.22_m }).ToPtr(), //Middle
+        SetArmCoordinate(m_doubleArm, Positions::middle, Speeds::middle).ToPtr(), //Middle
         SetCone(m_intake, true).ToPtr(),
         frc2::WaitCommand{ 0.5_s }.ToPtr(),
-        SetArmCoordinate(m_doubleArm, { 0.21_m, 0.05_m }).ToPtr(), //Closed
-        autoBuilder.followPath(outLoadingTrajectory[0])
+        SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr(), //Closed
+        autoBuilder->followPath(outLoadingTrajectory[0])
     );
 }
 

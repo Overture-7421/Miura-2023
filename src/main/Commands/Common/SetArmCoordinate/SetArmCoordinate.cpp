@@ -4,16 +4,17 @@
 
 #include "SetArmCoordinate.h"
 
-SetArmCoordinate::SetArmCoordinate(DoubleArm* doubleArm, frc::Translation2d target) {
+SetArmCoordinate::SetArmCoordinate(DoubleArm* doubleArm, frc::Translation2d target, PlannerProfile::Constraints constraints) {
     this->doubleArm = doubleArm;
     this->target = target;
+    this->constraints = constraints;
 
     AddRequirements(doubleArm);
 }
 
 // Called when the command is initially scheduled.
 void SetArmCoordinate::Initialize() {
-    doubleArm->SetTargetCoord(target);
+    doubleArm->SetTargetCoord(target, constraints);
 }
 
 // Called repeatedly when this Command is scheduled to run

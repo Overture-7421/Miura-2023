@@ -15,7 +15,7 @@ DoubleArm::DoubleArm() {
     ConfigureSensors();
 
     // frc::SmartDashboard::PutData(&plotter);
-    planner.SetTargetCoord(GetEndpointCoord(), GetEndpointCoord());
+    planner.SetTargetCoord(GetEndpointCoord(), GetEndpointCoord(), { 1_mps, 1_mps_sq });
 }
 /**
  * Will be called periodically whenever the CommandScheduler runs.
@@ -74,8 +74,8 @@ frc::Translation2d DoubleArm::GetEndpointCoord() {
     return kinematics.GetEndpointCoord(GetCurrentState());
 }
 
-void DoubleArm::SetTargetCoord(frc::Translation2d targetCoord) {
-    planner.SetTargetCoord(targetCoord, GetEndpointCoord());
+void DoubleArm::SetTargetCoord(frc::Translation2d targetCoord, PlannerProfile::Constraints constraints) {
+    planner.SetTargetCoord(targetCoord, GetEndpointCoord(), constraints);
 }
 
 void DoubleArm::SetFalconTargetPos(DoubleArmState desiredState) {

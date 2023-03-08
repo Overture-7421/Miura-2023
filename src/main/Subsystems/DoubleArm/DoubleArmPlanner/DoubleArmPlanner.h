@@ -6,14 +6,16 @@
 #include <frc/trajectory/TrapezoidProfile.h>
 #include <frc/geometry/Translation2d.h>
 #include <units/length.h>
+#include <units/velocity.h>
+#include <units/acceleration.h>
 #include "../DoubleArmKinematics/DoubleArmState.h"
 #include "../DoubleArmKinematics/DoubleArmKinematics.h"
 
 typedef frc::TrapezoidProfile<units::meters> PlannerProfile;
 class DoubleArmPlanner {
 public:
-    DoubleArmPlanner(PlannerProfile::Constraints constraints, DoubleArmKinematics kinematics);
-    void SetTargetCoord(frc::Translation2d targetCoord, frc::Translation2d currentCoord);
+    DoubleArmPlanner(DoubleArmKinematics kinematics);
+    void SetTargetCoord(frc::Translation2d targetCoord, frc::Translation2d currentCoord, PlannerProfile::Constraints constraints);
     std::optional<DoubleArmState> CalculateCurrentTargetState();
     bool IsFinished();
 private:
