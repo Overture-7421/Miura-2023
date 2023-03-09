@@ -37,10 +37,9 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
         SetCone(m_intake, true).ToPtr(),
         frc2::cmd::Parallel(
             autoBuilder->followPath(doubleLoadingTrajectory[0]),
+            SetWrist(m_intake, true).ToPtr(),
             SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr() //Closed
         ),
-        SetWrist(m_intake, true).ToPtr(),
-        SetCone(m_intake, true).ToPtr(),
         frc2::cmd::Parallel(
             autoBuilder->followPath(doubleLoadingTrajectory[1]),
             SetArmCoordinate(m_doubleArm, Positions::ground, Speeds::ground).ToPtr() //Ground
