@@ -38,7 +38,6 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
                 frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->setSpeed({ 0_mps, 0_mps, 0_deg_per_s });}, { m_swerveChassis }).ToPtr()
             )
         ),
-        frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->setSpeed({ 0_mps, 0_mps, 0_deg_per_s });}).ToPtr(),
         SetWrist(m_intake, true).ToPtr(),
         SetCone(m_intake, true).ToPtr(),
         frc2::cmd::Parallel(
@@ -48,7 +47,6 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
                 frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->setSpeed({ 0_mps, 0_mps, 0_deg_per_s });}, { m_swerveChassis }).ToPtr()
             )
         ),
-        frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->setSpeed({ 0_mps, 0_mps, 0_deg_per_s });}).ToPtr(),
         SetCone(m_intake, false).ToPtr(),
         frc2::cmd::Parallel(
             frc2::cmd::Sequence(
