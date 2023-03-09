@@ -20,6 +20,8 @@ SwerveModule::SwerveModule(int rotatorID, int wheelID, int canCoderID, double of
     rotator.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_1_General, 20);
     rotator.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_2_Feedback0, 255);
 
+    canCoder.SetStatusFramePeriod(ctre::phoenix::sensors::CANCoderStatusFrame::CANCoderStatusFrame_SensorData, 20);
+
     wheel.SetNeutralMode(NeutralMode::Brake);
     rotator.SetNeutralMode(NeutralMode::Coast);
     wheel.SetSelectedSensorPosition(0);

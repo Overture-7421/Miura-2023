@@ -32,30 +32,22 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
         SetArmCoordinate(m_doubleArm, Positions::middle, Speeds::middle).ToPtr(), //Middle
         SetCone(m_intake, true).ToPtr(),
         frc2::cmd::Parallel(
-            SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr(), //Closed
-            frc2::cmd::Sequence(
-                autoBuilder->followPath(doubleLoadingTrajectory[0]),
-                frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->setSpeed({ 0_mps, 0_mps, 0_deg_per_s });}, { m_swerveChassis }).ToPtr()
-            )
+            autoBuilder->followPath(doubleLoadingTrajectory[0]),
+            SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr() //Closed
         ),
         SetWrist(m_intake, true).ToPtr(),
         SetCone(m_intake, true).ToPtr(),
         frc2::cmd::Parallel(
-            SetArmCoordinate(m_doubleArm, Positions::ground, Speeds::ground).ToPtr(), //Ground
-            frc2::cmd::Sequence(
-                autoBuilder->followPath(doubleLoadingTrajectory[1]),
-                frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->setSpeed({ 0_mps, 0_mps, 0_deg_per_s });}, { m_swerveChassis }).ToPtr()
-            )
+            autoBuilder->followPath(doubleLoadingTrajectory[1]),
+            SetArmCoordinate(m_doubleArm, Positions::ground, Speeds::ground).ToPtr() //Ground
         ),
         SetCone(m_intake, false).ToPtr(),
         frc2::cmd::Parallel(
+            autoBuilder->followPath(doubleLoadingTrajectory[2]),
+
             frc2::cmd::Sequence(
                 SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr(), //Closed
                 SetWrist(m_intake, false).ToPtr()
-            ),
-            frc2::cmd::Sequence(
-                autoBuilder->followPath(doubleLoadingTrajectory[2]),
-                frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->setSpeed({ 0_mps, 0_mps, 0_deg_per_s });}, { m_swerveChassis }).ToPtr()
             )
         ),
         SetCone(m_intake, true).ToPtr()
