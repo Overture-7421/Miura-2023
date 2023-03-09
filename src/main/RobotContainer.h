@@ -84,6 +84,7 @@ private:
         pathplanner::PIDConstants(0.01, 0.0, 0.05),
         pathplanner::PIDConstants(0.45, 0.0, 0.0),
         [this](auto speeds) { swerveChassis.setModuleStates(speeds); },
+        // [this](auto speeds) { swerveChassis.setSpeed(speeds); },
         {},
         { &swerveChassis },
         true

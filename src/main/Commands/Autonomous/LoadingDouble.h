@@ -35,12 +35,14 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
             SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr(), //Closed
             autoBuilder->followPath(doubleLoadingTrajectory[0])
         ),
+        frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->setSpeed({ 0_mps, 0_mps, 0_deg });}).ToPtr(),
         SetWrist(m_intake, true).ToPtr(),
         SetCone(m_intake, true).ToPtr(),
         frc2::cmd::Parallel(
             SetArmCoordinate(m_doubleArm, Positions::ground, Speeds::ground).ToPtr(), //Ground
             autoBuilder->followPath(doubleLoadingTrajectory[1])
         ),
+        frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->setSpeed({ 0_mps, 0_mps, 0_deg });}).ToPtr(),
         SetCone(m_intake, false).ToPtr(),
         frc2::cmd::Parallel(
             frc2::cmd::Sequence(
@@ -49,6 +51,8 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
             ),
             autoBuilder->followPath(doubleLoadingTrajectory[2])
         ),
+        frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->setSpeed({ 0_mps, 0_mps, 0_deg });}).ToPtr(),
+
         SetCone(m_intake, true).ToPtr()
     );
 }
