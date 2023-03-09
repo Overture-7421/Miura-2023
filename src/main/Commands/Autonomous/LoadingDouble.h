@@ -23,7 +23,11 @@
 using namespace ArmConstants;
 
 static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm* m_doubleArm, Intake* m_intake, pathplanner::SwerveAutoBuilder* autoBuilder) {
-    std::vector<pathplanner::PathPlannerTrajectory> doubleLoadingTrajectory = pathplanner::PathPlanner::loadPathGroup("LoadingDouble", { pathplanner::PathConstraints(3_mps, 3_mps_sq) });
+    std::vector<pathplanner::PathPlannerTrajectory> doubleLoadingTrajectory = pathplanner::PathPlanner::loadPathGroup("LoadingDouble", {
+        {3_mps, 3_mps_sq },
+        {3_mps, 3_mps_sq },
+        {3_mps, 3_mps_sq }
+        });
 
 
     return frc2::cmd::Sequence(
@@ -44,12 +48,9 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
         SetCone(m_intake, false).ToPtr(),
         frc2::cmd::Parallel(
             autoBuilder->followPath(doubleLoadingTrajectory[2]),
-
-            frc2::cmd::Sequence(
-                SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr(), //Closed
-                SetWrist(m_intake, false).ToPtr()
-            )
+            SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr() //Closed
         ),
+        SetWrist(m_intake, false).ToPtr(),
         SetCone(m_intake, true).ToPtr()
     );
 }
