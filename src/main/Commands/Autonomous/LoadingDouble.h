@@ -67,10 +67,7 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
         /* Closed Pose */
         SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr(), //Closed
 
-        /* Wrist Up and Intake Closed */
-        frc2::cmd::Parallel(
-            SetWrist(m_intake, true).ToPtr(),
+        /* Intake Closed */
             SetCone(m_intake, false).ToPtr()
-        )
     );
 }
