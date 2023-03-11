@@ -31,25 +31,46 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
 
 
     return frc2::cmd::Sequence(
+        /* Wrist Down, Upper Pose, Open Intake  */
         frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->resetOdometry({ 1.81_m, 4.97_m, {180_deg} });}).ToPtr(),
         SetWrist(m_intake, false).ToPtr(),
-        SetArmCoordinate(m_doubleArm, Positions::middle, Speeds::middle).ToPtr(), //Middle
+        SetArmCoordinate(m_doubleArm, Positions::upper, Speeds::upper).ToPtr(), //Upper
         SetCone(m_intake, true).ToPtr(),
+
+        /* Follow Trajectory 0 while Wrist Up and Closed Pose */
         frc2::cmd::Parallel(
             autoBuilder->followPath(doubleLoadingTrajectory[0]),
             SetWrist(m_intake, true).ToPtr(),
             SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr() //Closed
         ),
+
+        /* Follow Trajectory 1 while Ground Pose  */
         frc2::cmd::Parallel(
             autoBuilder->followPath(doubleLoadingTrajectory[1]),
             SetArmCoordinate(m_doubleArm, Positions::ground, Speeds::ground).ToPtr() //Ground
         ),
+
+        /* Close Intake */
         SetCone(m_intake, false).ToPtr(),
+
+        /* Follow Trajectory 2 while Closed Pose */
         frc2::cmd::Parallel(
             autoBuilder->followPath(doubleLoadingTrajectory[2]),
             SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr() //Closed
         ),
+
+        /* Wrist Down, Middle Pose and Open Intake */
         SetWrist(m_intake, false).ToPtr(),
-        SetCone(m_intake, true).ToPtr()
+        SetArmCoordinate(m_doubleArm, Positions::middle, Speeds::middle).ToPtr(), //Middle
+        SetCone(m_intake, true).ToPtr(),
+
+        /* Closed Pose */
+        SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr(), //Closed
+
+        /* Wrist Up and Intake Closed */
+        frc2::cmd::Parallel(
+            SetWrist(m_intake, true).ToPtr(),
+            SetCone(m_intake, false).ToPtr()
+        )
     );
 }
