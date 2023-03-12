@@ -25,8 +25,8 @@ void DoubleArm::Periodic() {
     //frc::SmartDashboard::PutNumber("DoubleArm/CurrentLowerAngle", currentState.lowerAngle.Degrees().value());
     //frc::SmartDashboard::PutNumber("DoubleArm/CurrentUpperAngle", currentState.upperAngle.Degrees().value());
 
-    //frc::SmartDashboard::PutNumber("DoubleArm/EncoderLowerRaw", lowerEncoder.GetAbsolutePosition());
-    //frc::SmartDashboard::PutNumber("DoubleArm/EncoderUpperRaw", upperEncoder.GetAbsolutePosition());
+    frc::SmartDashboard::PutNumber("DoubleArm/EncoderLowerRaw", lowerEncoder.GetAbsolutePosition());
+    frc::SmartDashboard::PutNumber("DoubleArm/EncoderUpperRaw", upperEncoder.GetAbsolutePosition());
 
 
     std::optional<DoubleArmState> desiredState = planner.CalculateCurrentTargetState();
