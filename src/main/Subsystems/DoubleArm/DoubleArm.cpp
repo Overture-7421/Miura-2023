@@ -124,7 +124,7 @@ void DoubleArm::ConfigureMotors() {
     lowerRight.SelectProfileSlot(0, 0);
     lowerRight.Config_kP(0, 0.075);
     lowerRight.Config_kI(0, 0);
-    lowerRight.Config_kD(0, 0.05);
+    lowerRight.Config_kD(0, 0);
 
     /* Upper Motors */
     upperRight.ConfigAllSettings(baseConfig);
@@ -143,7 +143,7 @@ void DoubleArm::ConfigureMotors() {
 
 
     upperRight.SelectProfileSlot(0, 0);
-    upperRight.Config_kP(0, 0.002);
+    upperRight.Config_kP(0, 0);
     upperRight.Config_kI(0, 0);
     upperRight.Config_kD(0, 0);
 }
