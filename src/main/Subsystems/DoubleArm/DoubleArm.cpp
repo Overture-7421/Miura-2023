@@ -122,7 +122,7 @@ void DoubleArm::ConfigureMotors() {
     lowerLeft2.SetInverted(TalonFXInvertType::OpposeMaster);
 
     lowerRight.SelectProfileSlot(0, 0);
-    lowerRight.Config_kP(0, 0.05);
+    lowerRight.Config_kP(0, 0.08);
     lowerRight.Config_kI(0, 0);
     lowerRight.Config_kD(0, 0);
 
@@ -159,11 +159,11 @@ void DoubleArm::ConfigureSensors() {
 }
 
 frc::Rotation2d DoubleArm::GetLowerAngle() {
-    return units::degree_t((lowerEncoder.GetAbsolutePosition() - 0.8480) * 360.0);
+    return units::degree_t((lowerEncoder.GetAbsolutePosition() - 0.3470692) * 360.0);
 }
 
 frc::Rotation2d DoubleArm::GetUpperAngle() {
-    double rawVal = (-upperEncoder.GetAbsolutePosition() + 0.5425) * 360.0;
+    double rawVal = (-upperEncoder.GetAbsolutePosition() + 0.3033954) * 360.0;
     rawVal = frc::InputModulus(rawVal, -180.0, 180.0);
     frc::Rotation2d angleToLowerArm = frc::Rotation2d(units::degree_t(rawVal));
 

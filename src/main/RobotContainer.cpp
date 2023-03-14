@@ -43,9 +43,9 @@ void RobotContainer::ConfigureBindings() {
     wristPiston.OnTrue(frc2::InstantCommand{ [this]() { this->intake.setWristControl();} }.ToPtr());
 
     lowerPosition.OnTrue(frc2::SequentialCommandGroup{
+        SetWrist(&intake, true),
+        frc2::WaitCommand{(.1_s)},
         SetArmCoordinate(&doubleArm, Positions::closed, Speeds::closed),
-        frc2::WaitCommand{(1_s)},
-        SetWrist(&intake, false)
         }.ToPtr()); // Closed
 
     groundPickUp.OnTrue(frc2::SequentialCommandGroup{
@@ -59,7 +59,7 @@ void RobotContainer::ConfigureBindings() {
         }.ToPtr()); // Middle
 
     upperPosition.OnTrue(frc2::SequentialCommandGroup{
-        SetWrist(&intake, false),
+        SetWrist(&intake, true),
         SetArmCoordinate(&doubleArm, Positions::upper, Speeds::upper),
         SetWrist(&intake, true)
         }.ToPtr()); // upper
