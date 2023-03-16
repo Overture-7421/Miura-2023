@@ -66,4 +66,7 @@ private:
     /* Encoders */
     frc::DutyCycleEncoder lowerEncoder{ 1 };
     frc::DutyCycleEncoder upperEncoder{ 0 };
+
+    double lowerFeedForward = 0.3;
+    double upperFeedForward = 0.07;
 };
