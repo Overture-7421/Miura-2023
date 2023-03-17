@@ -12,8 +12,6 @@ RobotContainer::RobotContainer() {
     intake.SetDefaultCommand(IntakeControl(&intake, &mechanisms));
 
     //Set choosers for auto
-    pathChooser.AddOption("Loading Middle", loadingMiddle.get());
-    pathChooser.AddOption("Barrier Middle", barrierMiddle.get());
     pathChooser.AddOption("Loading Double", loadingDouble.get());
 
 

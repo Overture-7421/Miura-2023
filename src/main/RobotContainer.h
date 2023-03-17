@@ -25,8 +25,6 @@
 #include "Commands/Common/SetCone/SetCone.h"
 #include "Commands/Common/SetintakeSpeed/SetIntakeSpeed.h"
 #include "Commands/Common/SetArmCoordinate/SetArmCoordinate.h"
-#include "Commands/Autonomous/LoadingMiddle.h"
-#include "Commands/Autonomous/BarrierMiddle.h"
 #include "Commands/Autonomous/LoadingDouble.h"
 
 #include <Subsystems/DoubleArm/ArmConstants.h>
@@ -91,7 +89,5 @@ private:
     };
 
     frc::SendableChooser<frc2::Command*> pathChooser;
-    frc2::CommandPtr loadingMiddle = LoadingMiddle(&swerveChassis, &doubleArm, &intake, &autoBuilder);
-    frc2::CommandPtr barrierMiddle = BarrierMiddle(&swerveChassis, &doubleArm, &intake, &autoBuilder);
     frc2::CommandPtr loadingDouble = LoadingDouble(&swerveChassis, &doubleArm, &intake, &autoBuilder);
 };
