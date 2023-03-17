@@ -10,11 +10,11 @@
 typedef frc::TrapezoidProfile<units::meters> PlannerProfile;
 namespace ArmConstants {
     namespace Positions {
-        const frc::Translation2d closed{ 0.23_m, 0.05_m };
-        const frc::Translation2d upper{ 1_m, 0.65_m };
+        const frc::Translation2d closed{ 0.11_m, 0.02_m };
+        const frc::Translation2d upper{ 1_m, 0.80_m };
         const frc::Translation2d middle{ 0.55_m, 0.25_m };
-        const frc::Translation2d ground{ 1.11_m, -.5_m };
-        const frc::Translation2d portal{ 0.9_m, 0.47_m };
+        const frc::Translation2d ground{ 1.02_m, -.54_m };
+        const frc::Translation2d portal{ 0.7_m, 0.30_m };
     };
 
     namespace Speeds {
