@@ -15,7 +15,11 @@ DoubleArm::DoubleArm() {
     ConfigureSensors();
 
     // frc::SmartDashboard::PutData(&plotter);
-    planner.SetTargetCoord(GetEndpointCoord(), GetEndpointCoord(), { 0.2_mps, 0.2_mps_sq });
+    planner.SetTargetCoord(GetEndpointCoord(), GetEndpointCoord(), { 1_mps, 1_mps_sq });
+
+    frc::SmartDashboard::PutNumber("Lower FeedForward", lowerFeedForward);
+    frc::SmartDashboard::PutNumber("Upper FeedForward", upperFeedForward);
+
 }
 /**
  * Will be called periodically whenever the CommandScheduler runs.
@@ -42,6 +46,9 @@ void DoubleArm::Periodic() {
 
     }
     SetFalconTargetPos(targetState);
+
+    lowerFeedForward = frc::SmartDashboard::GetNumber("Lower FeedForward", lowerFeedForward);
+    upperFeedForward = frc::SmartDashboard::GetNumber("Upper FeedForward", upperFeedForward);
 
     // frc::Translation2d currentCoord = kinematics.GetEndpointCoord(currentState);
     // frc::SmartDashboard::PutNumber("DoubleArm/X", currentCoord.X().value());
@@ -124,9 +131,9 @@ void DoubleArm::ConfigureMotors() {
     lowerLeft2.SetInverted(TalonFXInvertType::OpposeMaster);
 
     lowerRight.SelectProfileSlot(0, 0);
-    lowerRight.Config_kP(0, 0.085);
+    lowerRight.Config_kP(0, 0.5); // 0.085
     lowerRight.Config_kI(0, 0);
-    lowerRight.Config_kD(0, 10);
+    lowerRight.Config_kD(0, 10); // 10
 
     /* Upper Motors */
     upperRight.ConfigAllSettings(baseConfig);
@@ -145,9 +152,9 @@ void DoubleArm::ConfigureMotors() {
 
 
     upperRight.SelectProfileSlot(0, 0);
-    upperRight.Config_kP(0, 0.065);
+    upperRight.Config_kP(0, 0); // 0.065
     upperRight.Config_kI(0, 0);
-    upperRight.Config_kD(0, 11);
+    upperRight.Config_kD(0, 0); // 10
 }
 
 void DoubleArm::ConfigureSensors() {
