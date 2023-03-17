@@ -18,11 +18,11 @@ namespace ArmConstants {
     };
 
     namespace Speeds {
-        const PlannerProfile::Constraints middle{ 3.0_mps, 2.3_mps_sq };
-        const PlannerProfile::Constraints closed{ 2_mps, 2_mps_sq };
+        const PlannerProfile::Constraints middle{ 4.5_mps, 3.8_mps_sq };
+        const PlannerProfile::Constraints closed{ 2.5_mps, 2_mps_sq };
         const PlannerProfile::Constraints upper{ 1.5_mps, 2_mps_sq };
         const PlannerProfile::Constraints ground{ 4.5_mps, 3.8_mps_sq };
-        const PlannerProfile::Constraints portal{ 3.5_mps, 2.8_mps_sq };
+        const PlannerProfile::Constraints portal{ 4.5_mps, 3.8_mps_sq };
     };
 
 };

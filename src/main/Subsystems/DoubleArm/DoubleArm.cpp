@@ -131,7 +131,7 @@ void DoubleArm::ConfigureMotors() {
     lowerLeft2.SetInverted(TalonFXInvertType::OpposeMaster);
 
     lowerRight.SelectProfileSlot(0, 0);
-    lowerRight.Config_kP(0, 0.5); // 0.085
+    lowerRight.Config_kP(0, 0.15); // 0.085
     lowerRight.Config_kI(0, 0);
     lowerRight.Config_kD(0, 10); // 10
 
@@ -152,9 +152,9 @@ void DoubleArm::ConfigureMotors() {
 
 
     upperRight.SelectProfileSlot(0, 0);
-    upperRight.Config_kP(0, 0); // 0.065
+    upperRight.Config_kP(0, 0.065); // 0.065
     upperRight.Config_kI(0, 0);
-    upperRight.Config_kD(0, 0); // 10
+    upperRight.Config_kD(0, 10); // 10
 }
 
 void DoubleArm::ConfigureSensors() {
