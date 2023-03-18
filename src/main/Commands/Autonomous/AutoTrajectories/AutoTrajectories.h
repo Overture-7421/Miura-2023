@@ -25,7 +25,7 @@
 class AutoTrajectories
     : public frc2::CommandHelper<frc2::CommandBase, AutoTrajectories> {
 public:
-    AutoTrajectories(SwerveChassis* swerveChassis, pathplanner::PathPlannerTrajectory* trajectory);
+    AutoTrajectories(SwerveChassis* swerveChassis, pathplanner::PathPlannerTrajectory trajectory);
 
     void Initialize() override;
 
@@ -40,5 +40,5 @@ private:
     SwerveChassis* swerveChassis;
 
     pathplanner::PPSwerveControllerCommand* alignCommand;
-    pathplanner::PathPlannerTrajectory* m_trajectory;
+    pathplanner::PathPlannerTrajectory m_trajectory;
 };

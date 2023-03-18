@@ -4,19 +4,20 @@
 
 #include "AutoTrajectories.h"
 
-AutoTrajectories::AutoTrajectories(SwerveChassis* swerveChassis, pathplanner::PathPlannerTrajectory* trajectory): swerveChassis(swerveChassis), m_trajectory(trajectory) {
+AutoTrajectories::AutoTrajectories(SwerveChassis* swerveChassis, pathplanner::PathPlannerTrajectory trajectory): swerveChassis(swerveChassis), m_trajectory(trajectory) {
     AddRequirements({ swerveChassis });
+    m_trajectory = trajectory;
 }
 
 // Called when the command is initially scheduled.
 void AutoTrajectories::Initialize() {
     alignCommand = new pathplanner::PPSwerveControllerCommand(
-        *m_trajectory,
+        m_trajectory,
         [this]() { return swerveChassis->getOdometry(); },
         swerveChassis->getKinematics(),
         { 0.3,0,0 },
-        { -0.012,0,0 },
-        { 0.1,0,0 },
+        { -0.013,0,0 },
+        { 0.5,0,0 },
         [this](auto speeds) { swerveChassis->setModuleStates(speeds); },
         { swerveChassis },
         true
