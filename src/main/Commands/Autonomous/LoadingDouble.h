@@ -54,23 +54,23 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
         ),
 
         /* Close Intake */
-        SetCone(m_intake, true).ToPtr()
+        SetCone(m_intake, true).ToPtr(),
 
-        // /* Follow Trajectory 2 while Closed Pose */
-        // frc2::cmd::Parallel(
-        //     autoBuilder->followPath(dropSecond).AsProxy(),
-        //     SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr() //Closed
-        // ),
+        /* Follow Trajectory 2 while Closed Pose */
+        frc2::cmd::Parallel(
+            autoBuilder->followPath(dropSecond).AsProxy(),
+            SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr() //Closed
+        ),
 
-        // /* Wrist Down, Middle Pose and Open Intake */
-        // SetWrist(m_intake, false).ToPtr(),
-        // SetArmCoordinate(m_doubleArm, Positions::middle, Speeds::middle).ToPtr(), //Middle
-        // SetCone(m_intake, true).ToPtr(),
+        /* Wrist Down, Middle Pose and Open Intake */
+        SetWrist(m_intake, false).ToPtr(),
+        SetArmCoordinate(m_doubleArm, Positions::middle, Speeds::middle).ToPtr(), //Middle
+        SetCone(m_intake, true).ToPtr(),
 
-        // /* Closed Pose */
-        // SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr(), //Closed
+        /* Closed Pose */
+        SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr(), //Closed
 
-        // /* Intake Closed */
-        // SetCone(m_intake, false).ToPtr()
+        /* Intake Closed */
+        SetCone(m_intake, false).ToPtr()
     );
 }
