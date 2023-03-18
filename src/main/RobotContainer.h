@@ -10,7 +10,6 @@
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc/smartdashboard/SendableChooser.h>
-#include <pathplanner/lib/auto/SwerveAutoBuilder.h>
 
 #include "Subsystems/SwerveChassis/SwerveChassis.h"
 #include "Subsystems/VisionManager/VisionManager.h"
@@ -74,20 +73,7 @@ private:
     Intake intake;
     DoubleArm doubleArm;
 
-    //Auto
-    pathplanner::SwerveAutoBuilder autoBuilder{
-        [this]() { return swerveChassis.getOdometry(); },
-        [this](auto initPose) { swerveChassis.resetOdometry(initPose); },
-        swerveChassis.getKinematics(),
-        pathplanner::PIDConstants(0.285, 0.0, 0.0),
-        pathplanner::PIDConstants(0.95, 0.0, 0.0),
-        [this](auto speeds) { swerveChassis.setModuleStates(speeds); },
-        // [this](auto speeds) { swerveChassis.setSpeed(speeds); },
-        {},
-        { &swerveChassis },
-        true
-    };
 
     frc::SendableChooser<frc2::Command*> pathChooser;
-    frc2::CommandPtr loadingDouble = LoadingDouble(&swerveChassis, &doubleArm, &intake, &autoBuilder);
+    frc2::CommandPtr loadingDouble = LoadingDouble(&swerveChassis, &doubleArm, &intake);
 };
