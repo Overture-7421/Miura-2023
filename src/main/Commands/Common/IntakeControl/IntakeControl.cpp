@@ -20,7 +20,7 @@ void IntakeControl::Execute() {
     if (take > reverse) {
         m_intake->setVoltage(-6.0);
     } else if (take < reverse) {
-        m_intake->setVoltage(2.0);
+        m_intake->setVoltage(3.0);
     } else {
         m_intake->setVoltage(0);
     }

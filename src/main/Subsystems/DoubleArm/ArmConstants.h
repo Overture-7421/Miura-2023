@@ -7,6 +7,7 @@
 #include <units/acceleration.h>
 
 
+
 typedef frc::TrapezoidProfile<units::meters> PlannerProfile;
 namespace ArmConstants {
     namespace Positions {
@@ -14,7 +15,7 @@ namespace ArmConstants {
         const frc::Translation2d upper{ 1_m, 0.80_m };
         const frc::Translation2d middle{ 0.55_m, 0.25_m };
         const frc::Translation2d ground{ 1.02_m, -.54_m };
-        const frc::Translation2d portal{ 0.7_m, 0.30_m };
+        const frc::Translation2d portal{ 0.80_m, 0.34_m };
     };
 
     namespace Speeds {
@@ -24,5 +25,4 @@ namespace ArmConstants {
         const PlannerProfile::Constraints ground{ 4.5_mps, 3.8_mps_sq };
         const PlannerProfile::Constraints portal{ 4.5_mps, 3.8_mps_sq };
     };
-
 };
