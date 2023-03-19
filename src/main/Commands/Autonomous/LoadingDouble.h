@@ -36,7 +36,7 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
         frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->resetOdometry({ 1.81_m, 4.97_m, {180_deg} });}).ToPtr(),
         SetCone(m_intake, true),
         SetArmCoordinate(m_doubleArm, Positions::portal, Speeds::portal).ToPtr(), //Portal
-        SetIntakeSpeed(m_intake, 3.0).ToPtr(),
+        SetIntakeSpeed(m_intake, 2.8).ToPtr(),
         frc2::WaitCommand(0.5_s),
         SetIntakeSpeed(m_intake, 0.0).ToPtr(),
 
@@ -54,13 +54,14 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
 
         /* Follow Trajectory to pick while Ground Pose  */
         frc2::cmd::Parallel(
-            frc2::cmd::Sequence(
-                AutoTrajectories(m_swerveChassis, pickSecondPiece).AsProxy(),
-                frc2::WaitCommand(0.2_s)
-            ),
-            SetArmCoordinate(m_doubleArm, Positions::ground, Speeds::ground).ToPtr(), //Ground
+            SetArmCoordinate(m_doubleArm, Positions::groundAuto, Speeds::groundAuto).ToPtr(), //Ground
             SetIntakeSpeed(m_intake, -6.0).ToPtr()
         ),
+        frc2::cmd::Sequence(
+            AutoTrajectories(m_swerveChassis, pickSecondPiece).AsProxy(),
+            frc2::WaitCommand(0.2_s)
+        ),
+
 
         /* Close Intake */
         SetIntakeSpeed(m_intake, 0.0).ToPtr(),

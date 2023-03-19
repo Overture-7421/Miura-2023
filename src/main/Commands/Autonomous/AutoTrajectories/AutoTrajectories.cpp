@@ -16,8 +16,8 @@ void AutoTrajectories::Initialize() {
         [this]() { return swerveChassis->getOdometry(); },
         swerveChassis->getKinematics(),
         { 0.3,0,0 },
-        { -0.013,0,0 },
-        { 0.5,0,0 },
+        { -0.006,0,0 }, //- 0.013
+        { 0.9,0,0 },
         [this](auto speeds) { swerveChassis->setModuleStates(speeds); },
         { swerveChassis },
         true
