@@ -24,9 +24,14 @@
 #include "Commands/Common/SetCone/SetCone.h"
 #include "Commands/Common/SetintakeSpeed/SetIntakeSpeed.h"
 #include "Commands/Common/SetArmCoordinate/SetArmCoordinate.h"
+
+/* Autonomous */
 #include "Commands/Autonomous/LoadingDouble.h"
+#include "Commands/Autonomous/BarrierBalance.h"
+#include "Commands/Autonomous/BarrierDouble.h"
 
 #include <Subsystems/DoubleArm/ArmConstants.h>
+
 using namespace ArmConstants;
 
 class RobotContainer {
@@ -76,4 +81,8 @@ private:
 
     frc::SendableChooser<frc2::Command*> pathChooser;
     frc2::CommandPtr loadingDouble = LoadingDouble(&swerveChassis, &doubleArm, &intake);
+    frc2::CommandPtr barrierBalance = BarrierBalance(&swerveChassis, &doubleArm, &intake);
+    frc2::CommandPtr barrierDouble = BarrierDouble(&swerveChassis, &doubleArm, &intake);
+
+
 };

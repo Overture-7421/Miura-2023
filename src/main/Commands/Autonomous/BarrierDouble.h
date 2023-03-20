@@ -21,31 +21,32 @@
 
 using namespace ArmConstants;
 
-static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm* m_doubleArm, Intake* m_intake) {
-    pathplanner::PathPlannerTrajectory dropAndMove = pathplanner::PathPlanner::loadPath("Loading_DropAndMove", { 2.5_mps, 2.5_mps_sq });
-    pathplanner::PathPlannerTrajectory pickSecondPiece = pathplanner::PathPlanner::loadPath("Loading_PickUpSecondPiece", { 3_mps, 3_mps_sq });
-    pathplanner::PathPlannerTrajectory dropSecond = pathplanner::PathPlanner::loadPath("Loading_DropSecondPiece", { 3_mps, 3_mps_sq });
+static frc2::CommandPtr BarrierDouble(SwerveChassis* m_swerveChassis, DoubleArm* m_doubleArm, Intake* m_intake) {
+    pathplanner::PathPlannerTrajectory dropAndMove = pathplanner::PathPlanner::loadPath("Barrier_DropAndMove", { 2.5_mps, 2.5_mps_sq });
+    pathplanner::PathPlannerTrajectory pickSecondPiece = pathplanner::PathPlanner::loadPath("Barrier_PickUpSecondPiece", { 3_mps, 3_mps_sq });
+    pathplanner::PathPlannerTrajectory dropSecondPieceP1 = pathplanner::PathPlanner::loadPath("Barrier_DropSecondPieceP1", { 3_mps, 3_mps_sq });
+    pathplanner::PathPlannerTrajectory dropSecondPieceP2 = pathplanner::PathPlanner::loadPath("Barrier_DropSecondPieceP2", { 3_mps, 3_mps_sq });
+
 
     // Wrist Down - False
     // Wrist Up - True
-    // Cone Open - True
-    // Cone Closed - False
+    // Cone Open - False
+    // Cone Closed - True
 
     return frc2::cmd::Sequence(
+
         /* Upper cone dropped  */
-        frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->resetOdometry({ 1.81_m, 4.97_m, {180_deg} });}).ToPtr(),
+        frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->resetOdometry({ 1.81_m, 0.50_m, {180_deg} });}).ToPtr(),
         SetCone(m_intake, true),
         SetArmCoordinate(m_doubleArm, Positions::portal, Speeds::portal).ToPtr(), //Portal
         SetIntakeSpeed(m_intake, 2.8).ToPtr(),
         frc2::WaitCommand(0.5_s),
         SetIntakeSpeed(m_intake, 0.0).ToPtr(),
 
-
-        /* Closed Pose & move */
+        /* Closed Pose & move  */
         frc2::cmd::Parallel(
             AutoTrajectories(m_swerveChassis, dropAndMove).AsProxy(),
             frc2::cmd::Sequence(
-                // frc2::WaitCommand(0.2_s),
                 SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr() //Closed
             )
         ),
@@ -53,7 +54,7 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
         /* Open intake */
         SetCone(m_intake, false).ToPtr(),
 
-        /* Follow trajectory to pick cube while Ground Pose  */
+        /* Follow trajectory to arrive to cube while Ground Pose */
         frc2::cmd::Parallel(
             SetArmCoordinate(m_doubleArm, Positions::groundAuto, Speeds::groundAuto).ToPtr(), //Ground
             SetIntakeSpeed(m_intake, -6.0).ToPtr()
@@ -66,11 +67,14 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
         /* Close intake */
         SetIntakeSpeed(m_intake, 0.0).ToPtr(),
 
-        /* Follow trajectory to arrive to grid while Closed Pose */
+        /* Follow trajectory P1 while Closed Pose */
         frc2::cmd::Parallel(
-            AutoTrajectories(m_swerveChassis, dropSecond).AsProxy(),
+            AutoTrajectories(m_swerveChassis, dropSecondPieceP1).AsProxy(),
             SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr() // Closed
         ),
+
+        /* Follow trajectory P2 to arrive to grid */
+        AutoTrajectories(m_swerveChassis, dropSecondPieceP2).AsProxy(),
 
         /* Upper cube dropped */
         SetWrist(m_intake, false).ToPtr(),
