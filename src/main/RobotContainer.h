@@ -30,6 +30,7 @@
 #include "Commands/Autonomous/LoadingBalance.h"
 #include "Commands/Autonomous/BarrierBalance.h"
 #include "Commands/Autonomous/BarrierDouble.h"
+#include "Commands/Autonomous/CenterBalance.h"
 
 #include <Subsystems/DoubleArm/ArmConstants.h>
 
@@ -85,6 +86,6 @@ private:
     frc2::CommandPtr loadingBalance = LoadingBalance(&swerveChassis, &doubleArm, &intake);
     frc2::CommandPtr barrierBalance = BarrierBalance(&swerveChassis, &doubleArm, &intake);
     frc2::CommandPtr barrierDouble = BarrierDouble(&swerveChassis, &doubleArm, &intake);
-
+    frc2::CommandPtr centerBalance = CenterBalance(&swerveChassis, &doubleArm, &intake);
 
 };

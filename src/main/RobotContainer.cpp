@@ -22,7 +22,7 @@ RobotContainer::RobotContainer() {
     pathChooser.AddOption("Loading Balance", loadingBalance.get());
     pathChooser.AddOption("Barrier Balance", barrierBalance.get());
     pathChooser.AddOption("Barrier Double", barrierDouble.get());
-
+    pathChooser.AddOption("Center Balance", centerBalance.get());
 
 
 
@@ -69,7 +69,7 @@ void RobotContainer::ConfigureBindings() {
     upperPosition.OnTrue(frc2::SequentialCommandGroup{
         SetWrist(&intake, false),
         SetArmCoordinate(&doubleArm, Positions::upper, Speeds::upper)
-        }.ToPtr()); // upper
+        }.ToPtr()); // Upper
 
     portalPosition.OnTrue(frc2::SequentialCommandGroup{
         SetWrist(&intake, false),

@@ -27,7 +27,6 @@ static frc2::CommandPtr LoadingBalance(SwerveChassis* m_swerveChassis, DoubleArm
     pathplanner::PathPlannerTrajectory moveBalance = pathplanner::PathPlanner::loadPath("LoadingBalance_P3", { 4_mps, 3.5_mps_sq });
     pathplanner::PathPlannerTrajectory balance = pathplanner::PathPlanner::loadPath("LoadingBalance_P4", { 3_mps, 2.5_mps_sq });
 
-
     // Wrist Down - False
     // Wrist Up - True
     // Cone Open - True
@@ -37,7 +36,7 @@ static frc2::CommandPtr LoadingBalance(SwerveChassis* m_swerveChassis, DoubleArm
         /* Upper cone dropped  */
         frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->resetOdometry({ 1.81_m, 4.43_m, {0_deg} });}).ToPtr(),
         SetCone(m_intake, false),
-        SetArmCoordinate(m_doubleArm, Positions::test, Speeds::test).ToPtr(), //test
+        SetArmCoordinate(m_doubleArm, Positions::armInvertedAuto, Speeds::armInvertedAuto).ToPtr(), //ArmInvertedAuto
 
         /* Upper cube dropped */
         frc2::WaitCommand(0.3_s),
@@ -68,7 +67,7 @@ static frc2::CommandPtr LoadingBalance(SwerveChassis* m_swerveChassis, DoubleArm
             frc2::cmd::Sequence(
                 SetArmCoordinate(m_doubleArm, Positions::closedauto, Speeds::closedauto).ToPtr(), // Closed
                 SetIntakeSpeed(m_intake, 0.0).ToPtr(),
-                SetArmCoordinate(m_doubleArm, Positions::test, Speeds::test).ToPtr() //test
+                SetArmCoordinate(m_doubleArm, Positions::armInvertedAuto, Speeds::armInvertedAuto).ToPtr() //ArmInvertedAuto
             )
         ),
 

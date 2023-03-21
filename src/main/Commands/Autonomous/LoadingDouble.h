@@ -67,7 +67,7 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
                 SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr(), // Closed
                 /* Close intake */
                 SetIntakeSpeed(m_intake, 0.0).ToPtr(),
-                SetArmCoordinate(m_doubleArm, Positions::test, Speeds::test).ToPtr() //test
+                SetArmCoordinate(m_doubleArm, Positions::armInvertedAuto, Speeds::armInvertedAuto).ToPtr() //ArmInvertedAuto
             )
         ),
 

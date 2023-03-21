@@ -17,7 +17,7 @@ namespace ArmConstants {
         const frc::Translation2d ground{ 1.02_m, -.54_m };
         const frc::Translation2d portal{ 0.87_m, 0.35_m };
 
-        const frc::Translation2d test{ 0.10_m, 0.20_m };
+        const frc::Translation2d armInvertedAuto{ 0.10_m, 0.20_m };
         const frc::Translation2d closedauto{ 0.11_m, 0.02_m };
         const frc::Translation2d groundAuto{ 1.02_m, -.56_m };
         const frc::Translation2d portalAuto{ 0.80_m, 0.34_m };
@@ -30,7 +30,7 @@ namespace ArmConstants {
         const PlannerProfile::Constraints ground{ 4.5_mps, 3.8_mps_sq };
         const PlannerProfile::Constraints portal{ 4.5_mps, 3.8_mps_sq };
 
-        const PlannerProfile::Constraints test{ 2_mps, 2_mps_sq };
+        const PlannerProfile::Constraints armInvertedAuto{ 2_mps, 2_mps_sq };
         const PlannerProfile::Constraints closedauto{ 1_mps, 1_mps_sq };
         const PlannerProfile::Constraints groundAuto{ 4.5_mps, 3.8_mps_sq };
 
