@@ -44,7 +44,7 @@ static frc2::CommandPtr BarrierBalance(SwerveChassis* m_swerveChassis, DoubleArm
 
         //Closed Pose & move
         frc2::cmd::Parallel(
-            AutoTrajectories(m_swerveChassis, dropAndMove).AsProxy(),
+            AutoTrajectories(m_swerveChassis, dropAndMove, { 0.3,0,0 }, { -0.03,0,0 }, { 1,0,0 }).AsProxy(),
             frc2::cmd::Sequence(
                 SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr() //Closed
             )
@@ -59,7 +59,7 @@ static frc2::CommandPtr BarrierBalance(SwerveChassis* m_swerveChassis, DoubleArm
             SetIntakeSpeed(m_intake, -6.0).ToPtr()
         ),
         frc2::cmd::Sequence(
-            AutoTrajectories(m_swerveChassis, pickSecondPiece).AsProxy(),
+            AutoTrajectories(m_swerveChassis, pickSecondPiece, { 0.3,0,0 }, { -0.03,0,0 }, { 1,0,0 }).AsProxy(),
             frc2::WaitCommand(0.2_s)
         ),
 
@@ -70,11 +70,11 @@ static frc2::CommandPtr BarrierBalance(SwerveChassis* m_swerveChassis, DoubleArm
 
         /* Align for balance while Closed Pose */
         frc2::cmd::Parallel(
-            AutoTrajectories(m_swerveChassis, alignForBalance).AsProxy(),
+            AutoTrajectories(m_swerveChassis, alignForBalance, { 0.3,0,0 }, { -0.03,0,0 }, { 1,0,0 }).AsProxy(),
             SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr() // Closed
         ),
 
         /* Balance */
-        AutoTrajectories(m_swerveChassis, balance).AsProxy()
+        AutoTrajectories(m_swerveChassis, balance, { 0.3,0,0 }, { -0.03,0,0 }, { 1,0,0 }).AsProxy()
     );
 }

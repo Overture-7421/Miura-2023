@@ -4,7 +4,8 @@
 
 #include "AutoTrajectories.h"
 
-AutoTrajectories::AutoTrajectories(SwerveChassis* swerveChassis, pathplanner::PathPlannerTrajectory trajectory): swerveChassis(swerveChassis), m_trajectory(trajectory) {
+AutoTrajectories::AutoTrajectories(SwerveChassis* swerveChassis, pathplanner::PathPlannerTrajectory trajectory, frc2::PIDController xController, frc2::PIDController yController, frc2::PIDController rController):
+    swerveChassis(swerveChassis), m_trajectory(trajectory), m_xController(xController), m_yController(yController), m_rController(rController) {
     AddRequirements({ swerveChassis });
     m_trajectory = trajectory;
 }
@@ -15,9 +16,9 @@ void AutoTrajectories::Initialize() {
         m_trajectory,
         [this]() { return swerveChassis->getOdometry(); },
         swerveChassis->getKinematics(),
-        { 0.3,0,0 },
-        { -0.006,0,0 }, //- 0.013
-        { 0.9,0,0 },
+        m_xController,
+        m_yController,
+        m_rController,
         [this](auto speeds) { swerveChassis->setModuleStates(speeds); },
         { swerveChassis },
         true

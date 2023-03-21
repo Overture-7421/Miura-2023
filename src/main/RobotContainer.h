@@ -27,6 +27,7 @@
 
 /* Autonomous */
 #include "Commands/Autonomous/LoadingDouble.h"
+#include "Commands/Autonomous/LoadingBalance.h"
 #include "Commands/Autonomous/BarrierBalance.h"
 #include "Commands/Autonomous/BarrierDouble.h"
 
@@ -81,6 +82,7 @@ private:
 
     frc::SendableChooser<frc2::Command*> pathChooser;
     frc2::CommandPtr loadingDouble = LoadingDouble(&swerveChassis, &doubleArm, &intake);
+    frc2::CommandPtr loadingBalance = LoadingBalance(&swerveChassis, &doubleArm, &intake);
     frc2::CommandPtr barrierBalance = BarrierBalance(&swerveChassis, &doubleArm, &intake);
     frc2::CommandPtr barrierDouble = BarrierDouble(&swerveChassis, &doubleArm, &intake);
 

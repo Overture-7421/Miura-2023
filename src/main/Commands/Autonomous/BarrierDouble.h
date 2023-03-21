@@ -45,7 +45,7 @@ static frc2::CommandPtr BarrierDouble(SwerveChassis* m_swerveChassis, DoubleArm*
 
         /* Closed Pose & move  */
         frc2::cmd::Parallel(
-            AutoTrajectories(m_swerveChassis, dropAndMove).AsProxy(),
+            AutoTrajectories(m_swerveChassis, dropAndMove, { 0.3,0,0 }, { -0.03,0,0 }, { 1,0,0 }).AsProxy(),
             frc2::cmd::Sequence(
                 SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr() //Closed
             )
@@ -60,7 +60,7 @@ static frc2::CommandPtr BarrierDouble(SwerveChassis* m_swerveChassis, DoubleArm*
             SetIntakeSpeed(m_intake, -6.0).ToPtr()
         ),
         frc2::cmd::Sequence(
-            AutoTrajectories(m_swerveChassis, pickSecondPiece).AsProxy(),
+            AutoTrajectories(m_swerveChassis, pickSecondPiece, { 0.3,0,0 }, { -0.03,0,0 }, { 1,0,0 }).AsProxy(),
             frc2::WaitCommand(0.2_s)
         ),
 
@@ -69,12 +69,12 @@ static frc2::CommandPtr BarrierDouble(SwerveChassis* m_swerveChassis, DoubleArm*
 
         /* Follow trajectory P1 while Closed Pose */
         frc2::cmd::Parallel(
-            AutoTrajectories(m_swerveChassis, dropSecondPieceP1).AsProxy(),
+            AutoTrajectories(m_swerveChassis, dropSecondPieceP1, { 0.3,0,0 }, { -0.03,0,0 }, { 1,0,0 }).AsProxy(),
             SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr() // Closed
         ),
 
         /* Follow trajectory P2 to arrive to grid */
-        AutoTrajectories(m_swerveChassis, dropSecondPieceP2).AsProxy(),
+        AutoTrajectories(m_swerveChassis, dropSecondPieceP2, { 0.3,0,0 }, { -0.03,0,0 }, { 1,0,0 }).AsProxy(),
 
         /* Upper cube dropped */
         SetWrist(m_intake, false).ToPtr(),

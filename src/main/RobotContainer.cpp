@@ -19,6 +19,7 @@ RobotContainer::RobotContainer() {
 
     //Set choosers for auto
     pathChooser.AddOption("Loading Double", loadingDouble.get());
+    pathChooser.AddOption("Loading Balance", loadingBalance.get());
     pathChooser.AddOption("Barrier Balance", barrierBalance.get());
     pathChooser.AddOption("Barrier Double", barrierDouble.get());
 

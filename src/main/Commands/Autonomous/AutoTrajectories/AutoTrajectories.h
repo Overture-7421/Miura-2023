@@ -8,6 +8,7 @@
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/WaitCommand.h>
+#include <frc/controller/PIDController.h>
 #include <pathplanner/lib/commands/PPSwerveControllerCommand.h>
 #include <pathplanner/lib/PathPlannerTrajectory.h>
 #include <pathplanner/lib/PathPlanner.h>
@@ -25,7 +26,7 @@
 class AutoTrajectories
     : public frc2::CommandHelper<frc2::CommandBase, AutoTrajectories> {
 public:
-    AutoTrajectories(SwerveChassis* swerveChassis, pathplanner::PathPlannerTrajectory trajectory);
+    AutoTrajectories(SwerveChassis* swerveChassis, pathplanner::PathPlannerTrajectory trajectory, frc2::PIDController xController, frc2::PIDController yController, frc2::PIDController rController);
 
     void Initialize() override;
 
@@ -41,4 +42,9 @@ private:
 
     pathplanner::PPSwerveControllerCommand* alignCommand;
     pathplanner::PathPlannerTrajectory m_trajectory;
+
+    frc2::PIDController m_xController;
+    frc2::PIDController m_yController;
+    frc2::PIDController m_rController;
+
 };
