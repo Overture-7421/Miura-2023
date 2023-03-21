@@ -56,11 +56,11 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
         /* Follow trajectory to pick cube while Ground Pose  */
         frc2::cmd::Parallel(
             SetArmCoordinate(m_doubleArm, Positions::groundAuto, Speeds::groundAuto).ToPtr(), //Ground
-            SetIntakeSpeed(m_intake, -6.0).ToPtr()
+            SetIntakeSpeed(m_intake, -8.0).ToPtr()
         ),
         frc2::cmd::Sequence(
             AutoTrajectories(m_swerveChassis, pickSecondPiece).AsProxy(),
-            frc2::WaitCommand(0.2_s)
+            frc2::WaitCommand(0.4_s)
         ),
 
         /* Close intake */
@@ -75,11 +75,14 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
         /* Upper cube dropped */
         SetWrist(m_intake, false).ToPtr(),
         SetArmCoordinate(m_doubleArm, Positions::middle, Speeds::middle).ToPtr(), //Middle
-        SetIntakeSpeed(m_intake, 4.0),
+        SetIntakeSpeed(m_intake, 8.0),
         frc2::WaitCommand(0.5_s),
         SetIntakeSpeed(m_intake, 0.0).ToPtr(),
 
         /* Closed Pose */
-        SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr() //Closed
+        frc2::cmd::Parallel(
+            SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr(), //Closed
+            SetWrist(m_intake, true).ToPtr()
+        )
     );
 }

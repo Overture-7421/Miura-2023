@@ -56,9 +56,9 @@ private:
     double wheelF = 0;
 
     //FeedForward
-    units::volt_t ks{ 0.59082 };
-    units::volt_t kv{ 2.2896 };
-    units::volt_t ka{ 0.45179 };
+    units::volt_t ks{ 0.74656 };
+    units::volt_t kv{ 2.1143 };
+    units::volt_t ka{ 0.80794 };
 
     frc::SimpleMotorFeedforward<units::meters> driveFeedForward{ ks, kv / 1_mps, ka / 1_mps_sq };
 

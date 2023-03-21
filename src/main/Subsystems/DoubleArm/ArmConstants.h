@@ -18,7 +18,7 @@ namespace ArmConstants {
         const frc::Translation2d portal{ 0.80_m, 0.34_m };
 
 
-        const frc::Translation2d groundAuto{ 1.02_m, -.57_m };
+        const frc::Translation2d groundAuto{ 1.02_m, -.54_m };
 
     };
 
