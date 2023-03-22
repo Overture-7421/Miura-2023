@@ -34,12 +34,11 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
     return frc2::cmd::Sequence(
         /* Upper cone dropped  */
         frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->resetOdometry({ 1.81_m, 4.97_m, {180_deg} });}).ToPtr(),
-        SetCone(m_intake, true),
-        SetArmCoordinate(m_doubleArm, Positions::portalAuto, Speeds::portal).ToPtr(), //Portal
-        SetIntakeSpeed(m_intake, 2.7).ToPtr(),
-        frc2::WaitCommand(0.5_s),
-        SetIntakeSpeed(m_intake, 0.0).ToPtr(),
-
+        SetArmCoordinate(m_doubleArm, Positions::middle, Speeds::middle).ToPtr(), //Portal
+        SetWrist(m_intake, false).ToPtr(),
+        SetCone(m_intake, true).ToPtr(),
+        frc2::WaitCommand(0.3_s),
+        SetWrist(m_intake, false).ToPtr(),
 
         /* Closed Pose & move */
         frc2::cmd::Parallel(
@@ -53,7 +52,7 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
             SetArmCoordinate(m_doubleArm, Positions::groundAuto, Speeds::groundAuto).ToPtr() //Ground
         ),
         frc2::cmd::Parallel(
-            SetIntakeSpeed(m_intake, -4.0).ToPtr(),
+            SetIntakeSpeed(m_intake, -6.0).ToPtr(),
             frc2::cmd::Sequence(
                 AutoTrajectories(m_swerveChassis, pickSecondPiece, { 0.3,0,0 }, { 0.12,0,0 }, { 1,0,0 }).AsProxy(),
                 frc2::WaitCommand(0.4_s)
@@ -62,22 +61,20 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
 
         /* Follow trajectory to arrive to grid while Closed Pose */
         frc2::cmd::Parallel(
-            AutoTrajectories(m_swerveChassis, dropSecond, { 0.3,0,0 }, { -0.05,0,0 }, { 1.37,0,0 }).AsProxy(), //1.25
+            AutoTrajectories(m_swerveChassis, dropSecond, { 0.29,0,0 }, { -0.05,0,0 }, { 1.37,0,0 }).AsProxy(), //1.25
             frc2::cmd::Sequence(
-                SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr(), // Closed
-                /* Close intake */
-                SetIntakeSpeed(m_intake, 0.0).ToPtr(),
+                SetArmCoordinate(m_doubleArm, Positions::closedauto, Speeds::closedauto).ToPtr(), // Closed
                 SetArmCoordinate(m_doubleArm, Positions::armInvertedAuto, Speeds::armInvertedAuto).ToPtr() //ArmInvertedAuto
             )
         ),
 
         /* Upper cube dropped */
         frc2::WaitCommand(0.3_s),
-        SetIntakeSpeed(m_intake, 6.0),
+        SetIntakeSpeed(m_intake, 8.1),
         frc2::WaitCommand(0.5_s),
         SetIntakeSpeed(m_intake, 0.0).ToPtr(),
 
         /* Closed Pose */
-        SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr() //Closed
+        SetArmCoordinate(m_doubleArm, Positions::closedauto, Speeds::closedauto).ToPtr() //Closed
     );
 }

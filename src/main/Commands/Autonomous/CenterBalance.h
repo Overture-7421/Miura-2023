@@ -37,7 +37,7 @@ static frc2::CommandPtr CenterBalance(SwerveChassis* m_swerveChassis, DoubleArm*
 
         /* Upper cube dropped */
         frc2::WaitCommand(0.3_s),
-        SetIntakeSpeed(m_intake, 6.0),
+        SetIntakeSpeed(m_intake, 6.0).ToPtr(),
         frc2::WaitCommand(0.5_s),
         SetIntakeSpeed(m_intake, 0.0).ToPtr(),
 
@@ -45,6 +45,6 @@ static frc2::CommandPtr CenterBalance(SwerveChassis* m_swerveChassis, DoubleArm*
         SetArmCoordinate(m_doubleArm, Positions::closedauto, Speeds::closedauto).ToPtr(), // Closed
 
         /* Balance Trajectory */
-        AutoTrajectories(m_swerveChassis, balance, { 0.6,0,0 }, { 0,0,0 }, { 1.25,0,0 }).AsProxy()
+        AutoTrajectories(m_swerveChassis, balance, { 0.3,0,0 }, { 0,0,0 }, { 1.25,0,0 }).AsProxy()
     );
 }

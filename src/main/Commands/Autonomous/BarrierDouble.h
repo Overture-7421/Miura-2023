@@ -61,7 +61,6 @@ static frc2::CommandPtr BarrierDouble(SwerveChassis* m_swerveChassis, DoubleArm*
             AutoTrajectories(m_swerveChassis, dropSecond, { 0.5,0,0 }, { -0.04,0,0 }, { 1.25,0,0 }).AsProxy(),
             frc2::cmd::Sequence(
                 SetArmCoordinate(m_doubleArm, Positions::closedauto, Speeds::closedauto).ToPtr(), // Closed
-                SetIntakeSpeed(m_intake, 0.0).ToPtr(),
                 SetArmCoordinate(m_doubleArm, Positions::armInvertedAuto, Speeds::armInvertedAuto).ToPtr() //ArmInvertedAuto
             )
         ),
