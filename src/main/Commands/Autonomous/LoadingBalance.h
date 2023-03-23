@@ -39,7 +39,7 @@ static frc2::CommandPtr LoadingBalance(SwerveChassis* m_swerveChassis, DoubleArm
 
         /* Upper cube dropped */
         frc2::WaitCommand(0.3_s),
-        SetIntakeSpeed(m_intake, 8.1),
+        SetIntakeSpeed(m_intake, 8.2),
         frc2::WaitCommand(0.5_s),
         SetIntakeSpeed(m_intake, 0.0).ToPtr(),
 
@@ -71,7 +71,7 @@ static frc2::CommandPtr LoadingBalance(SwerveChassis* m_swerveChassis, DoubleArm
 
         /* Upper cube dropped */
         frc2::WaitCommand(0.3_s),
-        SetIntakeSpeed(m_intake, 4.5),
+        SetIntakeSpeed(m_intake, 4.7),
         frc2::WaitCommand(0.5_s),
         SetIntakeSpeed(m_intake, 0.0).ToPtr(),
 

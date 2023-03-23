@@ -18,10 +18,10 @@ RobotContainer::RobotContainer() {
     intake.SetDefaultCommand(IntakeControl(&intake, &mechanisms));
 
     //Set choosers for auto
-    pathChooser.AddOption("Loading Double", loadingDouble.get());
-    pathChooser.AddOption("Loading Balance", loadingBalance.get());
-    pathChooser.AddOption("Barrier Balance", barrierBalance.get());
-    pathChooser.AddOption("Barrier Double", barrierDouble.get());
+    pathChooser.AddOption("Loading Cube", loadingDouble.get());
+    pathChooser.AddOption("Loading Cube & Balance", loadingBalance.get());
+    pathChooser.AddOption("Barrier Cube & Balance", barrierBalance.get());
+    pathChooser.AddOption("Barrier Cube", barrierDouble.get());
     pathChooser.AddOption("Center Balance", centerBalance.get());
 
 

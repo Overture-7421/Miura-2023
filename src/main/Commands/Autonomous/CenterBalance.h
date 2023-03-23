@@ -37,7 +37,7 @@ static frc2::CommandPtr CenterBalance(SwerveChassis* m_swerveChassis, DoubleArm*
 
         /* Upper cube dropped */
         frc2::WaitCommand(0.3_s),
-        SetIntakeSpeed(m_intake, 6.0).ToPtr(),
+        SetIntakeSpeed(m_intake, 8.2).ToPtr(),
         frc2::WaitCommand(0.5_s),
         SetIntakeSpeed(m_intake, 0.0).ToPtr(),
 
