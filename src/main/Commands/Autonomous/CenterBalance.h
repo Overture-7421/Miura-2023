@@ -50,6 +50,10 @@ static frc2::CommandPtr CenterBalance(SwerveChassis* m_swerveChassis, DoubleArm*
         ),
 
         /* Balance Trajectory */
-        AutoTrajectories(m_swerveChassis, balance, { 0.3,0,0 }, { 0,0,0 }, { 1.25,0,0 }).AsProxy()
+        AutoTrajectories(m_swerveChassis, balance, { 0.3,0,0 }, { 0,0,0 }, { 1.25,0,0 }).AsProxy(),
+
+        /*************** DANGER AUTOBALANCE **************/
+        AutoBalance(m_swerveChassis).ToPtr()
+        /*************** DANGER AUTOBALANCE **************/
     );
 }

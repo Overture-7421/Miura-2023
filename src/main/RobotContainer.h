@@ -29,7 +29,6 @@
 #include "Commands/Autonomous/LoadingDouble.h"
 #include "Commands/Autonomous/LoadingBalance.h"
 #include "Commands/Autonomous/BarrierBalance.h"
-#include "Commands/Autonomous/BarrierDouble.h"
 #include "Commands/Autonomous/CenterBalance.h"
 
 #include <Subsystems/DoubleArm/ArmConstants.h>
@@ -50,16 +49,6 @@ private:
     // Chassis driver controller and buttons
     frc::XboxController controller{ 0 };
     frc2::Trigger resetNavx{ [this] {return controller.GetBackButton();} };
-    frc2::Trigger alignOneLeft{ [this] {return controller.GetLeftBumper() && controller.GetXButton();} };
-    frc2::Trigger alignOneCenter{ [this] {return controller.GetLeftBumper() && controller.GetAButton();} };
-    frc2::Trigger alignOneRight{ [this] {return controller.GetLeftBumper() && controller.GetBButton();} };
-    frc2::Trigger alignTwoLeft{ [this] {return (controller.GetLeftTriggerAxis() || controller.GetRightTriggerAxis()) && controller.GetXButton();} };
-    frc2::Trigger alignTwoCenter{ [this] {return (controller.GetLeftTriggerAxis() || controller.GetRightTriggerAxis()) && controller.GetAButton();} };
-    frc2::Trigger alignTwoRight{ [this] {return (controller.GetLeftTriggerAxis() || controller.GetRightTriggerAxis()) && controller.GetBButton();} };
-    frc2::Trigger alignThreeLeft{ [this] {return controller.GetRightBumper() && controller.GetXButton();} };
-    frc2::Trigger alignThreeCenter{ [this] {return controller.GetRightBumper() && controller.GetAButton();} };
-    frc2::Trigger alignThreeRight{ [this] {return controller.GetRightBumper() && controller.GetBButton();} };
-    frc2::Trigger alignLoading{ [this] {return controller.GetYButton();} };
     frc2::Trigger autoBalance{ [this] {return controller.GetStartButton();} };
 
     // Mechanism Controller
@@ -85,7 +74,6 @@ private:
     frc2::CommandPtr loadingDouble = LoadingDouble(&swerveChassis, &doubleArm, &intake);
     frc2::CommandPtr loadingBalance = LoadingBalance(&swerveChassis, &doubleArm, &intake);
     frc2::CommandPtr barrierBalance = BarrierBalance(&swerveChassis, &doubleArm, &intake);
-    frc2::CommandPtr barrierDouble = BarrierDouble(&swerveChassis, &doubleArm, &intake);
     frc2::CommandPtr centerBalance = CenterBalance(&swerveChassis, &doubleArm, &intake);
 
 };

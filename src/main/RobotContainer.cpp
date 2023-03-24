@@ -21,7 +21,6 @@ RobotContainer::RobotContainer() {
     pathChooser.AddOption("Loading Cube", loadingDouble.get());
     pathChooser.AddOption("Loading Cube & Balance", loadingBalance.get());
     pathChooser.AddOption("Barrier Cube & Balance", barrierBalance.get());
-    pathChooser.AddOption("Barrier Cube", barrierDouble.get());
     pathChooser.AddOption("Center Balance", centerBalance.get());
 
 
@@ -35,16 +34,6 @@ RobotContainer::RobotContainer() {
 void RobotContainer::ConfigureBindings() {
     // Chassis Controller Buttons
     resetNavx.OnTrue(frc2::InstantCommand{ [this]() {this->swerveChassis.resetNavx();} }.ToPtr());
-    // alignOneLeft.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "1-Left").ToPtr());
-    // alignOneCenter.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "1-Center").ToPtr());
-    // alignOneRight.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "1-Right").ToPtr());
-    // alignTwoLeft.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "2-Left").ToPtr());
-    // alignTwoCenter.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "2-Center").ToPtr());
-    // alignTwoRight.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "2-Right").ToPtr());
-    // alignThreeLeft.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "3-Left").ToPtr());
-    // alignThreeCenter.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "3-Center").ToPtr());
-    // alignThreeRight.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "3-Right").ToPtr());
-    // alignLoading.WhileTrue(AlignRobotToTarget(&swerveChassis, &visionManager, "Loading").ToPtr());
     autoBalance.WhileTrue(AutoBalance(&swerveChassis).ToPtr());
 
     // Mechanisms Controller Buttons
