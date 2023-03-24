@@ -22,7 +22,8 @@
 using namespace ArmConstants;
 
 static frc2::CommandPtr CenterBalance(SwerveChassis* m_swerveChassis, DoubleArm* m_doubleArm, Intake* m_intake) {
-    pathplanner::PathPlannerTrajectory balance = pathplanner::PathPlanner::loadPath("CenterBalance", { 3_mps, 2.5_mps_sq });
+    pathplanner::PathPlannerTrajectory moveAndClose = pathplanner::PathPlanner::loadPath("CenterBalance_P1", { 3_mps, 2.5_mps_sq });
+    pathplanner::PathPlannerTrajectory balance = pathplanner::PathPlanner::loadPath("CenterBalance_P2", { 3_mps, 2.5_mps_sq });
 
     // Wrist Down - False
     // Wrist Up - True
@@ -41,8 +42,12 @@ static frc2::CommandPtr CenterBalance(SwerveChassis* m_swerveChassis, DoubleArm*
         frc2::WaitCommand(0.5_s),
         SetIntakeSpeed(m_intake, 0.0).ToPtr(),
 
-        /* Closed Pose */
-        SetArmCoordinate(m_doubleArm, Positions::closedauto, Speeds::closedauto).ToPtr(), // Closed
+
+        frc2::cmd::Parallel(
+            /* Closed Pose */
+            SetArmCoordinate(m_doubleArm, Positions::closedauto, Speeds::closedauto).ToPtr(), // Closed
+            AutoTrajectories(m_swerveChassis, moveAndClose, { 0.3,0,0 }, { 0,0,0 }, { 1.25,0,0 }).AsProxy()
+        ),
 
         /* Balance Trajectory */
         AutoTrajectories(m_swerveChassis, balance, { 0.3,0,0 }, { 0,0,0 }, { 1.25,0,0 }).AsProxy()
