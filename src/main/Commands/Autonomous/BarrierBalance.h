@@ -58,11 +58,8 @@ static frc2::CommandPtr BarrierBalance(SwerveChassis* m_swerveChassis, DoubleArm
             )
         ),
 
-        /* Follow trajectory to arrive to grid while Closed Pose */
-        frc2::cmd::Parallel(
-            AutoTrajectories(m_swerveChassis, moveToCharging, { 0,0,0 }, { -0.005,0,0 }, { 1,0,0 }).AsProxy(),
-            SetArmCoordinate(m_doubleArm, Positions::closedauto, Speeds::closedauto).ToPtr() // Closed
-        ),
+        SetArmCoordinate(m_doubleArm, Positions::closedauto, Speeds::closedauto).ToPtr(), // Closed
+        AutoTrajectories(m_swerveChassis, moveToCharging, { 0,0,0 }, { -0.005,0,0 }, { 1,0,0 }).AsProxy(),
 
         AutoTrajectories(m_swerveChassis, balance, { 0.5,0,0 }, { 0,0,0 }, { 1.125,0,0 }).AsProxy(),
 
@@ -79,9 +76,7 @@ static frc2::CommandPtr BarrierBalance(SwerveChassis* m_swerveChassis, DoubleArm
         SetIntakeSpeed(m_intake, 0.0).ToPtr(),
 
         /* Closed Pose */
-        frc2::cmd::Parallel(
-            SetArmCoordinate(m_doubleArm, Positions::closedauto, Speeds::closedauto).ToPtr() //Closed
-        )
+        SetArmCoordinate(m_doubleArm, Positions::closedauto, Speeds::closedauto).ToPtr() //Closed
 
     );
 }
