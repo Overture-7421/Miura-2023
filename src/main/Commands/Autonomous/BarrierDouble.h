@@ -23,10 +23,9 @@
 
 using namespace ArmConstants;
 
-static frc2::CommandPtr BarrierBalance(SwerveChassis* m_swerveChassis, DoubleArm* m_doubleArm, Intake* m_intake) {
+static frc2::CommandPtr BarrierDouble(SwerveChassis* m_swerveChassis, DoubleArm* m_doubleArm, Intake* m_intake) {
     pathplanner::PathPlannerTrajectory pickSecondPiece = pathplanner::PathPlanner::loadPath("Barrier_P1", { 2_mps, 2_mps_sq });
-    pathplanner::PathPlannerTrajectory moveToCharging = pathplanner::PathPlanner::loadPath("Barrier_P2", { 3_mps, 2.5_mps_sq });
-    pathplanner::PathPlannerTrajectory balance = pathplanner::PathPlanner::loadPath("Barrier_P3", { 4_mps, 4_mps_sq });
+    pathplanner::PathPlannerTrajectory moveToShoot = pathplanner::PathPlanner::loadPath("BarrierDouble", { 3_mps, 2.5_mps_sq });
 
     // Wrist Down - False
     // Wrist Up - True
@@ -59,13 +58,7 @@ static frc2::CommandPtr BarrierBalance(SwerveChassis* m_swerveChassis, DoubleArm
         ),
 
         SetArmCoordinate(m_doubleArm, Positions::closedauto, Speeds::closedauto).ToPtr(), // Closed
-        AutoTrajectories(m_swerveChassis, moveToCharging, { 0,0,0 }, { -0.005,0,0 }, { 1,0,0 }).AsProxy(),
-
-        AutoTrajectories(m_swerveChassis, balance, { 0.5,0,0 }, { 0,0,0 }, { 1.125,0,0 }).AsProxy(),
-
-        /*************** DANGER AUTOBALANCE **************/
-        AutoBalance(m_swerveChassis).ToPtr(),
-        /*************** DANGER AUTOBALANCE **************/
+        AutoTrajectories(m_swerveChassis, moveToShoot, { 0,0,0 }, { -0.005,0,0 }, { 1,0,0 }).AsProxy(),
 
 
         /* Upper cube dropped */

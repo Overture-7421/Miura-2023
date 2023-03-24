@@ -21,6 +21,7 @@ RobotContainer::RobotContainer() {
     pathChooser.AddOption("Loading Cube", loadingDouble.get());
     pathChooser.AddOption("Loading Cube & Balance", loadingBalance.get());
     pathChooser.AddOption("Barrier Cube & Balance", barrierBalance.get());
+    pathChooser.AddOption("Barrier Cube", barrierDouble.get());
     pathChooser.AddOption("Center Balance", centerBalance.get());
 
 

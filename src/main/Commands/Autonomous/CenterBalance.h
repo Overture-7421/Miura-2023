@@ -23,7 +23,7 @@ using namespace ArmConstants;
 
 static frc2::CommandPtr CenterBalance(SwerveChassis* m_swerveChassis, DoubleArm* m_doubleArm, Intake* m_intake) {
     pathplanner::PathPlannerTrajectory moveAndClose = pathplanner::PathPlanner::loadPath("CenterBalance_P1", { 3_mps, 2.5_mps_sq });
-    pathplanner::PathPlannerTrajectory balance = pathplanner::PathPlanner::loadPath("CenterBalance_P2", { 3_mps, 2.5_mps_sq });
+    pathplanner::PathPlannerTrajectory balance = pathplanner::PathPlanner::loadPath("CenterBalance_P2", { 4_mps, 4_mps_sq });
 
     // Wrist Down - False
     // Wrist Up - True

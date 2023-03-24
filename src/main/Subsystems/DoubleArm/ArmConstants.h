@@ -37,8 +37,8 @@ namespace ArmConstants {
     };
 
     namespace AutoPieces {
-        const double AutoTopCube = 7.8;
-        const double AutoMiddleCube = 4.7;
+        const double AutoTopCube = 7.5;
+        const double AutoMiddleCube = 4.4;
 
     };
 };

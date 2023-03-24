@@ -25,7 +25,7 @@ static frc2::CommandPtr LoadingBalance(SwerveChassis* m_swerveChassis, DoubleArm
     pathplanner::PathPlannerTrajectory pickSecondPiece = pathplanner::PathPlanner::loadPath("LoadingBalance_P1", { 3.5_mps, 3.5_mps_sq });
     pathplanner::PathPlannerTrajectory dropSecond = pathplanner::PathPlanner::loadPath("LoadingBalance_P2", { 4_mps, 3.5_mps_sq });
     pathplanner::PathPlannerTrajectory moveBalance = pathplanner::PathPlanner::loadPath("LoadingBalance_P3", { 4_mps, 3.5_mps_sq });
-    pathplanner::PathPlannerTrajectory balance = pathplanner::PathPlanner::loadPath("LoadingBalance_P4", { 3_mps, 2.5_mps_sq });
+    pathplanner::PathPlannerTrajectory balance = pathplanner::PathPlanner::loadPath("LoadingBalance_P4", { 4_mps, 4_mps_sq });
 
     // Wrist Down - False
     // Wrist Up - True

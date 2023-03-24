@@ -11,17 +11,17 @@ AutoBalance::AutoBalance(SwerveChassis* swerveChassis): m_swerveChassis(swerveCh
 
 // Called when the command is initially scheduled.
 void AutoBalance::Initialize() {
-    xController.SetTolerance(3);
-    rController.SetTolerance(14);
+    xController.SetTolerance(13);
+    rController.SetTolerance(5);
 }
 
 // Called repeatedly when this Command is scheduled to run
 void AutoBalance::Execute() {
 
-    units::meters_per_second_t xOutput{ xController.Calculate(m_swerveChassis->getPitch(), 0) };
+    units::meters_per_second_t xOutput{ xController.Calculate(m_swerveChassis->getPitch(), 5) };
     units::radians_per_second_t rOutput{ rController.Calculate(m_swerveChassis->getYaw(), 0) };
 
-    m_swerveChassis->setSpeed(frc::ChassisSpeeds::FromFieldRelativeSpeeds(xOutput, 0_mps, rOutput, m_swerveChassis->getOdometry().Rotation()));
+    m_swerveChassis->setSpeed(frc::ChassisSpeeds::FromFieldRelativeSpeeds(-xOutput, 0_mps, rOutput, m_swerveChassis->getOdometry().Rotation()));
 }
 
 // Called once the command ends or is interrupted.
