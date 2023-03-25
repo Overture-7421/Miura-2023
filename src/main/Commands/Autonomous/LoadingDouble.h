@@ -22,8 +22,8 @@
 using namespace ArmConstants;
 
 static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm* m_doubleArm, Intake* m_intake) {
-    pathplanner::PathPlannerTrajectory pickSecondPiece = pathplanner::PathPlanner::loadPath("LoadingBalance_P1", { 3.5_mps, 3.5_mps_sq });
-    pathplanner::PathPlannerTrajectory dropSecond = pathplanner::PathPlanner::loadPath("LoadingBalance_P2", { 4_mps, 3.5_mps_sq });
+    pathplanner::PathPlannerTrajectory pickSecondPiece = pathplanner::PathPlanner::loadPath("Loading_P1", { 3.5_mps, 3.5_mps_sq });
+    pathplanner::PathPlannerTrajectory dropSecond = pathplanner::PathPlanner::loadPath("Loading_P2", { 4_mps, 3.5_mps_sq });
 
     // Wrist Down - False
     // Wrist Up - True
@@ -31,7 +31,7 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
     // Cone Closed - False
 
     return frc2::cmd::Sequence(
-        /* Upper cone dropped  */
+        /* Odometry and Arm Position  */
         frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->resetOdometry({ 1.81_m, 4.43_m, {0_deg} });}).ToPtr(),
         SetArmCoordinate(m_doubleArm, Positions::armInvertedAuto, Speeds::armInvertedAuto).ToPtr(), //ArmInvertedAuto
 
@@ -41,7 +41,6 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
         frc2::WaitCommand(0.5_s),
         SetIntakeSpeed(m_intake, 0.0).ToPtr(),
 
-        /* Closed Pose */
 
         /* Follow trajectory to pick cube while Ground Pose  */
 
@@ -53,7 +52,7 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
             SetIntakeSpeed(m_intake, -6.0).ToPtr(),
             frc2::cmd::Sequence(
                 frc2::WaitCommand(1.3_s),
-                AutoTrajectories(m_swerveChassis, pickSecondPiece, { 0.4,0,0 }, { 0.01,0,0 }, { 1,0,0 }).AsProxy(), //-0.1
+                AutoTrajectories(m_swerveChassis, pickSecondPiece, { 0.4,0,0 }, { 0.01,0,0 }, { 1,0,0 }).AsProxy(),
                 frc2::WaitCommand(0.4_s)
             )
         ),

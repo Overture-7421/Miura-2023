@@ -19,7 +19,6 @@
 #include "Commands/Common/AutoBalance/AutoBalance.h"
 
 #include <Subsystems/DoubleArm/ArmConstants.h>
-#include "Subsystems/DoubleArm/ArmConstants.h"
 
 using namespace ArmConstants;
 
@@ -59,24 +58,21 @@ static frc2::CommandPtr BarrierBalance(SwerveChassis* m_swerveChassis, DoubleArm
         ),
 
         SetArmCoordinate(m_doubleArm, Positions::closedauto, Speeds::closedauto).ToPtr(), // Closed
+
         AutoTrajectories(m_swerveChassis, moveToCharging, { 0,0,0 }, { -0.005,0,0 }, { 1,0,0 }).AsProxy(),
+
+
+        AutoBalanceRotate(m_swerveChassis, 145).ToPtr().WithTimeout(1.5_s),
+        frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->resetOdometry({ 6.05_m, 2.23_m, {145_deg} });}).ToPtr(),
+
 
         AutoTrajectories(m_swerveChassis, balance, { 0.5,0,0 }, { 0,0,0 }, { 1.125,0,0 }).AsProxy(),
 
-        /*************** DANGER AUTOBALANCE **************/
-        AutoBalance(m_swerveChassis).ToPtr(),
-        /*************** DANGER AUTOBALANCE **************/
-
-
-        /* Upper cube dropped */
-        SetArmCoordinate(m_doubleArm, Positions::armInvertedAuto, Speeds::armInvertedAuto).ToPtr(), //ArmInvertedAuto
-        frc2::WaitCommand(0.3_s),
-        SetIntakeSpeed(m_intake, 12),
         frc2::WaitCommand(0.5_s),
-        SetIntakeSpeed(m_intake, 0.0).ToPtr(),
 
-        /* Closed Pose */
-        SetArmCoordinate(m_doubleArm, Positions::closedauto, Speeds::closedauto).ToPtr() //Closed
+        /*************** DANGER AUTOBALANCE **************/
+        AutoBalance(m_swerveChassis).ToPtr()
+        /*************** DANGER AUTOBALANCE **************/
 
     );
 }

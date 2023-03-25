@@ -18,10 +18,10 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class AutoBalance
-    : public frc2::CommandHelper<frc2::CommandBase, AutoBalance> {
+class AutoBalanceRotate
+    : public frc2::CommandHelper<frc2::CommandBase, AutoBalanceRotate> {
 public:
-    AutoBalance(SwerveChassis* swerveChassis);
+    AutoBalanceRotate(SwerveChassis* swerveChassis, double angle);
 
     void Initialize() override;
 
@@ -33,6 +33,6 @@ public:
 
 private:
     SwerveChassis* m_swerveChassis;
-    frc::PIDController xController{ .028, 0, 0 };
     frc::PIDController rController{ .05, 0, 0 };
+    double m_Angle;
 };

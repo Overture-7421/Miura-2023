@@ -25,7 +25,6 @@ using namespace ArmConstants;
 
 static frc2::CommandPtr BarrierDouble(SwerveChassis* m_swerveChassis, DoubleArm* m_doubleArm, Intake* m_intake) {
     pathplanner::PathPlannerTrajectory pickSecondPiece = pathplanner::PathPlanner::loadPath("Barrier_P1", { 2_mps, 2_mps_sq });
-    pathplanner::PathPlannerTrajectory moveToShoot = pathplanner::PathPlanner::loadPath("BarrierDouble", { 3_mps, 2.5_mps_sq });
 
     // Wrist Down - False
     // Wrist Up - True
@@ -56,20 +55,6 @@ static frc2::CommandPtr BarrierDouble(SwerveChassis* m_swerveChassis, DoubleArm*
                 frc2::WaitCommand(0.4_s)
             )
         ),
-
-        SetArmCoordinate(m_doubleArm, Positions::closedauto, Speeds::closedauto).ToPtr(), // Closed
-        AutoTrajectories(m_swerveChassis, moveToShoot, { 0,0,0 }, { -0.005,0,0 }, { 1,0,0 }).AsProxy(),
-
-
-        /* Upper cube dropped */
-        SetArmCoordinate(m_doubleArm, Positions::armInvertedAuto, Speeds::armInvertedAuto).ToPtr(), //ArmInvertedAuto
-        frc2::WaitCommand(0.3_s),
-        SetIntakeSpeed(m_intake, 12),
-        frc2::WaitCommand(0.5_s),
-        SetIntakeSpeed(m_intake, 0.0).ToPtr(),
-
-        /* Closed Pose */
-        SetArmCoordinate(m_doubleArm, Positions::closedauto, Speeds::closedauto).ToPtr() //Closed
-
+        SetArmCoordinate(m_doubleArm, Positions::closedauto, Speeds::closedauto).ToPtr() // Closed
     );
 }

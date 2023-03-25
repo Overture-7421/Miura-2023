@@ -28,9 +28,11 @@
 /* Autonomous */
 #include "Commands/Autonomous/LoadingDouble.h"
 #include "Commands/Autonomous/LoadingBalance.h"
-#include "Commands/Autonomous/BarrierBalance.h"
 #include "Commands/Autonomous/BarrierDouble.h"
+#include "Commands/Autonomous/BarrierBalance.h"
 #include "Commands/Autonomous/CenterBalance.h"
+#include "Commands/Autonomous/DropCone.h"
+#include "Commands/Autonomous/DropConeAndMove.h"
 
 #include <Subsystems/DoubleArm/ArmConstants.h>
 
@@ -77,5 +79,6 @@ private:
     frc2::CommandPtr barrierBalance = BarrierBalance(&swerveChassis, &doubleArm, &intake);
     frc2::CommandPtr barrierDouble = BarrierDouble(&swerveChassis, &doubleArm, &intake);
     frc2::CommandPtr centerBalance = CenterBalance(&swerveChassis, &doubleArm, &intake);
-
+    frc2::CommandPtr dropCone = DropCone(&swerveChassis, &doubleArm, &intake);
+    frc2::CommandPtr dropConeAndMove = DropConeAndMove(&swerveChassis, &doubleArm, &intake);
 };

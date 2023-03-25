@@ -16,16 +16,19 @@
 #include "Commands/Common/SetintakeSpeed/SetIntakeSpeed.h"
 #include "Commands/Common/SetArmCoordinate/SetArmCoordinate.h"
 #include "Commands/Autonomous/AutoTrajectories/AutoTrajectories.h"
+#include "Commands/Common/AutoBalanceRotate/AutoBalanceRotate.h"
+#include "Commands/Common/AutoBalance/AutoBalance.h"
+
 
 #include <Subsystems/DoubleArm/ArmConstants.h>
 
 using namespace ArmConstants;
 
 static frc2::CommandPtr LoadingBalance(SwerveChassis* m_swerveChassis, DoubleArm* m_doubleArm, Intake* m_intake) {
-    pathplanner::PathPlannerTrajectory pickSecondPiece = pathplanner::PathPlanner::loadPath("LoadingBalance_P1", { 3.5_mps, 3.5_mps_sq });
-    pathplanner::PathPlannerTrajectory dropSecond = pathplanner::PathPlanner::loadPath("LoadingBalance_P2", { 4_mps, 3.5_mps_sq });
-    pathplanner::PathPlannerTrajectory moveBalance = pathplanner::PathPlanner::loadPath("LoadingBalance_P3", { 4_mps, 3.5_mps_sq });
-    pathplanner::PathPlannerTrajectory balance = pathplanner::PathPlanner::loadPath("LoadingBalance_P4", { 4_mps, 4_mps_sq });
+    pathplanner::PathPlannerTrajectory pickSecondPiece = pathplanner::PathPlanner::loadPath("Loading_P1", { 3.5_mps, 3.5_mps_sq });
+    pathplanner::PathPlannerTrajectory dropSecond = pathplanner::PathPlanner::loadPath("Loading_P2", { 4_mps, 3.5_mps_sq });
+    pathplanner::PathPlannerTrajectory moveBalance = pathplanner::PathPlanner::loadPath("Loading_P3", { 4_mps, 3.5_mps_sq });
+    pathplanner::PathPlannerTrajectory balance = pathplanner::PathPlanner::loadPath("Loading_P4", { 4_mps, 4_mps_sq });
 
     // Wrist Down - False
     // Wrist Up - True
@@ -33,7 +36,7 @@ static frc2::CommandPtr LoadingBalance(SwerveChassis* m_swerveChassis, DoubleArm
     // Cone Closed - False
 
     return frc2::cmd::Sequence(
-        /* Upper cone dropped  */
+        /* Odometry and Arm Position  */
         frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->resetOdometry({ 1.81_m, 4.43_m, {0_deg} });}).ToPtr(),
         SetArmCoordinate(m_doubleArm, Positions::armInvertedAuto, Speeds::armInvertedAuto).ToPtr(), //ArmInvertedAuto
 
@@ -42,8 +45,6 @@ static frc2::CommandPtr LoadingBalance(SwerveChassis* m_swerveChassis, DoubleArm
         SetIntakeSpeed(m_intake, ArmConstants::AutoPieces::AutoTopCube),
         frc2::WaitCommand(0.5_s),
         SetIntakeSpeed(m_intake, 0.0).ToPtr(),
-
-        /* Closed Pose */
 
         /* Follow trajectory to pick cube while Ground Pose  */
 
@@ -81,7 +82,20 @@ static frc2::CommandPtr LoadingBalance(SwerveChassis* m_swerveChassis, DoubleArm
             SetArmCoordinate(m_doubleArm, Positions::closedauto, Speeds::closedauto).ToPtr() //Closed
         ),
 
-        AutoTrajectories(m_swerveChassis, balance, { 0.6,0,0 }, { 0,0,0 }, { 1.25,0,0 }).AsProxy()
+        /*************** ROTATION **************/
+        AutoBalanceRotate(m_swerveChassis, 55).ToPtr().WithTimeout(1.5_s),
+
+
+
+        frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->resetOdometry({ 2.29_m, 3.15_m, {55_deg} });}).ToPtr(),
+
+        AutoTrajectories(m_swerveChassis, balance, { 0.4,0,0 }, { 0,0,0 }, { 1.25,0,0 }).AsProxy(),
+
+        frc2::WaitCommand(0.5_s),
+
+        /*************** DANGER AUTOBALANCE **************/
+        AutoBalance(m_swerveChassis).ToPtr()
+        /*************** DANGER AUTOBALANCE **************/
 
     );
 }
