@@ -37,7 +37,7 @@ static frc2::CommandPtr CenterBalance(SwerveChassis* m_swerveChassis, DoubleArm*
 
         /* Odometry */
         frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->resetOdometry({ 1.81_m, 2.23_m, {0_deg} });}).ToPtr(),
-        SetCone(m_intake, true),
+        SetCone(m_intake, false),
 
         /* Leave Grid */
         AutoTrajectories(m_swerveChassis, leavegrid, { 0.3,0,0 }, { 0,0,0 }, { 1.25,0,0 }),
@@ -45,7 +45,7 @@ static frc2::CommandPtr CenterBalance(SwerveChassis* m_swerveChassis, DoubleArm*
 
         /* Rotate and Balance Trajectory */
         frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->resetOdometry({ 2.20_m, 2.23_m, {55_deg} });}).ToPtr(),
-        AutoTrajectories(m_swerveChassis, balance, { 0.4,0,0 }, { 0,0,0 }, { 1.25,0,0 }),
+        AutoTrajectories(m_swerveChassis, balance, { 0.6,0,0 }, { 0,0,0 }, { 1.25,0,0 }),
 
         frc2::WaitCommand(0.5_s),
 
