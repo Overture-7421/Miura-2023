@@ -43,7 +43,7 @@ private:
 
     DoubleArmKinematics kinematics{ 0.68648, 0.6731 };
     DoubleArmPlanner planner{ kinematics }; // Constraints are meters per second, max accel of meters per second squared
-    // frc::Field2d plotter;
+    frc::Field2d plotter;
     DoubleArmState targetState;
 
     const double FALCON_CODES_PER_REV = 2048;
@@ -67,6 +67,9 @@ private:
     frc::DutyCycleEncoder lowerEncoder{ 1 };
     frc::DutyCycleEncoder upperEncoder{ 0 };
 
-    double lowerFeedForward = 0.180;
-    double upperFeedForward = 0.06;
+    double lowerFeedForward = 0.03;
+    double upperFeedForward = 0.04;
+
+    double lowerKP = 0.09;
+    double upperKP = 0.03;
 };
