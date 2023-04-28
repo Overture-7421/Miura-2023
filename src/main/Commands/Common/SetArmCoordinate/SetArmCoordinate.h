@@ -7,6 +7,7 @@
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 #include "Subsystems/DoubleArm/DoubleArm.h"
+#include "Subsystems/DoubleArm/DoubleArmKinematics/DoubleArmState.h"
 #include <frc/geometry/Translation2d.h>
 
 /**
@@ -16,11 +17,10 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-typedef frc::TrapezoidProfile<units::meters> PlannerProfile;
 class SetArmCoordinate
     : public frc2::CommandHelper<frc2::CommandBase, SetArmCoordinate> {
 public:
-    SetArmCoordinate(DoubleArm* doubleArm, frc::Translation2d target, PlannerProfile::Constraints constraints);
+    SetArmCoordinate(DoubleArm* doubleArm, DoubleArmState targetState);
 
     void Initialize() override;
 
@@ -32,7 +32,6 @@ public:
 
 private:
     DoubleArm* doubleArm;
-    frc::Translation2d target;
-    PlannerProfile::Constraints constraints;
+    DoubleArmState targetState;
 
 };

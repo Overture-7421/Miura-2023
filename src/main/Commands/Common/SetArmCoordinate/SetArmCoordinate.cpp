@@ -4,17 +4,16 @@
 
 #include "SetArmCoordinate.h"
 
-SetArmCoordinate::SetArmCoordinate(DoubleArm* doubleArm, frc::Translation2d target, PlannerProfile::Constraints constraints) {
+SetArmCoordinate::SetArmCoordinate(DoubleArm* doubleArm, DoubleArmState targetState) {
     this->doubleArm = doubleArm;
-    this->target = target;
-    this->constraints = constraints;
+    this->targetState = targetState;
 
     AddRequirements(doubleArm);
 }
 
 // Called when the command is initially scheduled.
 void SetArmCoordinate::Initialize() {
-    doubleArm->SetTargetCoord(target, constraints);
+    doubleArm->SetTargetCoord(targetState);
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -25,5 +24,6 @@ void SetArmCoordinate::End(bool interrupted) {}
 
 // Returns true when the command should end.
 bool SetArmCoordinate::IsFinished() {
-    return target.Distance(doubleArm->GetEndpointCoord()) < .1_m;
+    DoubleArmState remainingDistance = doubleArm->IsAtTarget();
+    return remainingDistance.lowerAngle.Degrees() < 3_deg && remainingDistance.upperAngle.Degrees() < 3_deg;
 }

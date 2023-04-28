@@ -44,27 +44,27 @@ void RobotContainer::ConfigureBindings() {
 
     lowerPosition.OnTrue(frc2::SequentialCommandGroup{
         SetWrist(&intake, true),
-        SetArmCoordinate(&doubleArm, Positions::closed, Speeds::closed)
+        SetArmCoordinate(&doubleArm, Positions::StartingPosition)
         }.ToPtr()); // Closed
 
     groundPickUp.OnTrue(frc2::SequentialCommandGroup{
         SetWrist(&intake, true),
-        SetArmCoordinate(&doubleArm, Positions::ground, Speeds::ground),
+        SetArmCoordinate(&doubleArm, Positions::StartingPosition),
         }.ToPtr()); // Ground
 
     middlePosition.OnTrue(frc2::SequentialCommandGroup{
-        SetWrist(&intake, false),
-        SetArmCoordinate(&doubleArm, Positions::middle, Speeds::middle),
+        SetWrist(&intake, true),
+        SetArmCoordinate(&doubleArm, Positions::MiddlePosition),
         }.ToPtr()); // Middle
 
     upperPosition.OnTrue(frc2::SequentialCommandGroup{
         SetWrist(&intake, false),
-        SetArmCoordinate(&doubleArm, Positions::upper, Speeds::upper)
+        SetArmCoordinate(&doubleArm, Positions::StartingPosition)
         }.ToPtr()); // Upper
 
     portalPosition.OnTrue(frc2::SequentialCommandGroup{
         SetWrist(&intake, false),
-        SetArmCoordinate(&doubleArm, Positions::portal, Speeds::portal)
+        SetArmCoordinate(&doubleArm, Positions::StartingPosition)
         }.ToPtr()); // Portal
 }
 

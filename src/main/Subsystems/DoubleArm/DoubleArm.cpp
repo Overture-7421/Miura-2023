@@ -15,7 +15,6 @@ DoubleArm::DoubleArm() {
     ConfigureSensors();
 
     // frc::SmartDashboard::PutData("arm", &plotter);
-    planner.SetTargetCoord(GetEndpointCoord(), GetEndpointCoord(), { 1_mps, 1_mps_sq });
 
     // frc::SmartDashboard::PutNumber("Lower FeedForward", lowerFeedForward);
     // frc::SmartDashboard::PutNumber("Upper FeedForward", upperFeedForward);
@@ -32,20 +31,14 @@ void DoubleArm::Periodic() {
     // frc::SmartDashboard::PutNumber("DoubleArm/EncoderLowerRaw", lowerEncoder.GetAbsolutePosition());
     // frc::SmartDashboard::PutNumber("DoubleArm/EncoderUpperRaw", upperEncoder.GetAbsolutePosition());
 
-    frc::SmartDashboard::PutNumber("UpperSpeed", (upperRight.GetSelectedSensorVelocity() * 10) / 2048 / 6.75 * 0.319024);
+    frc::SmartDashboard::PutNumber("DoubleArm/TargetLowerAngle", targetState.lowerAngle.Degrees().value());
+    frc::SmartDashboard::PutNumber("DoubleArm/TargetUpperAngle", targetState.upperAngle.Degrees().value());
 
-    std::optional<DoubleArmState> desiredState = planner.CalculateCurrentTargetState();
-    if (desiredState.has_value()) {
-        targetState = desiredState.value();
-        frc::SmartDashboard::PutNumber("DoubleArm/TargetLowerAngle", targetState.lowerAngle.Degrees().value());
-        frc::SmartDashboard::PutNumber("DoubleArm/TargetUpperAngle", targetState.upperAngle.Degrees().value());
+    // auto targetCoord = kinematics.GetEndpointCoord(targetState);
+    // plotter.SetRobotPose({ targetCoord + frc::Translation2d{4_m, 4_m}, 0_deg });
+    // frc::SmartDashboard::PutNumber("DoubleArm/DesiredX", targetCoord.X().value());
+    // frc::SmartDashboard::PutNumber("DoubleArm/DesiredY", targetCoord.Y().value());
 
-        // auto targetCoord = kinematics.GetEndpointCoord(targetState);
-        // plotter.SetRobotPose({ targetCoord + frc::Translation2d{4_m, 4_m}, 0_deg });
-        // frc::SmartDashboard::PutNumber("DoubleArm/DesiredX", targetCoord.X().value());
-        // frc::SmartDashboard::PutNumber("DoubleArm/DesiredY", targetCoord.Y().value());
-
-    }
     SetFalconTargetPos(targetState);
 
     // lowerFeedForward = frc::SmartDashboard::GetNumber("Lower FeedForward", lowerFeedForward);
@@ -80,12 +73,15 @@ DoubleArmState DoubleArm::GetCurrentState() {
     return state;
 }
 
-frc::Translation2d DoubleArm::GetEndpointCoord() {
-    return kinematics.GetEndpointCoord(GetCurrentState());
+DoubleArmState DoubleArm::IsAtTarget() {
+    return DoubleArmState{
+        targetState.lowerAngle.Degrees() - GetLowerAngle().Degrees(),
+        targetState.upperAngle.Degrees() - GetUpperAngle().Degrees()
+    };
 }
 
-void DoubleArm::SetTargetCoord(frc::Translation2d targetCoord, PlannerProfile::Constraints constraints) {
-    planner.SetTargetCoord(targetCoord, GetEndpointCoord(), constraints);
+void DoubleArm::SetTargetCoord(DoubleArmState targetCoord) {
+    this->targetState = targetCoord;
 }
 
 void DoubleArm::SetFalconTargetPos(DoubleArmState desiredState) {

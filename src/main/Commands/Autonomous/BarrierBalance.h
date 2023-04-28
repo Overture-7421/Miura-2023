@@ -35,7 +35,7 @@ static frc2::CommandPtr BarrierBalance(SwerveChassis* m_swerveChassis, DoubleArm
     return frc2::cmd::Sequence(
         /* Upper cone dropped  */
         frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->resetOdometry({ 1.81_m, 1.07_m, {0_deg} });}).ToPtr(),
-        SetArmCoordinate(m_doubleArm, Positions::armInvertedAuto, Speeds::armInvertedAuto).ToPtr(), //ArmInvertedAuto
+        // SetArmCoordinate(m_doubleArm, Positions::armInvertedAuto, Speeds::armInvertedAuto).ToPtr(), //ArmInvertedAuto
 
         /* Upper cube dropped */
         frc2::WaitCommand(0.3_s),
@@ -46,9 +46,9 @@ static frc2::CommandPtr BarrierBalance(SwerveChassis* m_swerveChassis, DoubleArm
 
         /* Follow trajectory to pick cube while Ground Pose  */
         frc2::cmd::Parallel(
-            frc2::cmd::Sequence(
-                SetArmCoordinate(m_doubleArm, Positions::groundAuto, Speeds::closedauto).ToPtr() //Ground
-            ),
+            // frc2::cmd::Sequence(
+            //     SetArmCoordinate(m_doubleArm, Positions::groundAuto, Speeds::closedauto).ToPtr() //Ground
+            // ),
             SetIntakeSpeed(m_intake, -4.0).ToPtr(),
             frc2::cmd::Sequence(
                 frc2::WaitCommand(1.3_s),
@@ -57,7 +57,7 @@ static frc2::CommandPtr BarrierBalance(SwerveChassis* m_swerveChassis, DoubleArm
             )
         ),
 
-        SetArmCoordinate(m_doubleArm, Positions::closedauto, Speeds::closedauto).ToPtr(), // Closed
+        // SetArmCoordinate(m_doubleArm, Positions::closedauto, Speeds::closedauto).ToPtr(), // Closed
 
         AutoTrajectories(m_swerveChassis, moveToCharging, { 0,0,0 }, { -0.005,0,0 }, { 1,0,0 }).AsProxy(),
 

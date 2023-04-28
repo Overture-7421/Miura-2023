@@ -13,7 +13,6 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <CTRE/Phoenix.h>
 
-#include "DoubleArmKinematics/DoubleArmKinematics.h"
 #include "DoubleArmPlanner/DoubleArmPlanner.h"
 
 
@@ -26,8 +25,8 @@ public:
      */
     void Periodic() override;
     DoubleArmState GetCurrentState();
-    frc::Translation2d GetEndpointCoord();
-    void SetTargetCoord(frc::Translation2d targetCoord, PlannerProfile::Constraints constraints);
+    DoubleArmState IsAtTarget();
+    void SetTargetCoord(DoubleArmState targetState);
     frc::Rotation2d GetLowerAngle();
     frc::Rotation2d GetUpperAngle();
 
@@ -38,13 +37,11 @@ private:
     void ConfigureSensors();
 
     double ConvertAngleToUpperFalconPos(frc::Rotation2d angle);
-    double ConvertAngleToLowerFalconPos
-    (frc::Rotation2d angle);
+    double ConvertAngleToLowerFalconPos(frc::Rotation2d angle);
 
-    DoubleArmKinematics kinematics{ 0.68648, 0.6731 };
-    DoubleArmPlanner planner{ kinematics }; // Constraints are meters per second, max accel of meters per second squared
+    DoubleArmPlanner planner; // Constraints are meters per second, max accel of meters per second squared
     frc::Field2d plotter;
-    DoubleArmState targetState;
+    DoubleArmState targetState = { 101_deg, -71_deg };
 
     const double FALCON_CODES_PER_REV = 2048;
     const double LOWER_GEARBOX_REDUCTION = 96;

@@ -33,7 +33,7 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
     return frc2::cmd::Sequence(
         /* Odometry and Arm Position  */
         frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->resetOdometry({ 1.81_m, 4.43_m, {0_deg} });}).ToPtr(),
-        SetArmCoordinate(m_doubleArm, Positions::armInvertedAuto, Speeds::armInvertedAuto).ToPtr(), //ArmInvertedAuto
+        // SetArmCoordinate(m_doubleArm, Positions::armInvertedAuto, Speeds::armInvertedAuto).ToPtr(), //ArmInvertedAuto
 
         /* Upper cube dropped */
         frc2::WaitCommand(0.3_s),
@@ -47,7 +47,7 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
         frc2::cmd::Parallel(
             frc2::cmd::Sequence(
                 // SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr(), //Closed
-                SetArmCoordinate(m_doubleArm, Positions::groundAuto, Speeds::closedauto).ToPtr() //Ground
+                // SetArmCoordinate(m_doubleArm, Positions::groundAuto, Speeds::closedauto).ToPtr() //Ground
             ),
             SetIntakeSpeed(m_intake, -6.0).ToPtr(),
             frc2::cmd::Sequence(
@@ -61,8 +61,8 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
         frc2::cmd::Parallel(
             AutoTrajectories(m_swerveChassis, dropSecond, { 0.5,0,0 }, { 0.02,0,0 }, { 1.27,0,0 }).AsProxy(),
             frc2::cmd::Sequence(
-                SetArmCoordinate(m_doubleArm, Positions::closedauto, Speeds::closedauto).ToPtr(), // Closed
-                SetArmCoordinate(m_doubleArm, Positions::armInvertedAuto, Speeds::armInvertedAuto).ToPtr() //ArmInvertedAuto
+                //     SetArmCoordinate(m_doubleArm, Positions::closedauto, Speeds::closedauto).ToPtr(), // Closed
+                //     SetArmCoordinate(m_doubleArm, Positions::armInvertedAuto, Speeds::armInvertedAuto).ToPtr() //ArmInvertedAuto
             )
         ),
 
@@ -70,9 +70,9 @@ static frc2::CommandPtr LoadingDouble(SwerveChassis* m_swerveChassis, DoubleArm*
         frc2::WaitCommand(0.3_s),
         SetIntakeSpeed(m_intake, ArmConstants::AutoPieces::AutoMiddleCube),
         frc2::WaitCommand(0.5_s),
-        SetIntakeSpeed(m_intake, 0.0).ToPtr(),
+        SetIntakeSpeed(m_intake, 0.0).ToPtr()
 
         /* Closed Pose */
-        SetArmCoordinate(m_doubleArm, Positions::closedauto, Speeds::closedauto).ToPtr() //Closed
+        // SetArmCoordinate(m_doubleArm, Positions::closedauto, Speeds::closedauto).ToPtr() //Closed
     );
 }

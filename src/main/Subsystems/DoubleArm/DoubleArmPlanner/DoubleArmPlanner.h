@@ -8,22 +8,12 @@
 #include <units/length.h>
 #include <units/velocity.h>
 #include <units/acceleration.h>
+#include <optional>
 #include "../DoubleArmKinematics/DoubleArmState.h"
-#include "../DoubleArmKinematics/DoubleArmKinematics.h"
 
-typedef frc::TrapezoidProfile<units::meters> PlannerProfile;
 class DoubleArmPlanner {
 public:
-    DoubleArmPlanner(DoubleArmKinematics kinematics);
-    void SetTargetCoord(frc::Translation2d targetCoord, frc::Translation2d currentCoord, PlannerProfile::Constraints constraints);
-    std::optional<DoubleArmState> CalculateCurrentTargetState();
-    bool IsFinished();
-private:
-    units::second_t trajectoryStartTime;
-    frc::Rotation2d trajectoryAngle;
-    frc::Translation2d startingCoord;
+    DoubleArmPlanner();
 
-    PlannerProfile::Constraints constraints;
-    PlannerProfile targetPointProfile;
-    DoubleArmKinematics kinematics;
+private:
 };

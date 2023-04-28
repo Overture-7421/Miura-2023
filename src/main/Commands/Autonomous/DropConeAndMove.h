@@ -35,13 +35,13 @@ static frc2::CommandPtr DropConeAndMove(SwerveChassis* m_swerveChassis, DoubleAr
         /* Upper cone dropped  */
         frc2::InstantCommand([m_swerveChassis = m_swerveChassis]() {m_swerveChassis->resetOdometry({ 1.81_m, 2.23_m, {180_deg} });}).ToPtr(),
         SetWrist(m_intake, false).ToPtr(),
-        SetArmCoordinate(m_doubleArm, Positions::upper, Speeds::upper).ToPtr(), //Upper
+        // SetArmCoordinate(m_doubleArm, Positions::upper, Speeds::upper).ToPtr(), //Upper
         SetCone(m_intake, false).ToPtr(),
         frc2::WaitCommand{ 0.5_s }.ToPtr(),
 
         AutoTrajectories(m_swerveChassis, moveAndClose, { 0.3,0,0 }, { 0,0,0 }, { 1.27,0,0 }).AsProxy(),
 
-        SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr(), //Closed
+        // SetArmCoordinate(m_doubleArm, Positions::closed, Speeds::closed).ToPtr(), //Closed
 
         AutoTrajectories(m_swerveChassis, outCommunity, { 0.3,0,0 }, { 0,0,0 }, { 1.27,0,0 }).AsProxy()
 
