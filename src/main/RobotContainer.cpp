@@ -49,7 +49,7 @@ void RobotContainer::ConfigureBindings() {
 
     groundPickUp.OnTrue(frc2::SequentialCommandGroup{
         SetWrist(&intake, true),
-        SetArmCoordinate(&doubleArm, Positions::StartingPosition),
+        SetArmCoordinate(&doubleArm, Positions::GroundPosition),
         }.ToPtr()); // Ground
 
     middlePosition.OnTrue(frc2::SequentialCommandGroup{

@@ -7,7 +7,7 @@
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 #include "Subsystems/DoubleArm/DoubleArm.h"
-#include "Subsystems/DoubleArm/DoubleArmKinematics/DoubleArmState.h"
+#include "Subsystems/DoubleArm/DoubleArmState/DoubleArmState.h"
 #include <frc/geometry/Translation2d.h>
 
 /**

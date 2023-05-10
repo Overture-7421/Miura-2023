@@ -13,10 +13,8 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <CTRE/Phoenix.h>
 
-#include "DoubleArmPlanner/DoubleArmPlanner.h"
+#include "DoubleArmState/DoubleArmState.h"
 
-
-typedef frc::TrapezoidProfile<units::meters> PlannerProfile;
 class DoubleArm: public frc2::SubsystemBase {
 public:
     DoubleArm();
@@ -25,7 +23,6 @@ public:
      */
     void Periodic() override;
     DoubleArmState GetCurrentState();
-    DoubleArmState IsAtTarget();
     void SetTargetCoord(DoubleArmState targetState);
     frc::Rotation2d GetLowerAngle();
     frc::Rotation2d GetUpperAngle();
@@ -39,8 +36,6 @@ private:
     double ConvertAngleToUpperFalconPos(frc::Rotation2d angle);
     double ConvertAngleToLowerFalconPos(frc::Rotation2d angle);
 
-    DoubleArmPlanner planner; // Constraints are meters per second, max accel of meters per second squared
-    frc::Field2d plotter;
     DoubleArmState targetState = { 101_deg, -71_deg };
 
     const double FALCON_CODES_PER_REV = 2048;
@@ -67,6 +62,6 @@ private:
     double lowerFeedForward = 0.03;
     double upperFeedForward = 0.04;
 
-    double lowerKP = 0.09;
-    double upperKP = 0.03;
+    double lowerKP = 0.08;
+    double upperKP = 0.06;
 };

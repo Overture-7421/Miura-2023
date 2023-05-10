@@ -44,26 +44,6 @@ void DoubleArm::Periodic() {
     // lowerFeedForward = frc::SmartDashboard::GetNumber("Lower FeedForward", lowerFeedForward);
     // upperFeedForward = frc::SmartDashboard::GetNumber("Upper FeedForward", upperFeedForward);
 
-    // frc::Translation2d currentCoord = kinematics.GetEndpointCoord(currentState);
-    // frc::SmartDashboard::PutNumber("DoubleArm/X", currentCoord.X().value());
-    // frc::SmartDashboard::PutNumber("DoubleArm/Y", currentCoord.Y().value());
-    // frc::SmartDashboard::PutNumber("DoubleArm/PlannerFinished", planner.IsFinished());
-
-    // frc::SmartDashboard::PutNumber("AngleLowCont", ConvertAngleToLowerFalconPos(GetLowerAngle()));
-    // frc::SmartDashboard::PutNumber("AngleUpCont", ConvertAngleToUpperFalconPos(GetUpperAngle()));
-
-
-
-
-
-    // lowerRight.Set(ControlMode::Position, ConvertAngleToLowerFalconPos(desiredState.lowerAngle), DemandType_ArbitraryFeedForward, 0.03 * desiredState.lowerAngle.Cos());
-    //upperRight.Set(ControlMode::Position, frc::SmartDashboard::GetNumber("4.Target", 0.0), DemandType_ArbitraryFeedForward, 0.031 * currentState.upperAngle.Cos());
-
-    // frc::SmartDashboard::PutNumber("5.TargetLower", lowerRight.GetClosedLoopTarget());
-    // frc::SmartDashboard::PutNumber("5.TargetUpper", upperRight.GetClosedLoopTarget());
-
-    // frc::SmartDashboard::PutNumber("5.CurrentPosLower", lowerRight.GetSelectedSensorPosition());
-    // frc::SmartDashboard::PutNumber("5.CurrentPosUpper", upperRight.GetSelectedSensorPosition());
 }
 
 DoubleArmState DoubleArm::GetCurrentState() {
@@ -73,20 +53,21 @@ DoubleArmState DoubleArm::GetCurrentState() {
     return state;
 }
 
-DoubleArmState DoubleArm::IsAtTarget() {
-    return DoubleArmState{
-        targetState.lowerAngle.Degrees() - GetLowerAngle().Degrees(),
-        targetState.upperAngle.Degrees() - GetUpperAngle().Degrees()
-    };
-}
-
 void DoubleArm::SetTargetCoord(DoubleArmState targetCoord) {
     this->targetState = targetCoord;
 }
 
 void DoubleArm::SetFalconTargetPos(DoubleArmState desiredState) {
-    lowerRight.Set(ControlMode::Position, ConvertAngleToLowerFalconPos(desiredState.lowerAngle), DemandType_ArbitraryFeedForward, lowerFeedForward * desiredState.lowerAngle.Cos()); //0.180
-    upperRight.Set(ControlMode::Position, ConvertAngleToUpperFalconPos(desiredState.upperAngle), DemandType_ArbitraryFeedForward, upperFeedForward * desiredState.upperAngle.Cos()); //0.060
+    if (desiredState.lowerAngle.Degrees() == 101_deg) {
+        lowerRight.SelectProfileSlot(0, 0);
+        upperRight.SelectProfileSlot(0, 0);
+    } else {
+        lowerRight.SelectProfileSlot(1, 0);
+        upperRight.SelectProfileSlot(1, 0);
+    }
+
+    lowerRight.Set(ControlMode::MotionMagic, ConvertAngleToLowerFalconPos(desiredState.lowerAngle), DemandType_ArbitraryFeedForward, lowerFeedForward * desiredState.lowerAngle.Cos()); //0.180
+    upperRight.Set(ControlMode::MotionMagic, ConvertAngleToUpperFalconPos(desiredState.upperAngle), DemandType_ArbitraryFeedForward, upperFeedForward * desiredState.upperAngle.Cos()); //0.060
 }
 
 void DoubleArm::ConfigureMotors() {
@@ -130,7 +111,15 @@ void DoubleArm::ConfigureMotors() {
     lowerRight.SelectProfileSlot(0, 0);
     lowerRight.Config_kP(0, lowerKP); // 0.085
     lowerRight.Config_kI(0, 0);
-    lowerRight.Config_kD(0, 1); // 10
+    lowerRight.Config_kD(0, 0); // 10
+
+    lowerRight.Config_kP(1, lowerKP);
+    lowerRight.Config_kI(1, 0);
+    lowerRight.Config_kD(1, 0);
+
+    lowerRight.ConfigMotionSCurveStrength(6);
+    lowerRight.ConfigMotionCruiseVelocity(21700); // 21700??
+    lowerRight.ConfigMotionAcceleration(20000);
 
     /* Upper Motors */
     upperRight.ConfigAllSettings(baseConfig);
@@ -147,11 +136,18 @@ void DoubleArm::ConfigureMotors() {
     upperLeft.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_1_General, 255);
     upperLeft.SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_2_Feedback0, 255);
 
-
     upperRight.SelectProfileSlot(0, 0);
     upperRight.Config_kP(0, upperKP); // 0.065
     upperRight.Config_kI(0, 0);
-    upperRight.Config_kD(0, 5); // 10
+    upperRight.Config_kD(0, 0); // 10
+
+    upperRight.Config_kP(1, upperKP); // 0.065
+    upperRight.Config_kI(1, 0);
+    upperRight.Config_kD(1, 0); // 10
+
+    upperRight.ConfigMotionSCurveStrength(6);
+    upperRight.ConfigMotionCruiseVelocity(21700);
+    upperRight.ConfigMotionAcceleration(20000);
 }
 
 void DoubleArm::ConfigureSensors() {

@@ -10,7 +10,8 @@
 namespace ArmConstants {
     namespace Positions {
         const DoubleArmState StartingPosition{ 101_deg, -71_deg };
-        const DoubleArmState MiddlePosition{ 0_deg, 90_deg };
+        const DoubleArmState MiddlePosition{ 65_deg, -40_deg };
+        const DoubleArmState GroundPosition{ 15_deg, -71_deg };
 
     };
 

@@ -24,6 +24,5 @@ void SetArmCoordinate::End(bool interrupted) {}
 
 // Returns true when the command should end.
 bool SetArmCoordinate::IsFinished() {
-    DoubleArmState remainingDistance = doubleArm->IsAtTarget();
-    return remainingDistance.lowerAngle.Degrees() < 3_deg && remainingDistance.upperAngle.Degrees() < 3_deg;
+    return true;;
 }
