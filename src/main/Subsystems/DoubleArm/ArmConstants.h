@@ -5,13 +5,14 @@
 #include <units/length.h>
 #include <units/velocity.h>
 #include <units/acceleration.h>
-#include "Subsystems/DoubleArm/DoubleArmKinematics/DoubleArmState.h"
+#include "Subsystems/DoubleArm/DoubleArmState/DoubleArmState.h"
 
 namespace ArmConstants {
     namespace Positions {
         const DoubleArmState StartingPosition{ 101_deg, -71_deg };
         const DoubleArmState MiddlePosition{ 65_deg, -40_deg };
         const DoubleArmState GroundPosition{ 15_deg, -71_deg };
+        const DoubleArmState UpperPosition{ 50_deg, 0_deg };
 
     };
 

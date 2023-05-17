@@ -53,13 +53,13 @@ void RobotContainer::ConfigureBindings() {
         }.ToPtr()); // Ground
 
     middlePosition.OnTrue(frc2::SequentialCommandGroup{
-        SetWrist(&intake, true),
+        SetWrist(&intake, false),
         SetArmCoordinate(&doubleArm, Positions::MiddlePosition),
         }.ToPtr()); // Middle
 
     upperPosition.OnTrue(frc2::SequentialCommandGroup{
         SetWrist(&intake, false),
-        SetArmCoordinate(&doubleArm, Positions::StartingPosition)
+        SetArmCoordinate(&doubleArm, Positions::UpperPosition)
         }.ToPtr()); // Upper
 
     portalPosition.OnTrue(frc2::SequentialCommandGroup{

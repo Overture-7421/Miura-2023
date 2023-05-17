@@ -62,6 +62,6 @@ private:
     double lowerFeedForward = 0.03;
     double upperFeedForward = 0.04;
 
-    double lowerKP = 0.08;
+    double lowerKP = 0.05; //Misma variación desde 0.08
     double upperKP = 0.06;
 };
